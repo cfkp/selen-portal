@@ -39,11 +39,17 @@ else if (typeof filter[f]=='string' ) {
 console.log('String find value ');
 
 var s; s=filter[f]; result[newf]=s.replace('[value]', value);
-console.log('new '+filter[f]);
+console.log('new '+result[f]);
 
-} ; 
+} ;    try{
+	if (newf=="_id")
+	{  
+console.log('f= _id filter[newf]');
+	result[newf]= new ObjectID(result[newf]); 
+	}; }   catch(err){console.log('f= _id err '+err);};
 
-	};                      
+
+};                      
 
 return result;	
 };
@@ -114,12 +120,13 @@ router.post('/ref_value_list', function (req, res, next) {
 					;
 					//	console.log(rows[i].email);
                                         if (colmodel&&colmodel.label) {
- 					selcols["label"]= jspath ({json:rows[i],path:colmodel.label/*+'@string()'*/} )[0]
-					+'('+selcols["value"]+')'	;
-
+ 					selcols["label"]= jspath ({json:rows[i],path:colmodel.label} )[0]
+						;
+					if (colmodel.value!="_id")   {
+                                        selcols["label"]=selcols["label"] +'('+selcols["value"]+')';};
 					};
                                          if (colmodel&&colmodel.desc) {
-                                        	selcols["desc"]= jspath ({json:rows[i],path:colmodel.desc/*+'@string()'*/} )[0];
+                                        	selcols["desc"]= jspath ({json:rows[i],path:colmodel.desc} )[0];
  					};
  					 selcols["id"]= rows[i]._id;
                         		 result[i] =selcols;

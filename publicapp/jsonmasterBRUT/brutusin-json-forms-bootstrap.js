@@ -80,12 +80,12 @@ if (("undefined" === typeof $ || "undefined" === typeof $.fn || "undefined" === 
           	main_div.appendChild(input_value);
                 
                 element.type=  "hidden";
-
+		
 		 $( input_value ).autocomplete({
 		      minLength: 3,
 		      source: function(request,response) {
 
-		        get_autodata(request,response,schema.meta_ref);     
+		        get_autodata(schema.meta_ref,request,response);     
  			   }     
 			,
 		      focus: function( event, ui ) {
@@ -96,15 +96,27 @@ if (("undefined" === typeof $ || "undefined" === typeof $.fn || "undefined" === 
  			       $( element ).val( ui.item.value );
 			       $( element ).attr("meta_ref",ui.item.id );
  				$(element).change();
-       // $( "#user-id" ).val( ui.item.value );
-       // $( "#user-description" ).html( ui.item.desc );
-       // $( "#user-icon" ).attr( "src", "images/" + ui.item.icon );
- 
-        return false;
-      }
-    })
+ 			        return false;
+      				}
+    			});
 
-         }}
+		if (element.value){
+			var request={};           
+			request.term=element.value;
+			var meta_ref=JSON.parse(JSON.stringify(schema.meta_ref));
+			if (meta_ref.colmodel){
+				meta_ref.filter={};
+				meta_ref.filter[meta_ref.colmodel.value]="[value]";
+			};
+  			get_autodata(meta_ref,request,function(data){
+			if (data&&data[0]){
+			$( input_value ).val( data[0].label );
+			$( element ).val( data[0].value );
+  			$( element ).attr("meta_ref",data[0].id );  }
+                       });
+		
+		};
+    	}}
     });
 
 

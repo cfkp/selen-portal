@@ -161,28 +161,10 @@ var get_view_data = function (meta_class, meta_view, datarender) {
 
 };
 
-function get_autodata(request,response,params) {
-        params.value= request.term;    
-        $.post('view/ref_value_list',params /*{ "meta_class":"users","colmodel": {
-                        "value" :"email",
-                        "label":"fio"
-                        
-                    },   "value" : request.term  ,"filter": {
-                        "or": [
-                            {
-                                "email": {
-                                    "regex": ".*[value].*",
-                                    "options": "i"
-                                }
-                            },
-                            {
-                                "fio": {
-                                    "regex": ".*[value].*",
-                                    "options": "i"
-                                }
-                            }
-                        ]
-                    } }*/, 
+function get_autodata(params,request,response) {
+        params.value= request.term;
+		    
+        $.post('view/ref_value_list',params, 
 	function(data){
               response(data);
         });
