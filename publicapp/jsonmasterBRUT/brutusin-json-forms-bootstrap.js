@@ -103,7 +103,7 @@ if (("undefined" === typeof $ || "undefined" === typeof $.fn || "undefined" === 
 		if (element.value){
 			var request={};           
 			request.term=element.value;
-			var meta_ref=JSON.parse(JSON.stringify(schema.meta_ref));
+			var meta_ref=Object.assign({}, schema.meta_ref);//JSON.parse(JSON.stringify(schema.meta_ref));
 			if (meta_ref.colmodel){
 				meta_ref.filter={};
 				meta_ref.filter[meta_ref.colmodel.value]="[value]";
