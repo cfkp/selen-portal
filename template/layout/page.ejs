@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+ <link rel="stylesheet" href="../jquery/ui/jquery-ui.css">
+
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.css"/>
+<link rel="stylesheet" href="../bootstrap/css/bootstrap-theme.css"/>
+
+<link rel="stylesheet" href="../css/bootstrap.min.css"/>
+
+
+
+
+
+<!--script src="https://code.jquery.com/jquery-1.12.4.js"></script-->
+<script src="../jquery/jquery.js"></script>
+
+<script src="../jquery/ui/jquery-ui.js"></script>
+
+<script src="../bootstrap/js/bootstrap.js"></script>
+
+
+
+<!--script type="text/javascript" src="../lib/jsonform-master/deps/underscore.js"></script>
+<script type="text/javascript" src="../lib/jsonform-master/deps/opt/jsv.js"></script>
+<!--script type="text/javascript" src="../jsonmaster/jsonform.js"></script-->
+
+
+<link rel="stylesheet" href="../bootstrap-select/css/bootstrap-select.min.css">
+<link rel="stylesheet" href='../jsonmasterBRUT/brutusin-json-forms.css'/>
+<script src="../jsonmasterBRUT/markdown.min.js"></script>
+<script src="../bootstrap-select/js/bootstrap-select.min.js"></script>
+<script src="../bootstrap-select/js/i18n/defaults-en_US.min.js"></script>
+
+<script src="../jsonmasterBRUT/brutusin-json-forms.js"></script>
+<script src="../jsonmasterBRUT/brutusin-json-forms-bootstrap.js"></script>
+
+
+<script type="text/ecmascript" src="../jqgrid/js/i18n/grid.locale-ru.js"></script>
+<script type="text/ecmascript" src="../jqgrid/js/jquery.jqGrid.min.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="../jqgrid/css/ui.jqgrid-bootstrap.css" />
+
+<link href="../css/dashboard.css" rel="stylesheet">
+<link href="../css/style_DR.css" rel="stylesheet">
+
+<script src="../js/login.js"></script>
+<script src="../js/methods.js"></script>
+<script src="../js/views.js"></script>
+
+<script src="../js/menu.js"></script>
+<script src="../js/main.js"></script>
+
+<script src="../js/upload.js"></script>
+
+
+
+
+</head>
+<body>
+<!--------------------Error modal--------------------------------------------------->
+<div class="modal fade" id="messagedlg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="msgtitle" ></h4>
+      </div>
+      <div class="modal-body">
+        <p id="msg"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+        <!--button type="button" class="btn btn-primary">Сохранить изменения</button-->
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--------------method execute--------------------------------------------->
+<div class="modal fade" id="method_execute" tabindex="-1" role="dialog" aria-labelledby="method_title">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="method_title">Modal title</h4>
+      </div>
+      <div class="modal-body">
+     <form class="method_form"> </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" >Сохранить</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="col-xs-12">
+<%-partial('../partials/topNavigation')%>
+</div>
+<div class="container-fluid">
+<div class="row-fluid">
+<%-body -%>
+</div>
+</div>
+
+<footer>
+  <%-blocks.footer%>
+
+
+</footer>
+<input type="text" id="user" />
+<img id="user-icon" src="images/transparent_1x1.png" class="ui-state-default" alt="">
+<input type="hidden" id="user-id">
+<p id="user-description"></p>
+ 
+<script type="text/javascript">
+
+ 
+
+   $( "input#user" ).autocomplete({
+      minLength: 0,
+      source: function(request,response) {
+
+        params= { "meta_class":"users","colmodel": {
+                        "value" :"email",
+                        "label":"fio"
+                        
+                    },  "filter": {
+                        "or": [
+                            {
+                                "email": {
+                                    "regex": ".*[value].*",
+                                    "options": "i"
+                                }
+                            },
+                            {
+                                "fio": {
+                                    "regex": ".*[value].*",
+                                    "options": "i"
+                                }
+                            }
+                        ]
+                    } }
+        get_autodata(request,response,params);     
+  /*      $.post('view/ref_value_list', { "meta_class":"users","colmodel": {
+                        "value" :"email",
+                        "label":"fio"
+                        
+                    },   "value" : request.term  ,"filter": {
+                        "or": [
+                            {
+                                "email": {
+                                    "regex": ".*[value].*",
+                                    "options": "i"
+                                }
+                            },
+                            {
+                                "fio": {
+                                    "regex": ".*[value].*",
+                                    "options": "i"
+                                }
+                            }
+                        ]
+                    } }, 
+	function(data){
+              response(data);
+        });      */
+    }     
+,
+      focus: function( event, ui ) {
+        $( "input#user" ).val( ui.item.label );
+        return false;
+      },
+      select: function( event, ui ) {
+        $( "input#user" ).val( ui.item.label );
+        $( "#user-id" ).val( ui.item.value );
+        $( "#user-description" ).html( ui.item.desc );
+       // $( "#user-icon" ).attr( "src", "images/" + ui.item.icon );
+ 
+        return false;
+      }
+    })
+
+
+ </script>
+</body>
+</html>

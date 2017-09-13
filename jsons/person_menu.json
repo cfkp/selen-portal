@@ -1,0 +1,57 @@
+{
+    "_id": "58f1191c5ccef14173b0bf4f",
+    "name": "person_menu",
+    "title": "Меню клиента",
+    "data": {
+        "name": "expert_menu",
+        "title": "Меню клиента",
+        "root_menu": "#top_menu",
+        "items": [
+            {
+                "name": "menu_person_request",
+                "title": "Заявка",
+                "root_menu": "#left_menu",
+                "items": [
+                    {
+                        "title": "Мои заявки",
+                        "meta_action_type": "view",
+                        "meta_class": "person_request",
+                        "meta_view": "vw_persrequests"
+                    },
+                    {
+                        "title": "Добавить заявку",
+                        "meta_action_type": "method",
+                        "meta_class": "person_request",
+                        "meta_method": "new_request"
+                    },
+                    {
+                        "title": "Редактировать заявку",
+                        "meta_action_type": "method",
+                        "meta_class": "person_request",
+                        "meta_method": "edit_request"
+                    },
+                    {
+                        "title": "Изменить состояние",
+                        "meta_action_type": "method",
+                        "meta_class": "person_request",
+                        "meta_method": "change_state"
+                    }
+                ]
+            },
+            {
+                "name": "user_menu",
+                "title": "Данные пользователя",
+                "root_menu": "#left_menu",
+                "meta_class": "user_data",
+                "meta_action_type": "object",
+                "items": [
+                    {
+                        "title": "Данные",
+                        "href": "#section_info"
+                    }
+                ]
+            }
+
+        ]
+    }
+}

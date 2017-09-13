@@ -1,0 +1,14 @@
+<% layout('layout/page') -%>
+<% block('title', "") -%>
+<script>
+ messagedlg(null,"<%=msg.msg%>","<%=msg.type%>",
+					function(){
+						window.location.href = "/";
+						}
+					);
+
+</script>
+
+
+	
+

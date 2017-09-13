@@ -1,0 +1,123 @@
+{
+    "_id": "58ca5f9806f7300b90e28e04",
+    "user_createid": "58c7c6b8c20d99116418a797",
+    "meta_name": "orgs",
+    "data": {
+        "meta_name": "orgs",
+        "title": "Данные Организации",
+        "description": "Данные Организации",
+        "meta_table_name": "orgs",
+        "meta_parent_class": "",
+        "type": "object",
+        "properties": {
+ 
+            "Name": {
+                "type": "string",
+                "title": "Наименование инициатора проекта"
+            },
+         "owner": {
+                    "title": "Владелец",
+                    "type": "object",
+                    "properties": {
+                        "owner": {
+                            "title": "Владелец",
+                            "oneOf": [
+                                {
+                                    "type": "object",
+                                    "title": "Юридическое лицо",
+                                    "properties": {
+                                        "name": {
+                                            "required": true,
+                                            "title": "Название компании",
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                {
+                                    "title": "Бенифициар",
+                                    "type": "object",
+                                    "properties": {
+                                        "fio": {
+                                            "required": true,
+                                            "type": "string",
+                                            "title": "ФИО"
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        "own_percent": {
+                            "required": true,
+                            "title": "Процент владения",
+                            "type": "integer"
+                        }
+                    }
+                }
+            
+             }
+        
+    },
+    "created": "2017-03-14T10:23:32.897Z",
+    "__v": 0
+}{
+    "_id": "58ca5f9806f7300b90e28e04",
+    "user_createid": "58c7c6b8c20d99116418a797",
+    "meta_name": "orgs",
+    "data": {
+        "meta_name": "orgs",
+        "title": "Данные Организации",
+        "description": "Данные Организации",
+        "meta_table_name": "orgs",
+        "meta_parent_class": "",
+        "type": "object",
+        "properties": {
+ 
+            "Name": {
+                "type": "string",
+                "title": "Наименование инициатора проекта"
+            },
+         "owner": {
+                    "title": "Владелец",
+                    "type": "object",
+                    "properties": {
+                        "owner": {
+                            "title": "Владелец",
+                            "oneOf": [
+                                {
+                                    "type": "object",
+                                    "title": "Юридическое лицо",
+                                    "properties": {
+                                        "name": {
+                                            "required": true,
+                                            "title": "Название компании",
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                {
+                                    "title": "Бенифициар",
+                                    "type": "object",
+                                    "properties": {
+                                        "fio": {
+                                            "required": true,
+                                            "type": "string",
+                                            "title": "ФИО"
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        "own_percent": {
+                            "required": true,
+                            "title": "Процент владения",
+                            "type": "integer"
+                        }
+                    }
+                }
+            
+             }
+        
+    },
+    "created": "2017-03-14T10:23:32.897Z",
+    "__v": 0
+}

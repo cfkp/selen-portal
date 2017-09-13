@@ -1,0 +1,169 @@
+{
+    "_id": "58d7f2c65bec860861afffd9",
+    "name": "client_menu",
+    "title": "Меню клиента",
+    "data": {
+        "name": "client_menu",
+        "title": "Меню клиента",
+        "root_menu": "#top_menu",
+        "items": [
+            {
+                "name": "menu_person_request",
+                "title": "Заявка",
+                "root_menu": "#left_menu",
+                "items": [
+                    {
+                        "title": "Мои заявки",
+                        "meta_action_type": "view",
+                        "meta_class": "person_request",
+                        "meta_view": "vw_new_persrequests"
+                    },
+                    {
+                        "title": "Добавить заявку",
+                        "meta_action_type": "method",
+                        "meta_class": "person_request",
+                        "meta_method": "new_request"
+                    }
+                ]
+            },
+            {
+                "name": "user_menu",
+                "title": "Данные пользователя",
+                "root_menu": "#left_menu",
+                "meta_class": "user_data",
+                "meta_action_type": "object",
+                "items": [
+                    {
+                        "title": "Данные",
+                        "href": "#section_info"
+                    }
+                ]
+            },
+            {
+                "name": "enterprise_menu",
+                "title": "Данные по организации",
+                "meta_class": "enterprise",
+                "root_menu": "#left_menu",
+                "meta_action_type": "object",
+                "items": [
+                    {
+                        "title": "Данные",
+                        "href": "#section_enterprise_data"
+                    },
+                    {
+                        "title": "Группа компаний",
+                        "href": "#section_entrprise_group_company"
+                    },
+                    {
+                        "title": "Доход за 3 года",
+                        "href": "#section_entrprise_dohod"
+                    },
+                    {
+                        "title": "Кредит",
+                        "href": "#section_entrprise_credit"
+                    }
+                ]
+            },
+            {
+                "name": "project_menu",
+                "title": "Проект",
+                "root_menu": "#left_menu",
+                "meta_class": "project",
+                "meta_action_type": "object",
+                "items": [
+                    {
+                        "title": "Данные по проекту",
+                        "href": "#section_info"
+                    },
+                    {
+                        "title": "Сумма проекта",
+                        "href": "#section_sum"
+                    },
+                    {
+                        "title": "Структура финасирования",
+                        "href": "#section_invest_struct"
+                    },
+                    {
+                        "title": "Продукт",
+                        "href": "#section_product"
+                    },
+                    {
+                        "title": "Технология",
+                        "href": "#section_tech"
+                    },
+                    {
+                        "title": "Рынок",
+                        "href": "#section_market"
+                    },
+                    {
+                        "title": "Финансовые показатели",
+                        "href": "#section_indicators"
+                    },
+                    {
+                        "title": "Прочее",
+                        "href": "#section_other"
+                    }
+                ]
+            },
+            {
+                "name": "person_menu",
+                "title": "Физические лица",
+                "root_menu": "#left_menu",
+                "meta_class": "person",
+                "meta_action_type": "object",
+                "items": [
+                    {
+                        "title": "Данные",
+                        "href": "#section_info"
+                    }
+                ]
+            },
+            {
+                "name": "menu_request",
+                "title": "Заявки на гарантию",
+                "root_menu": "#left_menu",
+                "items": [
+                    {
+                        "title": "Мои заяки",
+                        "meta_action_type": "view",
+                        "meta_class": "garant_request",
+                        "meta_view": "vw_user_garant_request"
+                    },
+                    {
+                        "title": "Добавить заявку",
+                        "meta_action_type": "method",
+                        "meta_class": "garant_request",
+                        "meta_method": "create_request"
+                    }
+                ]
+            },
+            {
+                "name": "exportReport",
+                "title": "Отчеты",
+                "root_menu": "#left_menu",
+                "items": [
+                    {
+                        "title": "Чек-лист",
+                        "href": "/exportReport/checkList",
+                        "target": "_blank"
+                    },
+                    {
+                        "title": "Анкета проекта",
+                        "href": "/exportReport/anketa",
+                        "target": "_blank"
+                    },
+                    {
+                        "title": "Заявка на получение независимой гарантии",
+                        "href": "/exportReport/request",
+                        "target": "_blank"
+                    },
+                    {
+                        "title": "Резюме проекта",
+                        "href": "/exportReport/resume",
+                        "target": "_blank"
+                    }
+                ]
+            }
+        ]
+    }
+}
