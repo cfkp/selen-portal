@@ -1,15 +1,12 @@
-/**
- * Created by lexusrules on 18.03.17.
- */
-var bf;
+ var bf;
 var BrutusinForms;
 $(document).ready(function () {
   	load_main_menu();
-
+/*
 	$('#method_execute .btn-primary').bind('click', function () {
 		execute_method(null, bf_modal.getData());
 	});
-
+*/
 	$('#brut_save').bind('click', function () {
 		alert(JSON.stringify(bf.getData(), null, 4));
 		var meta_class = $('#BRUTform').attr("meta_class");
@@ -26,7 +23,7 @@ $(document).ready(function () {
 		};
 	});
 
-	hide_formBRUT();
+	hide_formBRUT($("#main_workspace"));
 	BrutusinForms = brutusin["json-forms"];
 	BrutusinForms.bootstrap.addFormatDecorator("file", "file", "glyphicon-search",
 		function (element) {
@@ -42,20 +39,9 @@ $(document).ready(function () {
 	BrutusinForms.bootstrap.addFormatDecorator("color", "color");
 	BrutusinForms.bootstrap.addFormatDecorator("date", "date");
 
-	/*$('.menu_left').bind('click', function(){
-	//  alert('lef click '+$(this).attr( "id")+' '+$(this).attr( "meta_class"));
-	getData (this);
-	});
-
-	/*$('.menu_top').bind('click', function(){
-	//  alert('top click '+$(this).attr( "meta_id")+' '+$(this).attr( "meta_class"));
-	loadmenu(this);
-	});
-	 */
-	//$(".navmenu.navmenu-default.navmenu-fixed-left .active a").click();
 
 });
-
+ /*
 var loaduserobj = function (meta_class, meta_name, meta_value) {
 	$.ajax({
 		type: "POST",
@@ -79,18 +65,7 @@ var loaduserobj = function (meta_class, meta_name, meta_value) {
 		}
 	});
 };
-
-/*var getData = function(obj){
-$(".object_form").empty();
-var meta_class=$(obj).attr( "meta_class");
-var meta_name=$(obj).attr( "meta_name");
-var meta_value=$(obj).attr( "meta_value");
-//   alert(id);
-if (meta_class) {
-loaduserobj(meta_class,meta_name,meta_value);
-}
-}
- */
+  */
 function load_class(obj) {
 	var meta_class = $(obj).attr("meta_class");
 	var parent = $(obj).parents().find('#detail_tabs');
@@ -111,7 +86,7 @@ function load_class(obj) {
 
 	api_load('/loadclass/' + meta_class + '/' + meta_name + '/' + meta_value, null, func);
 
-};
+}; 
 
 function api_load(url, requestdata, responsefunc) {
 	$.ajax({
@@ -173,32 +148,37 @@ var messagedlg = function (jsonmessage, usermessage, dlgtype,onclose) {
 
 };
 
-var prep_cont_BRUT = function (el_sel, meta_class, meta_name, meta_value) {
-	var form = $('#BRUTform')
-		var cont = $(el_sel);
-	cont.empty();
-	form.attr('meta_class', meta_class);
-	form.attr('meta_name', meta_name);
-	form.attr('meta_value', meta_value);
-	form.show();
+var prep_cont_BRUT = function (container, meta_class, meta_name, meta_value) {
+ 
+	var brutform =container.find('#BRUTform');
+ 	var brutcont = container.find('#BRUTcontainer');
 
-	return cont[0];
+	brutcont.empty();
+	brutform.attr('meta_class', meta_class);
+	brutform.attr('meta_name', meta_name);
+	brutform.attr('meta_value', meta_value);
+	brutform.show();
+
+	return brutcont[0];
 };
 
-function hide_formBRUT() {
-	$('#BRUTform').hide();
-	var cont = $('#BRUTcontainer');
-	cont.empty();
+function hide_formBRUT(container) {
+	var brutform =container.find('#BRUTform');
+	if (brutform){
+        brutform.hide();} ;
+	var brutcont = container.find('#BRUTcontainer');
+	if (brutcont){
+	brutcont.empty();  };
 };
 
 var loadFormBRUT = function (schema, value, meta_class, meta_name, meta_value) {
-
+        var allbrutCont=$("#main_workspace");
 	if (meta_name === '_id') {
 		meta_value = value._id;
 	}
 
 	bf = BrutusinForms.create(schema.data);
-	var container = prep_cont_BRUT('#BRUTcontainer', meta_class, meta_name, meta_value);
+	var container = prep_cont_BRUT(allbrutCont, meta_class, meta_name, meta_value);
 	bf.render(container, value.data);
 //        $('#BRUTcontainer').find(':input').attr('disabled', 'disabled');
 };

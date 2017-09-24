@@ -1,6 +1,6 @@
 
 function arrayToTable(meta_class, meta_view, data) {
-    var table = $('<table class="table table-striped"></table>');
+    var table = $('<table class="table table-striped pageview"></table>');
     table.attr('id',meta_view);
     table.attr('meta_view',meta_view);
     $(data.header.colmodel).each(function (i, rowData) {
@@ -19,26 +19,47 @@ function arrayToTable(meta_class, meta_view, data) {
     return table;
 } ;
 
-var closegrid=function (){
-	jQuery("#method_menu").empty();
-	jQuery("#detail_tabs").empty();
-	hide_formBRUT();
-	$.jgrid.gridUnload('#jqGrid');
-	$('#jqGrid').empty();
+var closegrid=function (grid_container){
+	grid_container.find("#method_menu").empty();
+	grid_container.find("#detail_tabs").empty();
+	hide_formBRUT(grid_container);
+	grid_container.find('#grid_container').empty();
 
 };
-
-var showgrid = function (meta_class, meta_view, data) {
-
-        closegrid();
-
+var get_grid_id =function (grid_container){
+var id_cont={};
+id_cont['grid_id']=grid_container.attr('id')+'_'+'vwGrid';
+id_cont['gridpager_id']=grid_container.attr('id')+'_'+'vwPager';
+id_cont['grid_id_']='#'+id_cont['grid_id'];
+id_cont['gridpager_id_']='#'+id_cont['gridpager_id'];
+return id_cont;
+	
+};
+var showgrid = function (grid_container,meta_class, meta_view, data) {
+        closegrid(grid_container);
 	var header = data.header;
 	var rows = data.rows;
+
   if ((header.view_mode)&&(header.view_mode=="page" )){
      //   drawpage(meta_class, meta_view, data);
-     $('#jqGrid').append(arrayToTable(meta_class, meta_view, data));
+     grid_container.find('#grid_container').append(arrayToTable(meta_class, meta_view, data));
 return;
   };      
+    
+    var gridid=get_grid_id(grid_container);
+
+
+     var table = $('<table></table>');
+    
+     table.attr('id',gridid.grid_id);
+   var pager = $('<div></div>'); 
+pager.attr('id',gridid.gridpager_id)	 
+        var gr_cont= grid_container.find('#grid_container').append(table);
+        gr_cont.append(pager);
+	var container=gr_cont.find(gridid.grid_id_);
+ 	var detail_container=grid_container.find('#detail_tabs');
+
+
 	if (header.methods_menu) {
 		load_menu(header.methods_menu);
 		
@@ -53,47 +74,47 @@ return;
 
 
 	$.jgrid.defaults.width = 780;
-	$.jgrid.defaults.responsive = true;
+	$.jgrid.defaults.responsive = true; 
 	$.jgrid.defaults.styleUI = 'Bootstrap';
 
-	$("#jqGrid").jqGrid({
+	container.jqGrid({
 		datatype: "local",
 		data: rows,
 		height: 250,
 		colModel: header.colmodel,
 		viewrecords: true, // show the current page, data rang and total records on the toolbar
 		caption: header.title,
-		multiselect: true,
-		pager: "#jqGridPager",
+		multiselect: false,
+		pager: gridid.gridpager_id_,
 		loadonce: true,
 		onSelectRow: function (rowid, selected) {
-			if ((header.detail) && (rowid != null)) {
+			if ((header.detail) && (rowid != null)&&detail_container.length!=0) {
 
 				if (selected) {
-					$("#detail_tabs").attr("meta_parent_field", "pers_request_id");
-					$("#detail_tabs").attr("meta_parent_value", rowid);
-					$("#detail_tabs").attr("meta_readonly",header.detail.readonly);
+					detail_container.attr("meta_parent_field", "pers_request_id");
+					detail_container.attr("meta_parent_value", rowid);
+					detail_container.attr("meta_readonly",header.detail.readonly);
 					
-					var reports = $("#detail_tabs #rep_menu")
+					var reports = detail_container.find("#rep_menu")
 					if (reports) {
-					reports.find( "li a" ).each(function( index ) {
-   $( this ).attr("href",$( this ).attr("hreftempl").replace('<%=meta_parent_value%>',rowid))
-					console.log( index + ": " + $( this ).attr("href") );	
-					});	
+						reports.find( "li a" ).each(function( index ) {
+   							$( this ).attr("href",$( this ).attr("hreftempl").replace('<%=meta_parent_value%>',rowid))
+							//	console.log( index + ": " + $( this ).attr("href") );	
+						});	
 					}
-					$("#detail_tabs").show();
-					$("#detail_tabs").find("[root_menu='#detail_tabs']").show();	
-					$("#detail_tabs").find('.active a').click();
-					$("#jqGrid").jqGrid('setGridState', 'hidden');
+					detail_container.show();
+					detail_container.find("[root_menu='#detail_tabs']").show();	
+					detail_container.find('.active a').click();
+					container.jqGrid('setGridState', 'hidden');
 				} else {
-					jQuery("#detail_tabs").hide();
-					hide_formBRUT()
+					detail_container.hide();
+					hide_formBRUT(grid_container);
 				};
 			}
 		}
 	});
 
-	$('#jqGrid').navGrid("#jqGridPager", {
+	container.navGrid(gridid.gridpager_id_, {
 		search: true, // show search button on the toolbar
 		add: false,
 		edit: false,
@@ -101,7 +122,7 @@ return;
 		refresh: true,
 		beforeRefresh: function () {
 			//	alert("beforeRefresh" + meta_class);
-			get_view_data(meta_class, meta_view, refresh_grid);
+			get_view_data(grid_container,meta_class, meta_view, refresh_grid);
 		},
 		afterRefresh: function () {
 			//	alert("afterRefresh" + meta_view);
@@ -115,24 +136,32 @@ return;
 	} // search options - define multiple search
 	);
 
+/* container.jqGrid('setGridWidth', parseInt($(window).width()) - 20);    
+
+ //handles the grid resize on window resize
+ $(window).resize(function () { 
+       container.jqGrid('setGridWidth', parseInt($(window).width()) - 20); 
+ });
+*/
+
 };
 
-function refresh_grid(meta_class, meta_view, dataresponse) {
+function refresh_grid(grid_element ,meta_class, meta_view, dataresponse) {
 	var rows = dataresponse.rows;
-	jQuery('#jqGrid').jqGrid('clearGridData');
-	jQuery('#jqGrid').jqGrid('setGridParam', {
+	grid_element.jqGrid('clearGridData');
+	grid_element.jqGrid('setGridParam', {
 		data: rows
 	});
-	jQuery('#jqGrid').trigger('reloadGrid');
+	grid_element.trigger('reloadGrid');
 };
 
-function show_view(meta_class, meta_view) {
+function show_view (grid_container,meta_class, meta_view) {
 
-	get_view_data(meta_class, meta_view, showgrid);
+	get_view_data( grid_container,meta_class, meta_view,showgrid);
 
 };
 
-var get_view_data = function (meta_class, meta_view, datarender) {
+var get_view_data = function ( grid_container,meta_class, meta_view, datarender) {
 	//  function api_load(url,requestdata,responsefunc) {
 	var requestdata = {}; //filter потом будет
 	var url = meta_class + '/' + meta_view;
@@ -146,7 +175,7 @@ var get_view_data = function (meta_class, meta_view, datarender) {
 		statusCode: {
 			200: function (dataresponse) {
 				if (datarender) {
-					datarender(meta_class, meta_view, dataresponse);
+					datarender(grid_container,meta_class, meta_view, dataresponse);
 				}
 				//	alert('view result ok');
 			},
@@ -161,23 +190,137 @@ var get_view_data = function (meta_class, meta_view, datarender) {
 
 };
 
+function jsonPathToValue(jsonData, path) {
+    if (!(jsonData instanceof Object) || typeof (path) === "undefined") {
+        throw "Not valid argument:jsonData:" + jsonData + ", path:" + path;
+    }
+    path = path.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
+    path = path.replace(/^\./, ''); // strip a leading dot
+    var pathArray = path.split('.');
+    for (var i = 0, n = pathArray.length; i < n; ++i) {
+        var key = pathArray[i];
+        if (key in jsonData) {
+            if (jsonData[key] !== null) {
+                jsonData = jsonData[key];
+            } else {
+                return null;
+            }
+        } else {
+            return key;
+        }
+    }
+    return jsonData;
+};  
+
+function convert_colmodel2auto (rows,colmodel){
+	  if (!colmodel){ return undefined}; 
+	  var autodata=[];
+	   var auto_row={};
+
+	   for (d in rows){ 
+	        auto_row={'value':null,'label':'','desc':'','_id':null};
+		var row= rows[d];
+		for (cols in colmodel){
+	        if (colmodel[cols]&&colmodel[cols].key){
+		auto_row['value']=jsonPathToValue(row,colmodel[cols].name);
+		
+		}
+		if(colmodel[cols].name=='_id'){auto_row['_id']=jsonPathToValue(row,colmodel[cols].name)}
+		if (!colmodel[cols].hidden) {
+		auto_row['label']=auto_row['label']+jsonPathToValue(row,colmodel[cols].name)+' ';
+		};
+
+		
+		};
+		autodata[d]=auto_row;
+	    };
+
+return autodata;
+};
 function get_autodata(params,request,response) {
         params.value= request.term;
-		    
+	var colmodel=params.colmodel;	    
         $.post('view/ref_value_list',params, 
 	function(data){
-              response(data);
+	  if (data){
+           /*var rows =data.rows;
+	   for (d in rows){ 
+	        auto_row={};
+		var row= rows[d];
+		for (cols in colmodel){
+	        if (colmodel[cols]&&colmodel[cols].key){
+		auto_row['value']=row[colmodel[cols].name];
+		};
+		autodata[d]=auto_row;
+		};
+	    };*/
+		var autodata =convert_colmodel2auto (data.rows,colmodel);
+		};	
+            response(autodata);
         });
-    } 
+    };
 
-function get_selected_rows() {
+function fill_ref( src_meta_ref,input_element,value_ref_element){
+	var request={};           
+	request.term=value_ref_element.value;
+	var meta_ref=Object.assign({}, src_meta_ref);
+	meta_ref.filter={};
+
+	if (meta_ref.colmodel){
+		for (x in meta_ref.colmodel){
+			if (meta_ref.colmodel[x].key){
+		meta_ref.filter[meta_ref.colmodel[x].name]="[value]";}};
+	} else {meta_ref.filter["_id"]="[value]";};
+	get_autodata(meta_ref,request,function(data){
+	if (data&&data[0]){
+	$( input_element ).val( data[0].label );
+	$( value_ref_element ).val( data[0].value );
+	$( value_ref_element ).attr("meta_ref",data[0].id );  }
+       });
+
+}; 
+
+function get_selected_rows(viewcontainer) {
 	var s=[];
-	var  page = $("#jqGrid .table");
+	var  page = viewcontainer.find(".pageview");
 	if (page.length) {
-		s.push($("#jqGrid .page_view").attr("meta_id")); 
+		s.push(page.attr("meta_id")); 
 	}
-	else{
-		s = jQuery("#jqGrid").jqGrid('getGridParam', 'selarrrow');
+	else{     
+		var gridid=get_grid_id(viewcontainer);
+
+		s = $(gridid.grid_id_).jqGrid('getGridParam', 'selrow');
 	};	 
 	return s;
+};
+
+var refviewmodal = function(meta_class,meta_view,selectFunc) {
+
+        var rez ={};
+        var grid_container=$('#refview');
+        show_view (grid_container,meta_class, meta_view)
+
+	grid_container.find('.btn-primary').unbind('click');
+
+	grid_container.find('.btn-primary').bind('click', function () {
+	//	execute_method(null, bf_modal.getData());
+	var s =get_selected_rows(grid_container);
+	if (!s||s==null) {  
+		alert('Выберите значение');
+        
+	}else   {
+        	grid_container.modal('hide');
+                closegrid(grid_container);
+		var ui={"item":{"value":null,"id":null,"label":null}};
+		ui.item.value=s;
+		ui.item.id=s;
+		ui.item.label=s;
+		selectFunc(null,ui);
+		}
+	});
+
+ 	//$('#refview #method_title').html(schema.title);	
+	grid_container.modal();
+
+
 };
