@@ -1,0 +1,20 @@
+{
+    "_id": ObjectId("59cca0f77292cd00a097fa94"),
+    "meta_name": "delete",
+    "meta_class": "default",
+    "data": {
+        "title": "Удалить",
+        "type": "object",
+        "meta_class": "default",
+        "meta_method": "delete",
+        "objectlist": "1",
+        "required": true,
+        "properties": {
+            "confirm": {
+                "required": true,
+                "title": "Подтвердите удаление",
+                "type": "boolean"
+            }
+        }
+    }
+}

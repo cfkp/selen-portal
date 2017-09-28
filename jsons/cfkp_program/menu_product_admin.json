@@ -1,0 +1,31 @@
+{
+    "_id": ObjectId("59cc0cd57292cd00a097fa93"),
+    "this_meta_class": "meta_method",
+    "name": "menu_product_admin",
+    "title": "Меню вьюхи",
+    "data": {
+        "name": "menu_product_admin",
+        "title": "Меню вьюхи",
+        "root_menu": "#method_menu",
+        "items": [
+            {
+                "title": "Добавить заявку",
+                "meta_action_type": "method",
+                "meta_class": "cfkp_product",
+                "meta_method": "new"
+            },
+            {
+                "title": "Редактировать заявку",
+                "meta_action_type": "method",
+                "meta_class": "cfkp_product",
+                "meta_method": "edit"
+            },
+            {
+                "title": "Удалить",
+                "meta_action_type": "method",
+                "meta_class": "cfkp_product",
+                "meta_method": "delete"
+            }
+        ]
+    }
+}

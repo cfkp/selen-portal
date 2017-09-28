@@ -82,7 +82,7 @@ router.post('/loadclass/:meta_class/:parent_name/:parent_id',checkAuth, function
 	});
 });
 
-router.post('/saveobj/:meta_class/:parent_name/:parent_id', function (req, res, next) {
+router.post('/saveobj/:meta_class/:parent_name/:parent_id',checkAuth, function (req, res, next) {
 	console.log("post '/saveobj/:meta_class'");
 	console.log("post " + req.params.meta_class);
 	console.log(req.body);
@@ -239,7 +239,7 @@ router.post('/load_main_menu',checkAuth, function (req, res, next) {
 	});
 });
 
-router.post('/load_tab_menu', function (req, res, next) {
+router.post('/load_tab_menu',checkAuth, function (req, res, next) {
 	console.log("post '/load_tab_menu',");
 	var userID = req.session.user;
 	var meta_class = "meta_menu";
@@ -286,7 +286,7 @@ router.post('/load_tab_menu', function (req, res, next) {
 	});
 });
 
-router.post('/load_menu/:menu_name', function (req, res, next) {
+router.post('/load_menu/:menu_name',checkAuth, function (req, res, next) {
 	console.log("post '/load_menu',");
 	var userID = req.session.user;
 	var meta_class = "meta_menu";
@@ -333,7 +333,7 @@ router.post('/load_menu/:menu_name', function (req, res, next) {
 	});
 });
 
-router.post('/callmethod/person_request/edit_request/init', function (req, res, next) {
+router.post('/callmethod/person_request/edit_request/init',checkAuth, function (req, res, next) {
 	console.log("post '/call_method/person_request/edit_request/init',");
 	console.log("post " + req.body);
 	console.log("post " + "init");
@@ -421,18 +421,25 @@ router.post('/callmethod/person_request/edit_request/init', function (req, res, 
 
 });
 
-router.post('/callmethod/:meta_class/:meta_method/init', function (req, res, next) {
-	console.log("post '/call_method/:meta_class/:meta_method/:meta_action',");
+router.post('/callmethod/:meta_class/:meta_method/init',checkAuth, function (req, res, next) {
+	console.log("post '/call_method/:meta_class/:meta_method/init',");
 	console.log("post " + req.params.meta_class);
 	console.log("post " + req.params.meta_method);
 	console.log("post " + req.body);
 	console.log("post " + "init");
-
+	
 	var userID = req.session.user;
 	var meta_class = req.params.meta_class;
 	var meta_method = req.params.meta_method;
 	var meta_action = req.params.meta_action;
 
+	if (meta_class=='undefined'||meta_method=='undefined') {
+	return	res.status(500).send({
+				'error': 'no_class',
+				'msg': 'Не определен класс или операция'
+			})
+	
+	};
 	/////////////////////////
 	var dbloc = db.get();
 	console.log('coll_get');
@@ -443,21 +450,58 @@ router.post('/callmethod/:meta_class/:meta_method/init', function (req, res, nex
 
 			var result = {};
 			console.log('Find meta data 0');
-			console.log('meta_class' + meta_class);
+			console.log('meta_class ' + meta_class);
 
 			db.get().collection("meta_method").findOne({
 				'meta_class': meta_class,
 				'meta_name': meta_method
 			}, function (err, doc) {
-				console.log('Find meta data0');
+				console.log('Find meta data 1');
 				if (doc) {
 					result = doc;
-				};
+					callback(null, result); 
+				}else if(!doc&&(meta_method=='new'||meta_method=='edit'))
+				{
+ 				console.log('Find meta data 0 1 '+meta_class);
+				   db.get().collection("meta_class").findOne({
+					'meta_name': meta_class}, function (err, doc) {
+				console.log('Find meta data 1 '+doc);
+
+					if (doc&&doc.data) {
+						doc.data["meta_class"]=meta_class;
+						doc.data["meta_method"]=meta_method;
+					if (meta_method=='edit')
+						{doc.data["objectlist"]=1};
+					result = doc;
+                                 	};
+				if (err)
+					return next(err);
+				callback(null, doc);
+
+				 });
+				}else if(!doc&&meta_method=='delete')
+				{
+ 				console.log('Find meta data 1 1 '+meta_class);
+				   db.get().collection("meta_method").findOne({
+					'meta_class': 'default','meta_name':'delete'}, function (err, doc) {
+				console.log('Find meta data 1 '+doc);
+
+					if (doc&&doc.data) {
+						doc.data["meta_class"]=meta_class;
+						doc.data["meta_method"]=meta_method;
+ 					result = doc;
+                                 	};
+				if (err)
+					return next(err);
+				callback(null, doc);
+
+				 });
+				} 
 				console.log(result);
 
 				if (err)
 					return next(err);
-				callback(null, result);
+				//callback(null, result); 
 			});
 		},
 		"value": function (callback) {
@@ -470,8 +514,8 @@ router.post('/callmethod/:meta_class/:meta_method/init', function (req, res, nex
 				var o_id = new ObjectID(req.body.objectlist[0]);
 				db.get().collection(meta_class).findOne({
 					"_id": o_id
-				}, function (err, doc) {
-					console.log('Find meta data1');
+				}, function (err, doc) {  
+					console.log('Find data1');
 					if (doc) {
 						result = doc;
 					};
@@ -509,7 +553,7 @@ router.post('/callmethod/:meta_class/:meta_method/init', function (req, res, nex
 
 });
 
-router.post('/callmethod/garant_request/create_request/execute', function (req, res, next) {
+router.post('/callmethod/garant_request/create_request/execute',checkAuth, function (req, res, next) {
 	console.log("post '/callmethod/garant_request/create_request/execute',");
 	console.log("post " + req.body);
 	console.log("post comment" + req.body.comment);
@@ -610,7 +654,7 @@ router.post('/callmethod/garant_request/create_request/execute', function (req, 
 	});
 });
 
-router.post('/callmethod/person_request/process_request/execute', function (req, res, next) {
+router.post('/callmethod/person_request/process_request/execute',checkAuth, function (req, res, next) {
 	console.log("post '/callmethod/person_request/process_request/execute'");
 
 	console.log("post " + req.params.meta_class);
@@ -672,7 +716,7 @@ router.post('/callmethod/person_request/process_request/execute', function (req,
 	});
 });
 
-router.post('/callmethod/person_request/change_state/execute', function (req, res, next) {
+router.post('/callmethod/person_request/change_state/execute',checkAuth, function (req, res, next) {
 	console.log("post '/callmethod/person_request/change_state/execute'");
 	console.log("post " + req.params.meta_class);
 	console.log("post " + req.params.meta_method);
@@ -732,7 +776,7 @@ router.post('/callmethod/person_request/change_state/execute', function (req, re
 });
 
 
-router.post('/callmethod/users/user_change_pass/execute', function (req, res, next) {
+router.post('/callmethod/users/user_change_pass/execute',checkAuth, function (req, res, next) {
 	console.log("post '/callmethod/users/user_change_pass/execute'");
 	console.log("post " + req.params.meta_class);
 	console.log("post " + req.params.meta_method);
@@ -794,7 +838,7 @@ router.post('/callmethod/users/user_change_pass/execute', function (req, res, ne
 });
 
 
-router.post('/callmethod/:meta_class/:meta_method/execute', function (req, res, next) {
+router.post('/callmethod/:meta_class/:meta_method/execute',checkAuth, function (req, res, next) {
 	console.log("post '/call_method/:meta_class/:meta_method/execute',");
 	console.log("post " + req.params.meta_class);
 	console.log("post " + req.params.meta_method);
@@ -806,11 +850,18 @@ router.post('/callmethod/:meta_class/:meta_method/execute', function (req, res, 
 	var meta_action = req.params.meta_action;
 	var dbloc = db.get();
 	var data = req.body.data;
+ 	if (meta_class=='undefined'||meta_method=='undefined') {
+	return	res.status(500).send({
+				'error': 'no_class',
+				'msg': 'Не определен класс или операция'
+			})
+	
+	};
 
 	console.log(req.body._id);
 
 	var obj_id;
-	if ((req.body._id)) {
+	if (meta_method=='edit'&&req.body._id) {
 		obj_id = new ObjectID(req.body._id);
 		console.log('updating document');
 		if (data !== null) {
@@ -825,12 +876,40 @@ router.post('/callmethod/:meta_class/:meta_method/execute', function (req, res, 
 				if (docs.ops) {
 
 					dataReturn = docs.ops[0]._id;
-				}
+		 		}
 				res.json(dataReturn);
 
 			});
 		}
-	} else {
+	} 
+	else if (meta_method=='delete'&&req.body._id){
+		obj_id = new ObjectID(req.body._id);
+		console.log('deleting document');
+		if ( data.confirm!== null&&data.confirm==true) {
+			dbloc.collection(meta_class).remove//updateOne
+				({
+				"_id": obj_id
+			}/*, {
+				$set: {
+					"deleted": true
+				}
+			}*/, function (err, docs) {
+				var dataReturn = '';
+				if (docs.ops) {
+
+					dataReturn = docs.ops[0]._id;
+		 		}
+				res.json(dataReturn);
+
+			});
+		}else {res.status(500).send({
+				'error': 'no_confirm',
+				'msg': 'Операция не подтверждена'
+			}); return;
+	
+		};
+	}
+	else if (meta_method=='new'&&!req.body._id){
 
 		var row = {
 			"created": Date.now,

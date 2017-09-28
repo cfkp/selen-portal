@@ -1,0 +1,30 @@
+{
+    "_id": ObjectId("59cc0bd87292cd00a097fa92"),
+    "user_createid": "58c7c6b8c20d99116418a797",
+    "meta_name": "vw_cfkp_product",
+    "meta_class": "cfkp_product",
+    "data": {
+        "meta_name": "vw_cfkp_product",
+        "meta_class": "cfkp_product",
+        "title": "Пользовательские заявки по гарантиям",
+        "methods_menu": "menu_product_admin",
+        "colmodel": [
+            {
+                "label": "id",
+                "name": "_id",
+                "key": true,
+                "hidden": true
+            },
+            {
+                "label": "программа",
+                "name": "data.program.name"
+            },
+            {
+                "label": "Продукт",
+                "name": "data.product"
+            }
+        ]
+    },
+    "created": "2017-03-14T10:23:32.897Z",
+    "__v": 0
+}

@@ -87,6 +87,7 @@ pager.attr('id',gridid.gridpager_id)
 		multiselect: false,
 		pager: gridid.gridpager_id_,
 		loadonce: true,
+shrinkToFit:false,
 		onSelectRow: function (rowid, selected) {
 			if ((header.detail) && (rowid != null)&&detail_container.length!=0) {
 
@@ -288,8 +289,11 @@ function get_selected_rows(viewcontainer) {
 	}
 	else{     
 		var gridid=get_grid_id(viewcontainer);
-
-		s = $(gridid.grid_id_).jqGrid('getGridParam', 'selrow');
+		var selrows;
+		selrows = $(gridid.grid_id_).jqGrid('getGridParam', 'selrow');
+		if (selrows&&typeof selrows=='array') {
+		s=selrows;		
+		} else {s.push(selrows)}; 
 	};	 
 	return s;
 };
