@@ -87,7 +87,7 @@ function load_class(obj) {
 	api_load('/loadclass/' + meta_class + '/' + meta_name + '/' + meta_value, null, func);
 
 }; 
-
+ 
 function api_load(url, requestdata, responsefunc) {
 	$.ajax({
 		url: "../api/" + url,
@@ -147,7 +147,7 @@ var messagedlg = function (jsonmessage, usermessage, dlgtype,onclose) {
 	$('#messagedlg').modal();
 
 };
-
+ 
 var prep_cont_BRUT = function (container, meta_class, meta_name, meta_value) {
  
 	var brutform =container.find('#BRUTform');

@@ -11,7 +11,7 @@
                                                                  
 
 
-
+<script src="../ejs/ejs.js"></script>
 <script src="../jquery/jquery.js"></script>
 
 <script src="../jquery/ui/jquery-ui.js"></script>
@@ -31,20 +31,37 @@
 <script src="../bootstrap-select/js/i18n/defaults-en_US.min.js"></script>
 
 <script src="../cfkp_calc/cfkp_calc.js"></script>
+<script src="../js/common.js"></script>
 </head>
-<body> 
+<!--------------------Error modal--------------------------------------------------->
+<div class="modal fade" id="messagedlg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="msgtitle" ></h4>
+      </div>
+      <div class="modal-body">
+        <p id="msg"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+        <!--button type="button" class="btn btn-primary">Сохранить изменения</button-->
+      </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+ 
 <header>
 <div id="search" hidden>
 <button type="button" id="show_search" class="btn btn-default btn-lg" ><span class="glyphicon glyphicon-search"></span>Поиск</button>
 </div>  
-				<nav>
+ <nav>
  
-   <form>
-<div id="product_filter">
-    <div class="form-group">
+   <form id="product_filter">
+     <div class="form-group">
 	<p>
  	 <label for="amount">Запрашиваемая сумма млн р.</label>
-  	 <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">	
+  	 <input type="text" id="amount" name ='amount'  readonly style="border:0; color:#f6931f; font-weight:bold;">	
 	</p>
 	<div id="slider-range"></div>
 
@@ -56,7 +73,7 @@
 	</p>
 
         <div class="col-sm-10">
-		<select id='group_invest' class="selectpicker" >
+		<select id='group_invest' class="selectpicker" name ='gr_invest'>
 		<option>Инвестиции в развитие</option>
 		<option>Инвестиции в основные средства</option>
 		<option>Пополнение оборотных средств</option>
@@ -71,7 +88,7 @@
 
 <p>
   <label for="period">Срок привлечения</label>
-  <input type="text" id="period" readonly style="border:0; color:#f6931f; font-weight:bold;">
+  <input type="text" id="period" name ='period' readonly style="border:0; color:#f6931f; font-weight:bold;">
 </p>
  
 <div id="period-slider-range"></div>
@@ -82,159 +99,18 @@
       <div class="col-sm-10">
         <button type="button" id='calc' class="btn btn-primary"   >Рассчитать</button>
       </div>                                                      
+    </div>
+
    </form>
-				</nav>
-</div>				
+ </nav>
 			</header>
 
+<body> 
 
-<div id="finding_products" hidden>
+  <div  id="finding_products" hidden>
 
-<div class="row">
-
-  <div class="col-sm-6 col-md-4" >
-    <div class="thumbnail" >
-<img data-src="" alt="300x200" src="images/logo.png" >
-      <div class="caption">
-<h1 id="program_name">Займ</h1>
-<h3 id="program_name">Программа «Консорциумы» (ФРП)</h3>
-<p><a href="#" class="btn btn-primary" role="button">Оформить заявку</a> 
-
-<div class="panel-group" id="accordion">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-		Проценты
-              </a>
-            </h4>
-    </div>
-    <div id="collapseOne" class="panel-collapse collapse in">
-      <div class="panel-body">
-<p id="program_perc">Мин ставка 5%</p>
-<p id="program_srok">Срок max, лет 5%</p>
-<p id="program_srok">Срок max, лет 7</p>
- 
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                Описание
-              </a>
-            </h4>
-    </div>
-    <div id="collapseTwo" class="panel-collapse collapse">
-      <div class="panel-body">
- <p id="program_comment" >
-В рамках этой программы льготное заёмное 
-софинансирование предоставляется на реализацию 
-проектов консорциумов предприятий и инжиниринговых компаний по 
-разработке перспективных технологий, учитывающих принципы наилучших доступных технологий, 
-с дальнейшим внедрением разработанных технологий на предприятиях.
-не менее 50% от суммы займа в год, начиная со 2 года серийного производства
-</p>
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                 Условия
-              </a>
-            </h4>
-    </div>
-    <div id="collapseThree" class="panel-collapse collapse">
-      <div class="panel-body">
-<p>Сумма max, млн. руб.  100</p>
-<p>Стоимость проекта min, млн. руб.  40</p>
-
-      </div>
-    </div>
-  </div>
-</div>
-
-
-						
-      </div>
-    </div>
-  </div>
-
-  <div class="col-sm-6 col-md-4">
-    <div class="thumbnail" >
-<img data-src="" alt="300x200" src="images/logo.png" >
-      <div class="caption">
-<h1 id="program_name">Займ</h1>
-<h3 id="program_name">Программа «Консорциумы» (ФРП)</h3>
-<p><a href="#" class="btn btn-primary" role="button">Оформить заявку</a> 
-
-<div class="panel-group" id="accordion1">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion1" href="#collapseOne1">
-		Проценты
-              </a>
-            </h4>
-    </div>
-    <div id="collapseOne1" class="panel-collapse collapse in">
-      <div class="panel-body">
-<p id="program_perc">Мин ставка 5%</p>
-<p id="program_srok">Срок max, лет 5%</p>
-<p id="program_srok">Срок max, лет 7</p>
- 
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion1" href="#collapseTwo1">
-                Описание
-              </a>
-            </h4>
-    </div>
-    <div id="collapseTwo1" class="panel-collapse collapse">
-      <div class="panel-body">
- <p id="program_comment" >
-В рамках этой программы льготное заёмное 
-софинансирование предоставляется на реализацию 
-проектов консорциумов предприятий и инжиниринговых компаний по 
-разработке перспективных технологий, учитывающих принципы наилучших доступных технологий, 
-с дальнейшим внедрением разработанных технологий на предприятиях.
-не менее 50% от суммы займа в год, начиная со 2 года серийного производства
-</p>
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion1" href="#collapseThree1">
-                 Условия
-              </a>
-            </h4>
-    </div>
-    <div id="collapseThree1" class="panel-collapse collapse">
-      <div class="panel-body">
-<p>Сумма max, млн. руб.  100</p>
-<p>Стоимость проекта min, млн. руб.  40</p>
-
-      </div>
-    </div>
-  </div>
-</div>
-
-
-						
-      </div>
-    </div>
   </div>
 
 
-</div>
 </body>
 </html>

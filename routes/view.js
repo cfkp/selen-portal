@@ -22,19 +22,23 @@ if (filter instanceof Array) {result=[];} else {result={};};
 	for (var f in filter)   
 	{ 
 		newf=f;
-if (f=='or'||f=='regex'||f=='options'  )
+if (f=='or'||f=='regex'||f=='options'|| f=='and' || f=='or'|| f=='lt'|| f=='gt'|| f=='lte'||f=='gte'|| f=='eq')
 { newf='$'+newf;};
 	
 	if (filter[f]!=undefined&&filter[f] instanceof Object)
 {
 
 result[newf]=get_filter (filter[f],value)}
-else if (typeof filter[f]=='string' ) { 
+else if (typeof filter[f]=='string') { 
 
 var s; s=filter[f]; 
 result[newf]=s.replace('[value]', value);
 
-} ;    try{
+
+}else if (typeof filter[f]=='number'|| typeof filter[f]=='boolean') 
+{result[newf]=filter[f];
+}
+;    try{
 		if (result[newf] === "session_user") {
 			result[newf] = userID;
 		};
@@ -111,7 +115,7 @@ var get_defcolmodel= function (root_src,src,parent_path, dst/*,i*/){
  		    get_defcolmodel   (root_src,src[prop],path, dst/*,i*/)
 		   };
                  }; 
-	console.log(JSON.stringify(src[prop]));
+//	console.log(JSON.stringify(src[prop]));
 
 	    if (src[prop]&&src[prop].type&&(src[prop].type=='string'||src[prop].type=='text'||src[prop].type=='number'||src[prop].type=='boolean'||src[prop].type=='integer')){
 	//	path=path+'.'+prop;
@@ -142,12 +146,7 @@ var colmodel=[{
             }];
             
 	get_defcolmodel(meta_class.data,meta_class.data,'data',colmodel/*,10*/);
-/*	for (x in colmodel)
-	{
-	console.log(x +'label '+ colmodel[x].label );
-	console.log(x +'name '+ colmodel[x].name );
-	};*/
-view['colmodel']=colmodel;	
+ view['colmodel']=colmodel;	
  return view;	
 
 };                                           
@@ -209,12 +208,15 @@ router.post('/:meta_class/:meta_view', function (req, res, next) {
 	console.log("post '/:meta_class/:meta_view'");
 	console.log("post " + req.params.meta_class);
 	console.log("post " + req.params.meta_view);
+	console.log("post "+JSON.stringify(req.body) );
 
         userID = req.session.user;
 
 	var meta_class = req.params.meta_class;
 	var meta_view = req.params.meta_view;
-
+	var user_filter;
+	if (req.body) {user_filter=req.body.filter};
+	
 	var userID = req.session.user;
 	/////////////////////////
 	var dbloc = db.get();
@@ -224,19 +226,16 @@ router.post('/:meta_class/:meta_view', function (req, res, next) {
 		
 		if (typeof meta_view === 'undefined' ||!meta_view||meta_view===null||meta_view==='undefined') {
 			collectname="meta_class";
-			console.log("select class");
-			fil={"meta_name": meta_class};
+ 			fil={"meta_name": meta_class};
 		};
 
 	async.waterfall([
 			function (callback) {
-				console.log("search model");
-				console.log("collectname "+collectname);
-				console.log("fil "+fil);
-				dbloc.collection(collectname).findOne(fil, callback);
+ 				dbloc.collection(collectname).findOne(fil, callback);
 			},
 			function (model, callback) {
  				var filter = {};
+				var vfilter ;
 				var selcols={};
 				console.log("model");
                                 console.log(model);
@@ -244,17 +243,36 @@ router.post('/:meta_class/:meta_view', function (req, res, next) {
 				
 					selcols=get_col_list(model.data.colmodel) ;
 					console.log(selcols);
+					
 					if (model.data.filter) {
-						filter = model.data.filter
+						vfilter = model.data.filter
 						
-				        filter=get_filter(filter,null);
-					console.log('filter '+JSON.stringify(filter));
+				         
 
 					};
 				};
 				
 				if (collectname=='meta_class') 
 					{model['data']= get_gridcols_from_class(model)};	
+				if (vfilter&&user_filter)
+					{ console.log('filter 1' );
+					 filter['and']=[];
+					 filter['and'].push(vfilter)    ;
+					 filter['and'].push(user_filter);
+					}
+				else if (vfilter) {
+					console.log('filter 2' );
+					filter=vfilter;
+				}
+ 
+
+				else if (user_filter) {
+					console.log('filter 3' );
+					filter=user_filter; 
+				};
+                                console.log('filter4 '+JSON.stringify(filter));
+				filter=get_filter(filter,null);
+				console.log('filter5 '+JSON.stringify(filter));
 				var rows= dbloc.collection(meta_class).find
 					(filter, selcols).toArray(function (err, rows) {
 						var result = {};

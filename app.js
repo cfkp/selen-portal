@@ -1,6 +1,4 @@
 var express = require('express');
-var morganlogger = require('morgan')
-
 
 var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
@@ -16,7 +14,6 @@ var mongoose = require('libs/mongoose');
 var HttpError = require('error').HttpError;
 
 var app = express();
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.engine('ejs', require('ejs-locals'));
@@ -56,7 +53,7 @@ app.use(function(err, req, res, next) {
       //  message: err.message,
       //  error: err});
     } else {
-     // log.error(err );
+      log.error(err );
       err = new HttpError(500);
       res.sendHttpError(err);
     }

@@ -123,7 +123,7 @@ shrinkToFit:false,
 		refresh: true,
 		beforeRefresh: function () {
 			//	alert("beforeRefresh" + meta_class);
-			get_view_data(grid_container,meta_class, meta_view, refresh_grid);
+			get_view_data(grid_container,meta_class, meta_view,undefined, refresh_grid);
 		},
 		afterRefresh: function () {
 			//	alert("afterRefresh" + meta_view);
@@ -158,14 +158,17 @@ function refresh_grid(grid_element ,meta_class, meta_view, dataresponse) {
 
 function show_view (grid_container,meta_class, meta_view) {
 
-	get_view_data( grid_container,meta_class, meta_view,showgrid);
+	get_view_data( grid_container,meta_class, meta_view,undefined,showgrid);
 
 };
 
-var get_view_data = function ( grid_container,meta_class, meta_view, datarender) {
+var get_view_data = function ( grid_container,meta_class, meta_view,user_filter, datarender) {
 	//  function api_load(url,requestdata,responsefunc) {
-	var requestdata = {}; //filter потом будет
+	var requestdata ; //filter потом будет
 	var url = meta_class + '/' + meta_view;
+
+	if (user_filter){requestdata = {'filter':user_filter};};
+
 	$.ajax({
 		url: "/view/" + url,
 		type: "POST",
