@@ -40,11 +40,14 @@ result[newf]=s.replace('[value]', value);
 }
 ;    try{
 		if (result[newf] === "session_user") {
+//			console.log('set session_user '+result[newf]);
 			result[newf] = userID;
+//			console.log(' session_user '+result[newf]);
 		};
 							
 	if (newf=="_id")
 	{  
+//	console.log('set object_id '+result[newf]);
 	result[newf]= new ObjectID(result[newf]); 
 	}; }   catch(err){console.log('f= _id err '+err);};
 
@@ -217,8 +220,7 @@ router.post('/:meta_class/:meta_view', function (req, res, next) {
 	var user_filter;
 	if (req.body) {user_filter=req.body.filter};
 	
-	var userID = req.session.user;
-	/////////////////////////
+ 	/////////////////////////
 	var dbloc = db.get();
    	var collectname= "meta_view";
 	var fil= {"meta_name": meta_view};

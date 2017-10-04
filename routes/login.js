@@ -12,9 +12,21 @@ var db = require('../db/db');
 var ObjectID = require('mongodb').ObjectID;
 
 router.get('/', function (req, res) {
-    res.render('login');
-} );
 
+console.log("login form");
+console.log("login req.query.mode " + req.query.mode);
+console.log("login req.query.program " + req.query.program);
+ 
+
+    res.render('login',{mode:req.query.mode,program:req.query.program});
+} );
+/*
+router.get('/:mode :programm', function (req, res) {
+ console.log("login ?:mode :programm");
+
+    res.render('login',{mode:req.params.mode,programm:req.params.programm});
+} );
+*/
 
 router.post('/', function (req, res, next) {
 	console.log("авторизация");

@@ -68,7 +68,7 @@ var menu_item_click = function () {
 			hide_formBRUT($("#main_workspace"));
 			load_class(this);
 		} else if (obj.attr("meta_action_type") == "method") {
-			call_method(obj.attr("meta_class"), obj.attr("meta_method"));
+			call_method(obj.attr("meta_class"), obj.attr("meta_method"),$('#main_workspace'));
 		} else if (obj.attr("meta_action_type") == "view") {
  			show_view($('#main_workspace'),obj.attr("meta_class"), obj.attr("meta_view"));
 		};

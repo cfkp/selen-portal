@@ -56,11 +56,35 @@
 <button type="button" id="show_search" class="btn btn-default btn-lg" ><span class="glyphicon glyphicon-search"></span>Поиск</button>
 </div>  
  <nav>
- 
    <form id="product_filter">
      <div class="form-group">
 	<p>
- 	 <label for="amount">Запрашиваемая сумма млн р.</label>
+ 	 <label for="amount">Компания является (отражена в реестре) субъектом МСП</label>
+  	 <input type="boolean" id="amount" name ='amount'  >	
+	</p>
+	<div id="slider-range"></div>
+
+    </div>
+     <div class="form-group">
+	<p>
+ 	 <label for="amount">Общая сумма проекта млн р.</label>
+  	 <input type="text" id="amount" name ='amount'  readonly style="border:0; color:#f6931f; font-weight:bold;">	
+	</p>
+	<div id="slider-range"></div>
+
+    </div>
+     <div class="form-group">
+	<p>
+ 	 <label for="amount">Сумма собственного участия млн р.</label>
+  	 <input type="text" id="amount" name ='amount'  readonly style="border:0; color:#f6931f; font-weight:bold;">	
+	</p>
+	<div id="slider-range"></div>
+
+    </div>
+
+     <div class="form-group">
+	<p>
+ 	 <label for="amount">Сумма запрашиваемого финансирования млн р.</label>
   	 <input type="text" id="amount" name ='amount'  readonly style="border:0; color:#f6931f; font-weight:bold;">	
 	</p>
 	<div id="slider-range"></div>
@@ -86,12 +110,12 @@
     </fieldset>
     <div class="form-group">
 
-<p>
-  <label for="period">Срок привлечения</label>
-  <input type="text" id="period" name ='period' readonly style="border:0; color:#f6931f; font-weight:bold;">
-</p>
+	<p>
+	  <label for="period">Срок привлечения</label>
+	  <input type="text" id="period" name ='period' readonly style="border:0; color:#f6931f; font-weight:bold;">
+	</p>
  
-<div id="period-slider-range"></div>
+	<div id="period-slider-range"></div>
     </div>
  
 

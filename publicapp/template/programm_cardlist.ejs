@@ -1,35 +1,14 @@
 <div class="row"> 
-<!--{
-        "program": {
-            "name": "werwerer",
-            "group_program": "Инвестиции в развитие",
-            "product": "Кредит",
-            "institute": "ФРП",
-            "min_tax_percent": 32,
-            "max_year_limit": 233,
-            "comment": "werwerwer",
-            "goal": "werwerwerwer"
-        },
-        "program_criteria": {
-            "min_sum": 232,
-            "max_sum": 323,
-            "min_cost_project": 434,
-            "max_prc_product": 23,
-            "min_percent_owner": 32,
-            "msp_nal": true
-        }
-    }
-<-->
 <% for(var i=0; i < rows.length; i++) { %>
 
 <div class="col-sm-6 col-md-4"> 
 <div class="thumbnail" >
 <img data-src="" alt="300x200" src="images/logo.png" >
       <div class="caption">
-<h1  > <%= rows[i].data.program.institute%> </h1>
-<h1  > <%= rows[i].data.program.product%> </h1>
-<h3  ><%= rows[i].data.program.name%></h3>
-<p><a href="#" class="btn btn-primary" role="button">Оформить заявку</a> 
+<h1> <%= rows[i].data.program.institute%> </h1>
+<h1> <%= rows[i].data.program.product%> </h1>
+<h3><%= rows[i].data.program.name%></h3>
+<p><a href="../login?mode=registration&programm=<%= rows[i]._id%>" class="btn btn-primary" role="button">Оформить заявку</a> 
 
 <div class="panel-group" id="acrd<%= rows[i]._id%>">
   <div class="panel panel-default">
@@ -42,9 +21,8 @@
     </div>
     <div id="clpse1_<%= rows[i]._id%>" class="panel-collapse collapse in">
       <div class="panel-body">
-<p>Мин ставка <%= rows[i].data.program.min_tax_percent %>%</p>
-<p>Срок max <%= rows[i].data.program.max_year_limit %> лет </p>
-  
+	<p>Мин ставка <%= rows[i].data.program.min_tax_percent %>%</p>
+	<p>Срок max <%= rows[i].data.program.max_year_limit %> лет </p>
       </div>
     </div>
   </div>

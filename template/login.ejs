@@ -1,6 +1,8 @@
 <% layout('layout/page') -%>
 <% block('title', "") -%>
 <div class="parent">
+
+<% if (!mode||mode!=='registrate'){%>
 <div class="registrate">
   <h1 class="text-center">Авторизация</h1>
   <div class="well">
@@ -24,10 +26,33 @@
   </div>
   <div class="text-right"><a  onclick="showReg(this);">Регистрация</a></div>
   <div class="text-right"><a  onclick="showReset(this);">Забыл пароль</a></div>
+</div>
+<div class="reset_pass" style="display:none">
+  <h1 class="text-center">Забыли пароль</h1>
+  <div class="well">
+    <form name="resetpass-form" >
+      <input type="hidden" name="isNew" value="2">
+      <div class="form-group">
+        <label for="email" class="control-label">Email</label>
+        <input type="email" class="form-control" name="email" required placeholder="Email">
+      </div>
+	  
+      <div class="form-group">
+        <label class="control-label">Сбросить пароль и выслать на почтовый адрес.
+		<input id="agree" type="checkbox" class="form-control" name="agree" required placeholder="Пароль">
+	    </label>
+      </div>	  
+      <div class="form-group">
+          <button id= "resetpass_submit" type="submit" class="btn btn-primary" data-loading-text="Отправляю..." disabled >Подтвердить</button>
+          <span  class="help-block error"></span>
+       </div>
+    </form>
+  </div>
 
 </div>
 
-<div class="registrate" style="display:none">
+<div class="registrate" 
+ style="display:none"   >
   <h1 class="text-center">Регистрация</h1>
   <div class="well">
     <form name="reg-form" >
@@ -67,31 +92,50 @@
   </div>
   <div class="text-right"><a  onclick="showReg(this);">Я уже зарегистрировался</a></div>
 </div>
-
-
-<div class="reset_pass" style="display:none">
+<%}%>
+<% if (mode&&mode=='registrate'){%>
+<!-- Регистрация клиента из  -->
+<div class="registrate" >
   <h1 class="text-center">Регистрация</h1>
   <div class="well">
-    <form name="resetpass-form" >
-      <input type="hidden" name="isNew" value="2">
+    <form name="reg-form" >
+      <input type="hidden" name="isNew" value="1">
       <div class="form-group">
         <label for="email" class="control-label">Email</label>
         <input type="email" class="form-control" name="email" required placeholder="Email">
       </div>
-	  
       <div class="form-group">
-        <label class="control-label">Сбросить пароль и выслать на почтовый адрес.
-		<input id="agree" type="checkbox" class="form-control" name="agree" required placeholder="Пароль">
+        <label for="tel" class="control-label">Телефон</label>
+        <input type="tel" class="form-control" name="tel" required placeholder="Телефон">
+      </div>
+	  <div class="form-group">
+        <label for="fio" class="control-label">Как к Вам обращаться</label>
+        <input type="text" class="form-control" name="fio" required placeholder="Как к Вам обращаться">
+      </div>
+      <div class="form-group">
+        <label class="control-label">Я принимаю <a href="/agreement.html" target="_blank">пользовательское соглашение</a>
+		<input id="agree_rules" type="checkbox" class="form-control" name="agree_rules" required placeholder="Пароль">
 	    </label>
       </div>	  
+      <input type="hidden" class="form-control" name="program_id" value ="<%= program %>" >
+<!--
+      <input type="hidden" class="form-control" name="program_id" >
+      <input type="hidden" class="form-control" name="program_id" >
+      <input type="hidden" class="form-control" name="program_id" >
+      <input type="hidden" class="form-control" name="program_id" >
+      <input type="hidden" class="form-control" name="program_id" >
+      <input type="hidden" class="form-control" name="program_id" >
+-->
       <div class="form-group">
-          <button id= "resetpass_submit" type="submit" class="btn btn-primary" data-loading-text="Отправляю..." disabled >Подтвердить</button>
+          <button id= "reg_submit" type="submit" class="btn btn-primary" data-loading-text="Отправляю..." disabled >Подтвердить</button>
           <span  class="help-block error"></span>
        </div>
     </form>
   </div>
+  <div class="text-right"><a  onclick="showReg(this);">Я уже зарегистрировался</a></div>
+</div>
 
-  </div>
+<%}%>
 
 
 

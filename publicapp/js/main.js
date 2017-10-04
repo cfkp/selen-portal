@@ -88,7 +88,7 @@ function load_class(obj) {
 
 }; 
  
-function api_load(url, requestdata, responsefunc) {
+function api_load(url, requestdata, responsefunc,container) {
 	$.ajax({
 		url: "../api/" + url,
 		type: "POST",
@@ -105,7 +105,7 @@ function api_load(url, requestdata, responsefunc) {
 						schema = dataresponse.schema;
 					}
 					var value = dataresponse.value;
-					responsefunc(schema, value);
+					responsefunc(schema, value,container);
 				} else {
 					messagedlg(dataresponse.responseText, "Данные сохранены", "message");
 				};

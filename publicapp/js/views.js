@@ -35,25 +35,28 @@ id_cont['gridpager_id_']='#'+id_cont['gridpager_id'];
 return id_cont;
 	
 };
-var showgrid = function (grid_container,meta_class, meta_view, data) {
+
+var showgrid = function (grid_container, data) {
         closegrid(grid_container);
 	var header = data.header;
 	var rows = data.rows;
+	var meta_class=	grid_container.attr('meta_class');
+	var meta_view =	grid_container.attr('meta_view');
 
   if ((header.view_mode)&&(header.view_mode=="page" )){
      //   drawpage(meta_class, meta_view, data);
      grid_container.find('#grid_container').append(arrayToTable(meta_class, meta_view, data));
-return;
+	return;
   };      
     
-    var gridid=get_grid_id(grid_container);
+    	var gridid=get_grid_id(grid_container);
 
 
-     var table = $('<table></table>');
+     	var table = $('<table></table>');
     
-     table.attr('id',gridid.grid_id);
-   var pager = $('<div></div>'); 
-pager.attr('id',gridid.gridpager_id)	 
+     	table.attr('id',gridid.grid_id);
+   	var pager = $('<div></div>'); 
+	pager.attr('id',gridid.gridpager_id)	 
         var gr_cont= grid_container.find('#grid_container').append(table);
         gr_cont.append(pager);
 	var container=gr_cont.find(gridid.grid_id_);
@@ -84,9 +87,9 @@ pager.attr('id',gridid.gridpager_id)
 		colModel: header.colmodel,
 		viewrecords: true, // show the current page, data rang and total records on the toolbar
 		caption: header.title,
-		multiselect: false,
+		multiselect: true,
 		pager: gridid.gridpager_id_,
-		loadonce: true,
+		loadonce: true, 
 shrinkToFit:false,
 		onSelectRow: function (rowid, selected) {
 			if ((header.detail) && (rowid != null)&&detail_container.length!=0) {
@@ -122,8 +125,7 @@ shrinkToFit:false,
 		del: false,
 		refresh: true,
 		beforeRefresh: function () {
-			//	alert("beforeRefresh" + meta_class);
-			get_view_data(grid_container,meta_class, meta_view,undefined, refresh_grid);
+ 			get_view_data(grid_container,undefined, refresh_grid);
 		},
 		afterRefresh: function () {
 			//	alert("afterRefresh" + meta_view);
@@ -147,8 +149,11 @@ shrinkToFit:false,
 
 };
 
-function refresh_grid(grid_element ,meta_class, meta_view, dataresponse) {
+function refresh_grid(grid_container , dataresponse) {
+	var gridid=get_grid_id(grid_container);
+	var grid_element= $(gridid.grid_id_);
 	var rows = dataresponse.rows;
+
 	grid_element.jqGrid('clearGridData');
 	grid_element.jqGrid('setGridParam', {
 		data: rows
@@ -157,14 +162,20 @@ function refresh_grid(grid_element ,meta_class, meta_view, dataresponse) {
 };
 
 function show_view (grid_container,meta_class, meta_view) {
+	grid_container.attr('meta_class',meta_class);
+	grid_container.attr('meta_view',meta_view);
 
-	get_view_data( grid_container,meta_class, meta_view,undefined,showgrid);
+	get_view_data( grid_container,undefined,showgrid);
 
 };
 
-var get_view_data = function ( grid_container,meta_class, meta_view,user_filter, datarender) {
+var get_view_data = function ( grid_container,user_filter, datarender) {
 	//  function api_load(url,requestdata,responsefunc) {
 	var requestdata ; //filter потом будет
+	
+	var meta_class=	grid_container.attr('meta_class');
+	var meta_view =	grid_container.attr('meta_view');
+ 
 	var url = meta_class + '/' + meta_view;
 
 	if (user_filter){requestdata = {'filter':user_filter};};
@@ -179,7 +190,7 @@ var get_view_data = function ( grid_container,meta_class, meta_view,user_filter,
 		statusCode: {
 			200: function (dataresponse) {
 				if (datarender) {
-					datarender(grid_container,meta_class, meta_view, dataresponse);
+					datarender(grid_container, dataresponse);
 				}
 				//	alert('view result ok');
 			},
