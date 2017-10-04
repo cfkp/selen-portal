@@ -53,9 +53,9 @@ var rendermethodform = function(formjson,data,container) {
  	$('#method_execute').attr("meta_object_id",data._id);	
 
  	$('#method_execute #method_title').html(schema.title);	
-	$('#method_execute .btn-primary').unbind('click');
+	$('#method_execute #execute').unbind('click');
 
-	$('#method_execute .btn-primary').bind('click', function () {
+	$('#method_execute #execute').bind('click', function () {
 		execute_method(null, bf_modal.getData(),container);
 	});
 

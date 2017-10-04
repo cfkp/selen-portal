@@ -74,7 +74,7 @@ var showgrid = function (grid_container, data) {
 		
 		
 	};
-
+	////console.log(JSON.stringify(header.colmodel));
 
 	$.jgrid.defaults.width = 780;
 	$.jgrid.defaults.responsive = true; 
@@ -91,6 +91,10 @@ var showgrid = function (grid_container, data) {
 		pager: gridid.gridpager_id_,
 		loadonce: true, 
 shrinkToFit:false,
+		beforeSelectRow: function (rowId, e) {
+	            container.jqGrid("resetSelection");
+	            return true;
+	        },
 		onSelectRow: function (rowid, selected) {
 			if ((header.detail) && (rowid != null)&&detail_container.length!=0) {
 

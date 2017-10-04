@@ -1,0 +1,53 @@
+﻿{
+    "_id": ObjectId("58f66f26c712876d64247bff"),
+    "name": "request_detail_menu",
+    "title": "Меню tab",
+    "data": {
+        "name": "request_detail_menu",
+        "title": "Меню клиента",
+        "root_menu": "#detail_tabs",
+        "items": [
+            {
+                "name": "enterprise_menu",
+                "title": "Инициатор проекта",
+                "meta_class": "enterprise",
+                "root_menu": "#left_menu",
+                "meta_action_type": "object",
+                "active": true
+            },
+            {
+                "name": "project_menu",
+                "title": "Проект",
+                "root_menu": "#left_menu",
+                "meta_class": "project",
+                "meta_action_type": "object"
+            },
+            {
+                "name": "project_ent_menu",
+                "title": "Проектная организация",
+                "root_menu": "#left_menu",
+                "meta_class": "project_ent",
+                "meta_action_type": "object"
+            },{
+                "name": "app_menu",
+                "title": "Приложения",
+                "root_menu": "#left_menu",
+                "meta_class": "applications",
+                "meta_action_type": "object"
+            },
+            {
+                "name": "person_menu",
+                "title": "orgs",
+                "root_menu": "#left_menu",
+                "meta_class": "orgs",
+                "meta_action_type": "object"
+            },
+            {
+                "name": "report",
+                "title": "Отчеты ",
+                "root_menu": "#left_menu",
+                "class": "dropdown"
+            }
+        ]
+    }
+}

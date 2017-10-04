@@ -24,8 +24,8 @@
 
 <link rel="stylesheet" href="../bootstrap-select/css/bootstrap-select.min.css">
 <link rel="stylesheet" href='../css/cfkp_calc/style_DR.css'/>
-<link rel="stylesheet" href='../css/cfkp_calc/style.css'/>
-<link rel="stylesheet" href='../css/cfkp_calc/demo.css'/>
+<!--link rel="stylesheet" href='../css/cfkp_calc/style.css'/>
+<link rel="stylesheet" href='../css/cfkp_calc/demo.css'/-->
 
 <script src="../bootstrap-select/js/bootstrap-select.min.js"></script>
 <script src="../bootstrap-select/js/i18n/defaults-en_US.min.js"></script>
@@ -58,72 +58,64 @@
  <nav>
    <form id="product_filter">
      <div class="form-group">
-	<p>
- 	 <label for="amount">Компания является (отражена в реестре) субъектом МСП</label>
-  	 <input type="boolean" id="amount" name ='amount'  >	
-	</p>
-	<div id="slider-range"></div>
+          <label for="product">Продукт</label>
+ 
+  		<select   class="form-control" id='product' name ='product' class="form-control">
+                            <option>Кредит</option>
+                            <option>Гарантия</option>
+                            <option>Займ</option>
+                            <option>Лизинг</option>
+ 		</select>
 
-    </div>
-     <div class="form-group">
-	<p>
- 	 <label for="amount">Общая сумма проекта млн р.</label>
-  	 <input type="text" id="amount" name ='amount'  readonly style="border:0; color:#f6931f; font-weight:bold;">	
-	</p>
-	<div id="slider-range"></div>
+      </div>
+    <div class="form-group">
+        <label  for='goal'>Цель привлечения  финансирования</label>
 
-    </div>
-     <div class="form-group">
-	<p>
- 	 <label for="amount">Сумма собственного участия млн р.</label>
-  	 <input type="text" id="amount" name ='amount'  readonly style="border:0; color:#f6931f; font-weight:bold;">	
-	</p>
-	<div id="slider-range"></div>
-
-    </div>
-
-     <div class="form-group">
-	<p>
- 	 <label for="amount">Сумма запрашиваемого финансирования млн р.</label>
-  	 <input type="text" id="amount" name ='amount'  readonly style="border:0; color:#f6931f; font-weight:bold;">	
-	</p>
-	<div id="slider-range"></div>
-
-    </div>
-    <fieldset class="form-group">
-      <div class="row">
-	<p>
-        <label class="col-form-legend col-sm-2">Цель привлечения  финансирования</label>
-	</p>
-
-        <div class="col-sm-10">
-		<select id='group_invest' class="selectpicker" name ='gr_invest'>
+		<select id='goal' class="form-control" name ='goal' class="form-control">
 		<option>Инвестиции в развитие</option>
 		<option>Инвестиции в основные средства</option>
 		<option>Пополнение оборотных средств</option>
 		<option>Гарантия</option>
 		<option>Развитие бизнеса в ТОР</option>
 		</select>
-
-        </div>
-      </div>
-    </fieldset>
+    </div>
     <div class="form-group">
 
+	  <label for="years">Срок привлечения</label>
+	  <input type="number"  name ='years' class="form-control" >
+      </div>
+     <div class="form-group">
+ 	 <label for="fin_sum">Сумма запрашиваемого финансирования млн р.</label>
+  	 <input type="number"   name ='fin_sum' class="form-control" >	
+ 
+    </div>
+     <div class="form-group">
 	<p>
-	  <label for="period">Срок привлечения</label>
-	  <input type="text" id="period" name ='period' readonly style="border:0; color:#f6931f; font-weight:bold;">
+ 	 <label for="cost_project">Общая сумма проекта млн р.</label>
+  	 <input type="number"   name ='cost_project' class="form-control"  >	
 	</p>
  
-	<div id="period-slider-range"></div>
     </div>
+     <div class="form-group">
+	<p>
+ 	 <label for="percent_owner">Сумма собственного участия млн р.</label>
+  	 <input type="number"   name ='percent_owner' class="form-control"  >	
+	</p>
+ 
+    </div>
+
+     <div class="form-group">
+  	 <label for="msp_nal">Компания является (отражена в реестре) субъектом МСП</label>
+  	 <input type="checkbox" name ='msp_nal' class="form-control" >	
+  
+    </div>
+
+
  
 
     <div class="form-group row">
-      <div class="col-sm-10">
-        <button type="button" id='calc' class="btn btn-primary"   >Рассчитать</button>
-      </div>                                                      
-    </div>
+         <button type="button" id='calc' class="btn btn-primary"   >Рассчитать</button>
+     </div>
 
    </form>
  </nav>
