@@ -859,7 +859,7 @@ router.post('/callmethod/:meta_class/:meta_method/execute',checkAuth, function (
 	};
 
 	console.log(req.body._id);
-
+	var sysdate=   new Date().toISOString();
 	var obj_id;
 	if (meta_method=='edit'&&req.body._id) {
 		obj_id = new ObjectID(req.body._id);
@@ -868,7 +868,7 @@ router.post('/callmethod/:meta_class/:meta_method/execute',checkAuth, function (
 			dbloc.collection(meta_class).updateOne({
 				"_id": obj_id
 			}, {
-				$set: {
+				$set: { "updated":sysdate,
 					"data": data
 				}
 			}, function (err, docs) {
@@ -909,10 +909,9 @@ router.post('/callmethod/:meta_class/:meta_method/execute',checkAuth, function (
 	
 		};
 	}
-	else if (meta_method=='new'&&!req.body._id){
-
+	else if (meta_method=='new'){
 		var row = {
-			"created": Date.now,
+			"created": sysdate ,
 			"user_createid": userID,
 			state: "Новый",
 			"data": data
@@ -936,7 +935,16 @@ router.post('/callmethod/:meta_class/:meta_method/execute',checkAuth, function (
 			res.json(dataReturn);
 		});
 
-	};
+	}
+	else {
+	return	res.status(500).send({
+				'error': 'no_class',
+				'msg': 'Не определен обработчик операции '+meta_method
+			})
+	
+
+};
+;
 });
 
 ////////////////////////////////////////

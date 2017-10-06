@@ -93,7 +93,7 @@ var showgrid = function (grid_container, data) {
 shrinkToFit:false,
 		beforeSelectRow: function (rowId, e) {
 	            container.jqGrid("resetSelection");
-	            return true;
+	            //return true;
 	        },
 		onSelectRow: function (rowid, selected) {
 			if ((header.detail) && (rowid != null)&&detail_container.length!=0) {
