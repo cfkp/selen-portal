@@ -24,6 +24,7 @@
     $( "#period" ).val(  $( "#period-slider-range" ).slider( "values", 0)+'-'+$( "#period-slider-range" ).slider( "values", 1) );
 */  
  $("#calc").bind('click', function () {
+
          var  Form = $('#product_filter').serializeArray();
 	 var  Formparams = {};
       $.each(Form,
@@ -53,6 +54,7 @@ $("#show_search").bind('click', function () {
 
 
     function insertTemplate(container,data) {
+
         getTemplate('../template/programm_cardlist.ejs', function renderTemplate(err, tpl) {
         if (err) {
             throw err;
@@ -61,6 +63,8 @@ $("#show_search").bind('click', function () {
         messagedlg(undefined, "Не найдено вариантов. Попробуйте изменить условия поиска", "error",function(){$("#show_search").click()}) 
 	}
 	else {
+        var formparam = $("form").serialize();
+        data['formparam']=formparam ;
         var html = ejs.render(tpl, data);
         $(container).html(html); }
          });
@@ -78,7 +82,9 @@ $("#show_search").bind('click', function () {
     }
 
 function get_htmldata(url,inpdata,container){
-	selen_call(url, inpdata, function(val){insertTemplate(container,val)});
+
+	selen_call(url, inpdata, function(val){ 
+insertTemplate(container,val)});
 
 };
 
@@ -93,19 +99,20 @@ function get_filter(p ){
 "goal":"Инвестиции в развитие"}
 */
 if (p.msp_nal=='on'){p.msp_nal=true} else {p.msp_nal=false};
+var prod1,prod2;
+if (p.product =='Кредит/Займ') {prod1='Кредит';prod2='Займ';} else {prod1=p.product;prod2=p.product;};
 var f =
 {
      'and' : [
-        { 'and' : [ { 'data.program_criteria.min_sum': { 'lte': Number(p.fin_sum) } }, { 'data.program_criteria.max_sum': { 'gte': Number(p.fin_sum)} } ]  }
-       , { 'and' : [ { 'data.program.max_year_limit': { 'lte': Number(p.years) } }    ] }
-       , { 'and' : [ { 'data.program_criteria.min_cost_project': { 'lte': Number(p.cost_project) } }    ] }
+        { 'and' : [ { 'data.program_criteria.min_sum': { 'lte': Number(p.fin_amount) } }, { 'data.program_criteria.max_sum': { 'gte': Number(p.fin_amount)} } ]  }
+       , { 'and' : [ { 'data.program.max_year_limit': { 'gte': Number(p.fin_period) } }    ] }
+      /* , { 'and' : [ { 'data.program_criteria.min_cost_project': { 'lte': Number(p.cost_project) } }    ] }
        , { 'and' : [ { 'data.program_criteria.min_percent_owner': { 'lte': Number(p.percent_owner) } }    ] }
-       , { 'and' : [ { 'data.program_criteria.min_cost_project': { 'lte': Number(p.cost_project) } }    ] }
-       , { 'and' : [ { 'data.program_criteria.msp_nal': { 'eq': p.msp_nal } }    ] }
-       , { 'and' : [ { 'data.program.product': { 'eq': p.product } }] }
+       , { 'and' : [ { 'data.program_criteria.msp_nal': { 'eq': p.msp_nal } }    ] } */
+       , { 'or' : [ { 'data.program.product': { 'eq': prod1 } },{ 'data.program.product': { 'eq': prod2 } }] }
        , { 'and' : [ { 'data.program.goal':  p.goal  }] }
     ]         
 }
-  
+//f={};  
 return f;
 };
