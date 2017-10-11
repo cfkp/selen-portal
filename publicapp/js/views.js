@@ -76,21 +76,26 @@ var showgrid = function (grid_container, data) {
 	};
 	////console.log(JSON.stringify(header.colmodel));
 
-	$.jgrid.defaults.width = 780;
+	$.jgrid.defaults.width = 900;
 	$.jgrid.defaults.responsive = true; 
 	$.jgrid.defaults.styleUI = 'Bootstrap';
 
 	container.jqGrid({
 		datatype: "local",
 		data: rows,
-		height: 250,
+		height: 400,
 		colModel: header.colmodel,
 		viewrecords: true, // show the current page, data rang and total records on the toolbar
 		caption: header.title,
 		multiselect: true,
 		pager: gridid.gridpager_id_,
 		loadonce: true, 
-shrinkToFit:false,
+	        rowNum: 30,
+ 		viewrecords: true,
+                scroll: 1, // set the scroll property to 1 to enable paging with scrollbar - virtual loading of records
+                emptyrecords: '0 записей найдено', // the message will be displayed at the bottom 
+   
+		shrinkToFit:false,
 		beforeSelectRow: function (rowId, e) {
 	            container.jqGrid("resetSelection");
 	            //return true;

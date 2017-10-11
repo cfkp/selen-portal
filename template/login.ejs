@@ -2,7 +2,7 @@
 <% block('title', "") -%>
 <div class="parent">
 
-<% if (!mode||mode!=='registrate'){%>
+<% if (!mode||mode!=='registration'){%>
 <div class="registrate">
   <h1 class="text-center">Авторизация</h1>
   <div class="well">
@@ -63,10 +63,10 @@
       </div>
       <div class="form-group">
         <label for="tel" class="control-label">Телефон</label>
-        <input type="tel" class="form-control" name="tel" required placeholder="Телефон">
+        <input type="tel" class="form-control" name="phone" required placeholder="Телефон">
       </div>
 	  <div class="form-group">
-        <label for="fio" class="control-label">Как к Вам обращаться</label>
+        <label for="fio" class="control-label">Фио контактного лица</label>
         <input type="text" class="form-control" name="fio" required placeholder="Как к Вам обращаться">
       </div>
       <div class="form-group">
@@ -77,7 +77,7 @@
         <label class="control-label">Повторите пароль</label>
         <input type="password" onchange="checkPassword(this);" class="form-control" id="password_repeat"  required placeholder="Повторите пароль">
         <span id="helpBlock2" style="display: none;" class="help-block">Пароль введен неверно</span>
-      </div>
+      </div>                
 	  
       <div class="form-group">
         <label class="control-label">Я принимаю <a href="/agreement.html" target="_blank">пользовательское соглашение</a>
@@ -93,8 +93,8 @@
   <div class="text-right"><a  onclick="showReg(this);">Я уже зарегистрировался</a></div>
 </div>
 <%}%>
-<% if (mode&&mode=='registrate'){%>
-<!-- Регистрация клиента из  -->
+<% if (mode&&mode=='registration'){%>
+<!-- Регистрация клиента из калькулятора  -->
 <div class="registrate" >
   <h1 class="text-center">Регистрация</h1>
   <div class="well">
@@ -106,26 +106,30 @@
       </div>
       <div class="form-group">
         <label for="tel" class="control-label">Телефон</label>
-        <input type="tel" class="form-control" name="tel" required placeholder="Телефон">
+
+	<input type="text" name="phone" id="tel" class="form-control" data-mask="+7-999-999-99-99" pattern="^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$" required title="+7-ddd-ddd-dd-dd">
+  
       </div>
-	  <div class="form-group">
-        <label for="fio" class="control-label">Как к Вам обращаться</label>
+
+  <div class="form-group">
+        <label for="fio" class="control-label">Фио контактного лица</label>
         <input type="text" class="form-control" name="fio" required placeholder="Как к Вам обращаться">
       </div>
+
       <div class="form-group">
+        <label for="enterprise_inn" class="control-label">ИНН Компании</label>
+	<input type="text" name ="enterprise_inn"  class="form-control" data-mask="999999999999" pattern="^(\d{10}|\d{12})$" required placeholder="ИНН компании инициатора" title="ИНН должен содержать 10 или 12 цифр">
+      </div>
+
+      <div class="f">
         <label class="control-label">Я принимаю <a href="/agreement.html" target="_blank">пользовательское соглашение</a>
-		<input id="agree_rules" type="checkbox" class="form-control" name="agree_rules" required placeholder="Пароль">
+		<input id="agree_rules" type="checkbox" class="form-control1" name="agree_rules" required placeholder="Пароль">
 	    </label>
-      </div>	  
-      <input type="hidden" class="form-control" name="program_id" value ="<%= program %>" >
-<!--
-      <input type="hidden" class="form-control" name="program_id" >
-      <input type="hidden" class="form-control" name="program_id" >
-      <input type="hidden" class="form-control" name="program_id" >
-      <input type="hidden" class="form-control" name="program_id" >
-      <input type="hidden" class="form-control" name="program_id" >
-      <input type="hidden" class="form-control" name="program_id" >
--->
+      </div>
+	<% for (par in params) {%> 	  
+       <input type="hidden" class="form-control" name="<%=par%>" value ="<%=params[par]%>" >
+ 	<%}%>
+  
       <div class="form-group">
           <button id= "reg_submit" type="submit" class="btn btn-primary" data-loading-text="Отправляю..." disabled >Подтвердить</button>
           <span  class="help-block error"></span>

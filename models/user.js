@@ -78,7 +78,7 @@ schema.statics.authorize = function(isNew,email,fio, password,tel, callback) {
             },
             function (user, callback) {
                 if (user) {
-                    callback(new AuthError("Пользователь с таким email уже существует"));
+                    callback(new AuthError("Пользователь с таким email уже существует"),user);
                 }
                 else
                     User.findOne({tel: tel}, callback);

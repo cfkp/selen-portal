@@ -8,7 +8,7 @@
 <h1> <%= rows[i].data.program.institute%> </h1>
 <h1> <%= rows[i].data.program.product%> </h1>
 <h3><%= rows[i].data.program.name%></h3>
-<p><a href="../login?mode=registration&programm=<%= rows[i]._id%>" class="btn btn-primary" role="button">Оформить заявку</a> 
+<p><a href="../login?mode=registration&program_id=<%= rows[i]._id%>&<%= formparam%>" class="btn btn-primary" role="button">Оформить заявку</a> 
 
 <div class="panel-group" id="acrd<%= rows[i]._id%>">
   <div class="panel panel-default">

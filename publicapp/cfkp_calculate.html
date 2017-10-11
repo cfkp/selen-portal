@@ -56,14 +56,13 @@
 <button type="button" id="show_search" class="btn btn-default btn-lg" ><span class="glyphicon glyphicon-search"></span>Поиск</button>
 </div>  
  <nav>
-   <form id="product_filter">
+   <form id="product_filter" >
      <div class="form-group">
           <label for="product">Продукт</label>
  
-  		<select   class="form-control" id='product' name ='product' class="form-control">
-                            <option>Кредит</option>
+  		<select   class="form-control" id='product' name ='product' required class="form-control">
+                            <option>Кредит/Займ</option>
                             <option>Гарантия</option>
-                            <option>Займ</option>
                             <option>Лизинг</option>
  		</select>
 
@@ -71,25 +70,27 @@
     <div class="form-group">
         <label  for='goal'>Цель привлечения  финансирования</label>
 
-		<select id='goal' class="form-control" name ='goal' class="form-control">
-		<option>Инвестиции в развитие</option>
+		<select id='goal'  class="form-control" name ='goal' class="form-control" required>
+		<option>Пополнение оборотных средств</option>
+		<option>Капитальные вложения</option>
+		<!--option>Инвестиции в развитие</option>
 		<option>Инвестиции в основные средства</option>
 		<option>Пополнение оборотных средств</option>
 		<option>Гарантия</option>
-		<option>Развитие бизнеса в ТОР</option>
+		<option>Развитие бизнеса в ТОР</option-->
 		</select>
     </div>
     <div class="form-group">
 
-	  <label for="years">Срок привлечения</label>
-	  <input type="number"  name ='years' class="form-control" >
+	  <label for="fin_period">Срок привлечения</label>
+	  <input type="number"  name ='fin_period' class="form-control" required>
       </div>
      <div class="form-group">
- 	 <label for="fin_sum">Сумма запрашиваемого финансирования млн р.</label>
-  	 <input type="number"   name ='fin_sum' class="form-control" >	
+ 	 <label for="fin_amount">Сумма запрашиваемого финансирования млн р.</label>
+  	 <input type="number"   name ='fin_amount' class="form-control" required>	
  
     </div>
-     <div class="form-group">
+     <!--div class="form-group">
 	<p>
  	 <label for="cost_project">Общая сумма проекта млн р.</label>
   	 <input type="number"   name ='cost_project' class="form-control"  >	
@@ -105,21 +106,31 @@
     </div>
 
      <div class="form-group">
-  	 <label for="msp_nal">Компания является (отражена в реестре) субъектом МСП</label>
-  	 <input type="checkbox" name ='msp_nal' class="form-control" >	
+  	 <label for ="msp_nal">Компания является (отражена в реестре) субъектом МСП</label>
+	<div class="radio">
+	  <label>
+	          <input type="radio" name="msp_nal" id="msp_nal_yes" value="on" checked>
+	          ДА
+	        </label>
+	</div>
+	<div class="radio">
+	  <label>
+          <input type="radio"  name="msp_nal" id="msp_nal_no" value="off">
+          НЕТ
+          </label>
+	</div>
+  	 	
   
-    </div>
-
-
+    </div-->
  
 
     <div class="form-group row">
-         <button type="button" id='calc' class="btn btn-primary"   >Рассчитать</button>
+         <button type="button" id='calc' class="btn btn-primary btn-lg"   >Рассчитать</button>
      </div>
 
    </form>
  </nav>
-			</header>
+</header>
 
 <body> 
 

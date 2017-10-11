@@ -9,16 +9,17 @@ var mailer = require('../middleware/sendmail'); //-- Your js file path
 var async = require('async');
 
 var db = require('../db/db');
+var usersdb = require('../db/usersdb');
+
 var ObjectID = require('mongodb').ObjectID;
 
 router.get('/', function (req, res) {
 
 console.log("login form");
-console.log("login req.query.mode " + req.query.mode);
-console.log("login req.query.program " + req.query.program);
+console.log("login req.query  " + JSON.stringify(req.query) );
  
 
-    res.render('login',{mode:req.query.mode,program:req.query.program});
+    res.render('login',{mode:req.query.mode,params:req.query});
 } );
 /*
 router.get('/:mode :programm', function (req, res) {
@@ -68,8 +69,10 @@ router.post('/', function (req, res, next) {
 	if ((isNew=='1')||(!user.state)||(user.state=="new")) {
 	console.log("new user");
 		mailer(user.email,'Регистрация',null,'regmail',{user:user});
-
-		res.status(200).send({
+		if (req.body.program_id){
+    			usersdb.create_request(String(user._id),fio,req.body.phone,req.body.fin_amount,req.body.fin_period,req.body.program_id,req.body.enterprise_inn,req.body.goal,req.body.product)
+		}	
+	res.status(200).send({
 				'type': 'Сообщение',
 				'msg': 'По указанному Вами адресу направлено письмо с подтверждением регистрации. Просьба перейти по ссылке, указанной в письме'
 			});

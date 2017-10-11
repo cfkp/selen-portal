@@ -1,0 +1,17 @@
+                       поле в справочнике                                                  отношение  поле в фильтре 
+
+Минимальная сумма запрашиваемого финансирования, млн. руб. (data.program_criteria.min_sum) <= (lte)   p.fin_sum 
+
+Максимальная сумма запрашиваемого финансирования, млн. руб.(data.program_criteria.max_sum) >= (gte)   p.fin_sum 
+
+Срок max, лет (data.program.max_year_limit)                                                <= (lte)   p.years 
+                         
+Стоимость проекта min, млн. руб. (data.program_criteria.min_cost_project)                  <= (lte)   p.cost_project 
+
+Min доля собственного участия, %(data.program_criteria.min_percent_owner)                  <= (lte)   p.percent_owner 
+
+Требование о статусе МСП в едином реестре налоговой (data.program_criteria.msp_nal)         = (eq)    p.msp_nal 
+
+Продукт (data.program.product)                                                              = (eq)    p.product  
+
+Цель привлечения  финансирования(data.program.goal)                                          =        p.goal 

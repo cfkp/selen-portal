@@ -78,9 +78,13 @@ color:#f4f4f4;
 body {
   padding: 50px;
 font-size: 16px;
-  font-family: 'Open Sans Condensed', Condens, 'Arial Narrow', Tahoma, Helvetica, Arial, sans-serif;
+ /* font-family: 'Open Sans Condensed', Condens, 'Arial Narrow', Tahoma, Helvetica, Arial, sans-serif;
+*/
 }
  
 .form-control{
 color:#080808;
+max-width: 459px;
+height: 40px;
+
 }
