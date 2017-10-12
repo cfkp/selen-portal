@@ -1,7 +1,7 @@
 ﻿<head>
 <title>Калькулятор продуктов</title>
 
- <link rel="stylesheet" href="../jquery/ui/jquery-ui.css">
+<link rel="stylesheet" href="../jquery/ui/jquery-ui.css">
 
 <link rel="stylesheet" href="../bootstrap/css/bootstrap.css"/>
 <link rel="stylesheet" href="../bootstrap/css/bootstrap-theme.css"/>
@@ -13,6 +13,7 @@
 
 <script src="../ejs/ejs.js"></script>
 <script src="../jquery/jquery.js"></script>
+<script src="../jquery-maskmoney/jquery.maskMoney.min.js"></script>
 
 <script src="../jquery/ui/jquery-ui.js"></script>
 
@@ -82,15 +83,20 @@
     </div>
     <div class="form-group">
 
-	  <label for="fin_period">Срок привлечения</label>
-	  <input type="number"  name ='fin_period' class="form-control" required>
+	  <label for="fin_period">Срок привлечения, мес</label>
+	  <input type="number"  name ='fin_period' min=0 class="form-control" required>
       </div>
      <div class="form-group">
  	 <label for="fin_amount">Сумма запрашиваемого финансирования млн р.</label>
-  	 <input type="number"   name ='fin_amount' class="form-control" required>	
+  	 <!--input type="number"   name ='fin_amount' class="form-control" required-->	
+        <input type="text"    name='fin_amount'   class="form-control amount" id="c2" />
+        <script type="text/javascript">$(".amount").maskMoney({symbol:'', allowZero:false, allowNegative:true, defaultZero:false});</script>         
  
     </div>
-     <!--div class="form-group">
+
+
+
+      <!--div class="form-group">
 	<p>
  	 <label for="cost_project">Общая сумма проекта млн р.</label>
   	 <input type="number"   name ='cost_project' class="form-control"  >	

@@ -101,11 +101,12 @@ function get_filter(p ){
 if (p.msp_nal=='on'){p.msp_nal=true} else {p.msp_nal=false};
 var prod1,prod2;
 if (p.product =='Кредит/Займ') {prod1='Кредит';prod2='Займ';} else {prod1=p.product;prod2=p.product;};
+var fin_amont=string2money(p.fin_amount)/1000000;
 var f =
 {
      'and' : [
-        { 'and' : [ { 'data.program_criteria.min_sum': { 'lte': Number(p.fin_amount) } }, { 'data.program_criteria.max_sum': { 'gte': Number(p.fin_amount)} } ]  }
-       , { 'and' : [ { 'data.program.max_year_limit': { 'gte': Number(p.fin_period) } }    ] }
+        { 'and' : [ { 'data.program_criteria.min_sum': { 'lte': string2money(p.fin_amount) } }, { 'data.program_criteria.max_sum': { 'gte': string2money(p.fin_amount)} } ]  }
+       , { 'and' : [ { 'data.program.max_year_limit': { 'gte': Number(p.fin_period)/12 } }    ] }
       /* , { 'and' : [ { 'data.program_criteria.min_cost_project': { 'lte': Number(p.cost_project) } }    ] }
        , { 'and' : [ { 'data.program_criteria.min_percent_owner': { 'lte': Number(p.percent_owner) } }    ] }
        , { 'and' : [ { 'data.program_criteria.msp_nal': { 'eq': p.msp_nal } }    ] } */
@@ -115,4 +116,12 @@ var f =
 }
 //f={};  
 return f;
+};
+
+function string2money(val)
+{
+var str = val;
+str = str.replace(/[^\d\.\-]/g, ""); // You might also include + if you want them to be able to type it
+var num = Number(str);
+return num
 };

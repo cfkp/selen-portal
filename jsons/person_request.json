@@ -1,0 +1,100 @@
+{
+    "_id": ObjectId("58ecd6a35ccef14173b0bf4b"),
+    "meta_name": "person_request",
+    "meta_table_name": "person_request",
+    "data": {
+        "title": "Заявка для оформления",
+        "type": "object",
+        "required": true,
+        "properties": {
+            "fio": {
+                "required": true,
+                "title": "Фамилия",
+                "type": "string"
+            },
+            "email": {
+                "required": true,
+                "title": "E-Mail",
+                "type": "string"
+            },
+            "phone": {
+                "required": true,
+                "title": "Контактный телефон",
+                "type": "string"
+            },
+            "project_name": {
+                "required": true,
+                "title": "Наименование проекта",
+                "type": "string"
+            },
+            "project_essence": {
+                "required": true,
+                "title": "Суть проекта(кратко)",
+                "type": "textarea"
+            },
+            "INN": {
+                "required": true,
+                "title": "ИНН компании-инициатора",
+                "type": "string"
+            },
+            "INN_project": {
+                "required": false,
+                "title": "ИНН проектной компании (если есть)",
+                "type": "string"
+            },
+            "OKVED_project": {
+                "required": false,
+                "title": "ОКВЭД-2 проектной компании (если есть)",
+                "type": "string"
+            },
+            "product": {
+                        "required": true,
+                        "title": "Продукт",
+                        "type": "string",
+                        "enum": [
+                            "Кредит/Займ",
+                            "Гарантия",
+                             
+                            "Лизинг"
+                        ]
+                    },
+            "goal": {
+                        "required": true,
+                         "title": "Цель привлечения  финансирования",
+                         "type": "string",
+                            "enum": [
+                                "Капитальные вложения",
+                                "Пополнение оборотных средств"
+                            ]        },
+            "fin_amount": {
+                "required": true,
+                "title": "Сумма финансирования (тыс.руб)",
+                "type": "integer"
+            },
+            "fin_period": {
+                "required": true,
+                "title": "Срок финансирования (мес)",
+                "type": "integer"
+            },
+            "program_id":  {
+                "type": "string",
+                "title": "Программа",
+                "meta_ref": {
+                    "meta_class": "cfkp_product",
+                    "colmodel": [
+                        {
+                            "label": "id",
+                            "name": "_id",
+                            "key": true,
+                            "hidden": true
+                        },
+                        {
+                            "label": "Программа",
+                            "name": "data.program.name"
+                        }     ]
+                }
+            }
+
+        }
+    }
+}

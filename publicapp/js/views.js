@@ -36,7 +36,7 @@ return id_cont;
 	
 };
 
-var showgrid = function (grid_container, data) {
+var showgrid = function (grid_container, data,selectrows) {
         closegrid(grid_container);
 	var header = data.header;
 	var rows = data.rows;
@@ -134,7 +134,9 @@ var showgrid = function (grid_container, data) {
 		del: false,
 		refresh: true,
 		beforeRefresh: function () {
- 			get_view_data(grid_container,undefined, refresh_grid);
+		var s=get_selected_rows(grid_container);
+
+ 			get_view_data(grid_container,undefined, refresh_grid,s);
 		},
 		afterRefresh: function () {
 			//	alert("afterRefresh" + meta_view);
@@ -158,16 +160,16 @@ var showgrid = function (grid_container, data) {
 
 };
 
-function refresh_grid(grid_container , dataresponse) {
+function refresh_grid(grid_container , dataresponse,selectrows) {
 	var gridid=get_grid_id(grid_container);
 	var grid_element= $(gridid.grid_id_);
 	var rows = dataresponse.rows;
-
 	grid_element.jqGrid('clearGridData');
 	grid_element.jqGrid('setGridParam', {
 		data: rows
 	});
 	grid_element.trigger('reloadGrid');
+	grid_element.jqGrid('setSelection',selectrows);
 };
 
 function show_view (grid_container,meta_class, meta_view) {
@@ -178,7 +180,7 @@ function show_view (grid_container,meta_class, meta_view) {
 
 };
 
-var get_view_data = function ( grid_container,user_filter, datarender) {
+var get_view_data = function ( grid_container,user_filter, datarender,selectrows) {
 	//  function api_load(url,requestdata,responsefunc) {
 	var requestdata ; //filter потом будет
 	
@@ -199,7 +201,7 @@ var get_view_data = function ( grid_container,user_filter, datarender) {
 		statusCode: {
 			200: function (dataresponse) {
 				if (datarender) {
-					datarender(grid_container, dataresponse);
+					datarender(grid_container, dataresponse,selectrows);
 				}
 				//	alert('view result ok');
 			},
@@ -324,8 +326,10 @@ function get_selected_rows(viewcontainer) {
 var refviewmodal = function(meta_class,meta_view,selectFunc) {
 
         var rez ={};
+	var from_method=false;
         var grid_container=$('#refview');
         show_view (grid_container,meta_class, meta_view)
+if (!$('#method_execute').hidden){  from_method=true;$('#method_execute').modal('hide');};
 
 	grid_container.find('.btn-primary').unbind('click');
 
@@ -338,6 +342,7 @@ var refviewmodal = function(meta_class,meta_view,selectFunc) {
 	}else   {
         	grid_container.modal('hide');
                 closegrid(grid_container);
+		if (from_method)  {setTimeout(function(){ $('#method_execute').modal('show'); }, 500);};
 		var ui={"item":{"value":null,"id":null,"label":null}};
 		ui.item.value=s;
 		ui.item.id=s;
@@ -346,8 +351,10 @@ var refviewmodal = function(meta_class,meta_view,selectFunc) {
 		}
 	});
 
- 	//$('#refview #method_title').html(schema.title);	
-	grid_container.modal();
+ 	//$('#refview #method_title').html(schema.title);
+setTimeout(function(){ grid_container.modal(); }, 500);
+	
+	//grid_container.modal();
 
 
 };

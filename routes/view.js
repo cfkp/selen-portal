@@ -170,6 +170,18 @@ router.post('/ref_value_list', function (req, res, next) {
 	 /////////////////////////
 	
 	console.log('meta_class '+meta_class);
+	if (!colmodel) {colmodel=[{
+			                "label": "id",
+			                "name": "_id",
+			                "key": true,
+			                "hidden": true
+            			},
+				{
+			                "label": "id",
+			                "name": "_id" 
+            			}];
+	    };
+
         var selcols=get_col_list(colmodel);
 					 
 	console.log('selcols '+JSON.stringify(selcols));
@@ -224,7 +236,7 @@ router.post('/:meta_class/:meta_view', function (req, res, next) {
 	var dbloc = db.get();
    	var collectname= "meta_view";
 	var fil= {"meta_name": meta_view};
-	console.log("meta_view type "+typeof meta_view);
+
 		
 		if (typeof meta_view === 'undefined' ||!meta_view||meta_view===null||meta_view==='undefined') {
 			collectname="meta_class";
