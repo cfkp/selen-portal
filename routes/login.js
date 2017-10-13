@@ -9,7 +9,7 @@ var mailer = require('../middleware/sendmail'); //-- Your js file path
 var async = require('async');
 
 var db = require('../db/db');
-var usersdb = require('../db/usersdb');
+var pers_req = require('../db/person_request');
 
 var ObjectID = require('mongodb').ObjectID;
 
@@ -70,7 +70,7 @@ router.post('/', function (req, res, next) {
 	console.log("new user");
 		mailer(user.email,'Регистрация',null,'regmail',{user:user});
 		if (req.body.program_id){
-    			usersdb.create_request(String(user._id),fio,req.body.phone,req.body.fin_amount,req.body.fin_period,req.body.program_id,req.body.enterprise_inn,req.body.goal,req.body.product)
+    			pers_req.create_request(String(user._id),fio,req.body.phone,req.body.fin_amount,req.body.fin_period,req.body.program_id,req.body.enterprise_inn,req.body.goal,req.body.product)
 		}	
 	res.status(200).send({
 				'type': 'Сообщение',
@@ -115,38 +115,33 @@ router.get('/registration', function (req, res, next) {
 	var obj_id = new ObjectID(req.query.confirm);
 
 	dbloc.collection(meta_class).updateOne({
-		"_id": obj_id
-	}, {
-		$set: {
-			"state": new_state
-		}
-	},
-		function (err, docs) {
+						"_id": obj_id
+						}, 
+						{
+						$set: {
+						"state": new_state
+							}
+						},
+			function (err, docs) {
 				console.log(' updating document1 ');
-
-	console.log(docs);
-
+			//	console.log(docs);
+		
 		if (err || (!docs)|| (docs.result.n==0)) {
-
 		//	res.status(400).json({'msg': 'Ошибка регистрации пользователь не найден'});
 		  res.render('regfinish',{'msg':{'type':'error','msg': 'Ошибка регистрации пользователь не найден'}});
 
 		} else {
-//	console.log(' updating document2 ');
-//	console.log(docs);
-//	console.log(docs.ops);
-
+                   
+  		pers_req.update_newuser_request(obj_id) ;
+			
 		  res.render('regfinish',{'msg':{'type':'message','msg':  "Спасибо за регистрацию"}});
 
 		}
-//		res.json(dataReturn);
+ 
 
-
-		//return  res.render('regfinish');
-	}); 
+ 	}); 
 	
- //   return res.redirect("./login");
-	
+ 	
 });
 
 

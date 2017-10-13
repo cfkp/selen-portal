@@ -105,8 +105,8 @@ var fin_amont=string2money(p.fin_amount)/1000000;
 var f =
 {
      'and' : [
-        { 'and' : [ { 'data.program_criteria.min_sum': { 'lte': string2money(p.fin_amount) } }, { 'data.program_criteria.max_sum': { 'gte': string2money(p.fin_amount)} } ]  }
-       , { 'and' : [ { 'data.program.max_year_limit': { 'gte': Number(p.fin_period)/12 } }    ] }
+        { 'and' : [ { 'data.program_criteria.min_sum': { 'lte': fin_amont } }, { 'data.program_criteria.max_sum': { 'gte': fin_amont} } ]  }
+       , { 'and' : [ { 'data.program.max_year_limit': { 'gte': Number(p.fin_period)} }    ] }
       /* , { 'and' : [ { 'data.program_criteria.min_cost_project': { 'lte': Number(p.cost_project) } }    ] }
        , { 'and' : [ { 'data.program_criteria.min_percent_owner': { 'lte': Number(p.percent_owner) } }    ] }
        , { 'and' : [ { 'data.program_criteria.msp_nal': { 'eq': p.msp_nal } }    ] } */

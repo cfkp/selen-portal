@@ -727,7 +727,6 @@ router.post('/callmethod/person_request/change_state/execute',checkAuth, functio
 	var meta_method = req.params.meta_method;
 	var meta_action = req.params.meta_action;
 	console.log('id=' + req.body._id);
-
 	/////////////////////////
 	var dbloc = db.get();
 	var data = req.body.data;
@@ -754,7 +753,7 @@ router.post('/callmethod/person_request/change_state/execute',checkAuth, functio
 		function (err, docs) {
 
 		console.log('save row');
-		console.log(docs);
+//		console.log(docs);
 
 		if (err || docs.result === undefined) {
 			console.error('Error updating document', err);
@@ -763,7 +762,7 @@ router.post('/callmethod/person_request/change_state/execute',checkAuth, functio
 			var dataReturn = '';
 			if (docs.ops) {
 				console.log(' updating document');
-				console.log(docs.ops);
+//				console.log(docs.ops);
 
 				dataReturn = docs.ops[0]._id;
 			}
