@@ -133,6 +133,7 @@ var showgrid = function (grid_container, data,selectrows) {
 		edit: false,
 		del: false,
 		refresh: true,
+		view: true,
 		beforeRefresh: function () {
 		var s=get_selected_rows(grid_container);
 

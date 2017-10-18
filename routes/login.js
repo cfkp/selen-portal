@@ -40,6 +40,8 @@ router.post('/', function (req, res, next) {
     var tel = null;
     if (req.body.tel)
         tel = req.body.tel;
+    if (req.body.phone)
+        tel = req.body.phone;
    // console.log(req.body.tel);
     var email = req.body.email;
     var password = req.body.password;
@@ -68,10 +70,12 @@ router.post('/', function (req, res, next) {
         }
 	if ((isNew=='1')||(!user.state)||(user.state=="new")) {
 	console.log("new user");
-		mailer(user.email,'Регистрация',null,'regmail',{user:user});
+//		mailer(user.email,'Регистрация',null,'regmail',{user:user});
 		if (req.body.program_id){
     			pers_req.create_request(String(user._id),fio,req.body.phone,req.body.fin_amount,req.body.fin_period,req.body.program_id,req.body.enterprise_inn,req.body.goal,req.body.product)
 		}	
+    req.session.destroy();
+
 	res.status(200).send({
 				'type': 'Сообщение',
 				'msg': 'По указанному Вами адресу направлено письмо с подтверждением регистрации. Просьба перейти по ссылке, указанной в письме'
@@ -80,6 +84,7 @@ router.post('/', function (req, res, next) {
 		}
 	else if (isNew=='2') {
 	console.log("reset pass user");
+    req.session.destroy();
 
 		res.status(200).send({
 				'type': 'Сообщение',
@@ -131,9 +136,10 @@ router.get('/registration', function (req, res, next) {
 		  res.render('regfinish',{'msg':{'type':'error','msg': 'Ошибка регистрации пользователь не найден'}});
 
 		} else {
-                   
+		req.session.user = obj_id;
+   
   		pers_req.update_newuser_request(obj_id) ;
-			
+ 			
 		  res.render('regfinish',{'msg':{'type':'message','msg':  "Спасибо за регистрацию"}});
 
 		}

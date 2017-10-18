@@ -1,4 +1,4 @@
-  $( function() {
+﻿  $( function() {
   /*  $( "#slider-range" ).slider({
       range: false,
       min: 0,
@@ -106,7 +106,7 @@ var f =
 {
      'and' : [
         { 'and' : [ { 'data.program_criteria.min_sum': { 'lte': fin_amont } }, { 'data.program_criteria.max_sum': { 'gte': fin_amont} } ]  }
-       , { 'and' : [ { 'data.program.max_year_limit': { 'gte': Number(p.fin_period)} }    ] }
+       , { 'and' : [ { 'data.program.max_month_limit': { 'gte': Number(p.fin_period)} }    ] }
       /* , { 'and' : [ { 'data.program_criteria.min_cost_project': { 'lte': Number(p.cost_project) } }    ] }
        , { 'and' : [ { 'data.program_criteria.min_percent_owner': { 'lte': Number(p.percent_owner) } }    ] }
        , { 'and' : [ { 'data.program_criteria.msp_nal': { 'eq': p.msp_nal } }    ] } */

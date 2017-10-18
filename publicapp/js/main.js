@@ -8,7 +8,7 @@ $(document).ready(function () {
 	});
 */
 	$('#brut_save').bind('click', function () {
-		alert(JSON.stringify(bf.getData(), null, 4));
+		//alert(JSON.stringify(bf.getData(), null, 4));
 		var meta_class = $('#BRUTform').attr("meta_class");
 		var meta_name = $('#BRUTform').attr("meta_name");
 		var meta_value = $('#BRUTform').attr("meta_value");

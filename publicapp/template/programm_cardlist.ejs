@@ -3,12 +3,12 @@
 
 <div class="col-sm-6 col-md-4"> 
 <div class="thumbnail" >
-<img data-src="" alt="300x200" src="images/logo.png" >
+<img data-src="" alt="300x200" src="images/logo.png" style="height: 70px; ">
       <div class="caption">
 <h1> <%= rows[i].data.program.institute%> </h1>
 <h1> <%= rows[i].data.program.product%> </h1>
 <h3><%= rows[i].data.program.name%></h3>
-<p><a href="../login?mode=registration&program_id=<%= rows[i]._id%>&<%= formparam%>" class="btn btn-primary" role="button">Оформить заявку</a> 
+<p><a href="../login?mode=registration&program_id=<%= rows[i]._id%>&<%= formparam%>" target="_blank" class="btn btn-primary" role="button">Оформить заявку</a> 
 
 <div class="panel-group" id="acrd<%= rows[i]._id%>">
   <div class="panel panel-default">
@@ -60,7 +60,7 @@
 	<p>Max доля продукта от суммы проекта, % <%= rows[i].data.program_criteria.max_prc_product%></p>
 	<p>Min доля собственного участия, % <%= rows[i].data.program_criteria.min_percent_owner%> </p>
 	<% if (rows[i].data.program_criteria.msp_nal) {%>
-	<p>Cтатус МСП в едином реесре налоговой  </p>
+	<p>Cтатус МСП в едином реестре налоговой  </p>
 	<% } %>
  
       </div>

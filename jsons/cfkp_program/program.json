@@ -47,9 +47,9 @@
                         "title": "Min Ставка, годовых (От ..%)",
                         "type": "number"
                     },
-                    "max_year_limit": {
+                    "max_month_limit": {
                         "required": true,
-                        "title": "Срок max, лет",
+                        "title": "Срок max, мес.",
                         "type": "number"
                     },
                     "comment": {

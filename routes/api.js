@@ -6,6 +6,7 @@ var _ = require('lodash');
 var fs = require("fs");
 var db = require('../db/db');
 var crypto = require('crypto');
+var mailer = require('../middleware/sendmail'); //-- Your js file path
 
 var checkAuth = require('../middleware/checkAuth');
 var ObjectID = require('mongodb').ObjectID;
@@ -517,10 +518,16 @@ router.post('/callmethod/:meta_class/:meta_method/init',checkAuth, function (req
 				}, function (err, doc) {  
 					console.log('Find data1');
 					if (doc) {
+						if (doc.state&&doc.state !== "Новый"&&meta_method=='edit') {
+							callback({
+								'error': 'no_edit_right',
+								'msg': 'Документ не в состоянии "Новый"'
+							});
+							return;
+						};
 						result = doc;
 					};
-					console.log(result);
-
+ 
 					callback(null, result);
 				});
 			} else {
@@ -529,8 +536,13 @@ router.post('/callmethod/:meta_class/:meta_method/init',checkAuth, function (req
 		}
 	},
 		function (err, results) {
-		console.log("results");
+		console.log("results"); 
 		console.log(results);
+		if (err) {
+			res.status(500).send(err);
+			return;
+		};
+
 		if (_.isEmpty(results.schema)) {
 		console.log("results.schema=='{}'");
 	
@@ -774,13 +786,70 @@ router.post('/callmethod/person_request/change_state/execute',checkAuth, functio
 
 });
 
+router.post('/callmethod/person_request/change_state2expert/execute',checkAuth, function (req, res, next) {
+	console.log("post '/callmethod/person_request/change_state2expert/execute'");
+	console.log("post " + req.params.meta_class);
+	console.log("post " + req.params.meta_method);
+	console.log("post " + req.body);
+
+	var userID = req.session.user;
+	var meta_class = "person_request";
+	var meta_method = req.params.meta_method;
+	var meta_action = req.params.meta_action;
+	console.log('id=' + req.body._id);
+	/////////////////////////
+	var dbloc = db.get();
+	var data = req.body.data;
+	var new_state="Отправлена клиентом";
+	if (!data.confirm)   {
+ 		res.status(500).send({
+			'error': 'no_new_state',
+			'msg': 'Действие не подтверждено'
+		});
+		return;
+	};
+
+	//        var row = {"created":Date.now, "user_createid" :userID,state:"Новый","data": data};
+	var obj_id = new ObjectID(req.body._id);
+	dbloc.collection(meta_class).updateOne({
+		"_id": obj_id
+	}, {
+		$set: {
+			"state": new_state
+		}
+	},
+		function (err, docs) {
+
+		console.log('save row');
+//		console.log(docs);
+
+		if (err || docs.result === undefined) {
+			console.error('Error updating document', err);
+			//res.status(400).json({'msg': 'Error inserting document'});
+		} else {
+			var dataReturn = '';
+			if (docs.ops) {
+				console.log(' updating document');
+//				console.log(docs.ops);
+
+				dataReturn = docs.ops[0]._id;
+			}
+			console.log('Document successfully update');
+mailer('finance@cfcp.ru','Уведомление',null,'request_notify',{});
+		};
+
+		res.json(dataReturn);
+	});
+
+});
+
 
 router.post('/callmethod/users/user_change_pass/execute',checkAuth, function (req, res, next) {
 	console.log("post '/callmethod/users/user_change_pass/execute'");
 	console.log("post " + req.params.meta_class);
 	console.log("post " + req.params.meta_method);
 	console.log("post " + req.body);
-	var userID = req.session.user;
+	var userID = req.session.user;   
 	var meta_class = "users";
 //	var meta_method = req.params.meta_method;
 //	var meta_action = req.params.meta_action;
@@ -921,6 +990,11 @@ router.post('/callmethod/:meta_class/:meta_method/execute',checkAuth, function (
 				console.error('Error inserting document', err);
 				//res.status(400).json({'msg': 'Error inserting document'});
 			} else {
+				if (meta_class=='person_request'){
+					 var pers_req = require('../db/person_request');
+
+					pers_req.load_request_info (docs.ops[0]._id,function(error,body){});	
+					 };
 				var dataReturn = '';
 				if (docs.ops) {
 					console.log(' inserting document');

@@ -54,7 +54,7 @@
  
 <header>
 <div id="search" hidden>
-<button type="button" id="show_search" class="btn btn-default btn-lg" ><span class="glyphicon glyphicon-search"></span>Поиск</button>
+<button type="button" id="show_search" class="btn btn-primary btn-lg" ><span class="glyphicon glyphicon-search"></span>Поиск</button>
 </div>  
  <nav>
    <form id="product_filter" >
@@ -90,7 +90,7 @@
  	<label for="fin_amount">Сумма запрашиваемого финансирования, руб.</label>
   	 <!--input type="number"   name ='fin_amount' class="form-control" required-->	
         <input type="text"    name='fin_amount'   class="form-control amount" id="c2" />
-        <script type="text/javascript">$(".amount").maskMoney({symbol:'', allowZero:false, allowNegative:true, defaultZero:false});</script>         
+        <script type="text/javascript">$(".amount").maskMoney({symbol:'', allowZero:false,precision:0, allowNegative:true, defaultZero:false});</script>         
  
     </div>
 

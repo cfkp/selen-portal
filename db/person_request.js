@@ -69,7 +69,9 @@ var load_request_info=function(request_id,next) {
 	var sysdate=   new Date().toISOString();
     var options = {host:'selen-it.ru', 
 		port:'8080',
-		path:'/ztassquery/query/tass/input?login=tishenkov@icgfirst.ru&password=Aa4224005&id='+request_id,
+//http://selen-it.ru:8080/ztassquery/query/tass/small?login=tishenkov@icgfirst.ru&password=Aa4224005&id=
+//		path:'/ztassquery/query/tass/input?login=tishenkov@icgfirst.ru&password=Aa4224005&id='+request_id,
+		path:'/ztassquery/query/tass/small?login=tishenkov@icgfirst.ru&password=Aa4224005&id='+request_id,
 		method : 'GET'};
  
  var request = require('request');
@@ -103,15 +105,19 @@ console.log("update_newuser_request "+userID);
 	async.waterfall([
 			function (callback) {
 				dbloc.collection('person_request').findOne({
-						'user_createid': userID,'need_ext_load':true
+						 'user_createid': String(userID)
 						}, 
 				  callback);
 			},
 			function (row, callback) {
 			//	row ={};row._id='58f720c0931574157ced48ab';
- 				if (row) { 
+				console.log('сделали поиск заявки');
+
+ 				if (row) {
+console.log('заявка найдена'); 
 				load_request_info (row._id,callback);
-				}
+				} else {console.log('заявка не найдена'); 
+};
  			}
 
 		],
