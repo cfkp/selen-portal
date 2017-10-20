@@ -5,23 +5,23 @@ var _ = require('lodash');
 var formidable = require('formidable');
 var path = require('path');
 
+var config = require('config');
+
 var fs = require("fs");
 var db = require('../db/db');
 var checkAuth = require('../middleware/checkAuth');
  
 router.get('/down/:file(*)', function(req, res, next){
- console.log('download');
+
+ log.info({req:req},'start');
  var userid= req.session.user;
  var file = req.params.file;
 
-var  filename =path.resolve(".")+'/uploads/' + file;
+  var  filename =config.get('upload_path') + file;
 
 
- console.log(file);
- console.log(filename);
- var newfilename=filename.substr(filename.indexOf("$")+1);
- console.log(newfilename);
-
+  var newfilename=filename.substr(filename.indexOf("$")+1);
+ 
  res.download(filename,newfilename);
 });
 
@@ -29,37 +29,32 @@ var  filename =path.resolve(".")+'/uploads/' + file;
 
 
 router.post('/up', function(req, res){
- console.log('up');
+ log.info({req:req},'start');
  var userid= req.session.user;
  var result={};
   // create an incoming form object
-  var form = new formidable.IncomingForm();
+ var form = new formidable.IncomingForm();
 
   // specify that we want to allow the user to upload multiple files in a single request
   form.multiples = true;
- console.log('upload1');
-
+ 
   // store all uploads in the /uploads directory
-  form.uploadDir = path.join(__dirname, '../uploads');
- console.log('upload2');
-
+  form.uploadDir = config.get('upload_path');// path.join(__dirname, '../uploads');
+ 
   // every time a file has been uploaded successfully,
   // rename it to it's orignal name
   form.on('file', function(field, file) {
-    console.log('download ok' );
-    console.log(file.path);
-	console.log(file.hash);
-
- console.log(file.name);
-
- fs.rename(file.path, path.join(form.uploadDir, userid+'$'+file.name));
-result.serverfilename= userid+'$'+file.name;
+  	result.serverfilename= userid+'$'+file.name;
+  	fs.rename(file.path, path.join(form.uploadDir, result.serverfilename));
+  
+	log.info({req:req},{uploadDir:form.uploadDir,serverfilename:result.serverfilename,file_name:file.name});
+ 
   });
 
   // log any errors that occur
   form.on('error', function(err) {
-    console.log('An error has occured: \n' + err);
-  });
+	log.error({req:req},{uploadDir:form.uploadDir,serverfilename:result.serverfilename,file_name:file.name},'An error has occured: \n' + err);
+   });
 
   // once all the files have been uploaded, send a response to the client
   form.on('end', function() {

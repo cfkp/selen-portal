@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var log = require('libs/log')(module);
+
 var User = require('models/user').User;
 var HttpError = require('error').HttpError;
 var AuthError = require('models/user').AuthError;
@@ -13,11 +15,9 @@ var pers_req = require('../db/person_request');
 
 var ObjectID = require('mongodb').ObjectID;
 
-router.get('/', function (req, res) {
 
-console.log("login form");
-console.log("login req.query  " + JSON.stringify(req.query) );
- 
+router.get('/', function (req, res) {
+log.debug({req:req},"login form");
 
     res.render('login',{mode:req.query.mode,params:req.query});
 } );
@@ -30,7 +30,8 @@ router.get('/:mode :programm', function (req, res) {
 */
 
 router.post('/', function (req, res, next) {
-	console.log("авторизация");
+
+log.info({req:req},"authorize");
 
 // isNew - 0 - Уже зарегистрированный
 // isNew - 1 - Новый
@@ -48,43 +49,37 @@ router.post('/', function (req, res, next) {
     var fio = req.body.fio;
     
     User.authorize(isNew,email,fio,password,tel, function(err, user) {
-        console.log("auth");
-
+ 
 	 if (err) {
-	console.log("err");
-
+ 
             if (err instanceof AuthError) {
 
-	console.log("err http");
-              //  return next(new HttpError(403, err.message));
+               //  return next(new HttpError(403, err.message));
 		return res.status(403).send({
 				'type': 'error',
 				'msg': err.message
 			});
 	
             } else {
-	console.log("err other");
-
+ 
                 return next(err);
             }
         }
 	if ((isNew=='1')||(!user.state)||(user.state=="new")) {
-	console.log("new user");
-//		mailer(user.email,'Регистрация',null,'regmail',{user:user});
+ //		mailer(user.email,'Регистрация',null,'regmail',{user:user});
 		if (req.body.program_id){
     			pers_req.create_request(String(user._id),fio,req.body.phone,req.body.fin_amount,req.body.fin_period,req.body.program_id,req.body.enterprise_inn,req.body.goal,req.body.product)
 		}	
-    req.session.destroy();
+	    req.session.destroy();
 
-	res.status(200).send({
+		res.status(200).send({
 				'type': 'Сообщение',
 				'msg': 'По указанному Вами адресу направлено письмо с подтверждением регистрации. Просьба перейти по ссылке, указанной в письме'
 			});
 
 		}
 	else if (isNew=='2') {
-	console.log("reset pass user");
-    req.session.destroy();
+     req.session.destroy();
 
 		res.status(200).send({
 				'type': 'Сообщение',
@@ -94,9 +89,7 @@ router.post('/', function (req, res, next) {
 		}
 
 	else{
-	console.log("login user");
-
-	 req.session.user = user._id;
+ 	 req.session.user = user._id;
 			res.status(200).send({
 				'type': 'Сообщение',
 				'msg': 'Добро пожаловать'
@@ -108,8 +101,8 @@ router.post('/', function (req, res, next) {
 );
 
 router.get('/registration', function (req, res, next) {
-	console.log("get '/registration'");
-	console.log("get " + req.query.confirm);
+
+       log.info({req:req},"registration");
 
 	var userID = req.session.user;
 	var meta_class = "users";
@@ -128,9 +121,7 @@ router.get('/registration', function (req, res, next) {
 							}
 						},
 			function (err, docs) {
-				console.log(' updating document1 ');
-			//	console.log(docs);
-		
+ 		
 		if (err || (!docs)|| (docs.result.n==0)) {
 		//	res.status(400).json({'msg': 'Ошибка регистрации пользователь не найден'});
 		  res.render('regfinish',{'msg':{'type':'error','msg': 'Ошибка регистрации пользователь не найден'}});
