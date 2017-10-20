@@ -54,20 +54,13 @@ if (("undefined" === typeof $ || "undefined" === typeof $.fn || "undefined" === 
     BrutusinForms.addDecorator(function (element, schema) {
         if (element.tagName) {
             var tagName = element.tagName.toLowerCase();
+
             if (tagName === "input" && schema.meta_ref ) {
  
 		var parent = element.parentNode;
 		main_div = document.createElement("div");
                 main_div.className = "div-autoref";
 
-/*		var file_property;
-		if (element.value) {
-			file_property=JSON.parse(element.value);
-			var file_description = file_property.name+' ('+ Math.ceil(file_property.size/1024)+'kB)';		
-			main_div.innerHTML ='<a class="fileurl" href="'+file_property.url+'">'+file_description +'</a> <div class="progress"> <div class="progress-bar" role="progressbar"></div></div>';
-		}else {
-		main_div.innerHTML ='<a class="fileurl">Выберите файл </a> <div class="progress"> <div class="progress-bar" role="progressbar"></div></div>';
-		}    */
                 parent.appendChild(main_div);
                 parent.removeChild(element);
                 main_div.appendChild(element);
@@ -81,11 +74,33 @@ if (("undefined" === typeof $ || "undefined" === typeof $.fn || "undefined" === 
                 
                 element.type=  "hidden";
 
+               if (!schema.meta_ref.mode||schema.meta_ref.mode=="grid"){
+
+		var searchButton = document.createElement("button");
+                searchButton.className = " glyphicon glyphicon-level-up btn btn-primary  btn-xs";
+
+                searchButton.onclick = function () {
+                     refviewmodal(schema.meta_ref.meta_class,schema.meta_ref.meta_view,
+
+			function (event,ui){
+ 			$( element ).val( ui.item.value );
+			fill_ref( schema.meta_ref,input_value,element);
+ 			      
+ 			$(element).change();
+       			return false;
+			}
+		);
+                };
+                main_div.appendChild(searchButton);
+                };			
+                if (schema.meta_ref.mode=="auto"){
+
+
 		 $( input_value ).autocomplete({
 		      minLength: 3,
 		      source: function(request,response) {
 
-		        get_autodata(request,response,schema.meta_ref);     
+		        get_autodata(schema.meta_ref,request,response);     
  			   }     
 			,
 		      focus: function( event, ui ) {
@@ -96,15 +111,26 @@ if (("undefined" === typeof $ || "undefined" === typeof $.fn || "undefined" === 
  			       $( element ).val( ui.item.value );
 			       $( element ).attr("meta_ref",ui.item.id );
  				$(element).change();
-       // $( "#user-id" ).val( ui.item.value );
-       // $( "#user-description" ).html( ui.item.desc );
-       // $( "#user-icon" ).attr( "src", "images/" + ui.item.icon );
- 
-        return false;
-      }
-    })
+ 			        return false;
+      				}
+    			});              
+		 };
+	var clearRefButton = document.createElement("button");
+                clearRefButton.className = " glyphicon glyphicon-trash btn btn-primary  btn-xs";
 
-         }}
+                clearRefButton .onclick = function () {
+                      	$(element.parentNode).find('input').val(null);     
+ 			$(element).change();
+       		 
+                };
+                main_div.appendChild(clearRefButton);
+            
+		if (element.value){
+			fill_ref( schema.meta_ref,input_value,element);
+		};
+
+		
+    	}}
     });
 
 
@@ -142,29 +168,30 @@ if (("undefined" === typeof $ || "undefined" === typeof $.fn || "undefined" === 
     });
 
 // Popover over inputs
-//BrutusinForms.addDecorator(function (element, schema) {
-//if (element.tagName) {
-//        if (element.title && (tagName === "input" || tagName === "textarea" || tagName === "select")) {
-//            element.setAttribute("data-toggle", "tooltip");
-//            element.setAttribute("data-trigger", "focus");
-//            if ("undefined" === typeof markdown) {
-//                element.setAttribute("data-content", element.title);
-//            } else {
-//                element.setAttribute("data-content", markdown.toHTML(element.title));
-//            }
-//            if (schema.title) {
-//                element.title = schema.title;
-//            } else {
-//                element.title = "Help";
-//            }
-//            $(element).popover({
-//                placement: 'top',
-//                container: 'body',
-//                html: !("undefined" === typeof markdown)
-//            });
-//        }input
-//    }
-//});
+BrutusinForms.addDecorator(function (element, schema) {
+if (element.tagName) {
+            var tagName = element.tagName.toLowerCase();
+        if (element.title && (tagName === "input" || tagName === "textarea" || tagName === "select")) {
+            element.setAttribute("data-toggle", "tooltip");
+            element.setAttribute("data-trigger", "focus");
+            if ("undefined" === typeof markdown) {
+                element.setAttribute("data-content", element.title);
+            } else {
+                element.setAttribute("data-content", markdown.toHTML(element.title));
+            }
+            if (schema.title) {
+                element.title = schema.title;
+            } else {
+                element.title = "Help";
+            }
+            $(element).popover({
+                placement: 'top',
+                container: 'body',
+                html: !("undefined" === typeof markdown)
+            });
+        }
+    }
+});
 // Bootstrap select
     BrutusinForms.addDecorator(function (element, schema) {
         if (element.tagName) {

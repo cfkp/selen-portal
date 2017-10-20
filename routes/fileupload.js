@@ -9,11 +9,6 @@ var fs = require("fs");
 var db = require('../db/db');
 var checkAuth = require('../middleware/checkAuth');
  
-/*router.all('/',checkAuth,function(request, response,next){
-console.log('upload all');
-	next();   
-         });
-*/
 router.get('/down/:file(*)', function(req, res, next){
  console.log('download');
  var userid= req.session.user;

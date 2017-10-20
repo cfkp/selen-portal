@@ -9,12 +9,25 @@ var mailer = require('../middleware/sendmail'); //-- Your js file path
 var async = require('async');
 
 var db = require('../db/db');
+var pers_req = require('../db/person_request');
+
 var ObjectID = require('mongodb').ObjectID;
 
 router.get('/', function (req, res) {
-    res.render('login');
-} );
 
+console.log("login form");
+console.log("login req.query  " + JSON.stringify(req.query) );
+ 
+
+    res.render('login',{mode:req.query.mode,params:req.query});
+} );
+/*
+router.get('/:mode :programm', function (req, res) {
+ console.log("login ?:mode :programm");
+
+    res.render('login',{mode:req.params.mode,programm:req.params.programm});
+} );
+*/
 
 router.post('/', function (req, res, next) {
 	console.log("авторизация");
@@ -27,6 +40,8 @@ router.post('/', function (req, res, next) {
     var tel = null;
     if (req.body.tel)
         tel = req.body.tel;
+    if (req.body.phone)
+        tel = req.body.phone;
    // console.log(req.body.tel);
     var email = req.body.email;
     var password = req.body.password;
@@ -55,9 +70,13 @@ router.post('/', function (req, res, next) {
         }
 	if ((isNew=='1')||(!user.state)||(user.state=="new")) {
 	console.log("new user");
-		mailer(user.email,'Регистрация',null,'regmail',{user:user});
+//		mailer(user.email,'Регистрация',null,'regmail',{user:user});
+		if (req.body.program_id){
+    			pers_req.create_request(String(user._id),fio,req.body.phone,req.body.fin_amount,req.body.fin_period,req.body.program_id,req.body.enterprise_inn,req.body.goal,req.body.product)
+		}	
+    req.session.destroy();
 
-		res.status(200).send({
+	res.status(200).send({
 				'type': 'Сообщение',
 				'msg': 'По указанному Вами адресу направлено письмо с подтверждением регистрации. Просьба перейти по ссылке, указанной в письме'
 			});
@@ -65,6 +84,7 @@ router.post('/', function (req, res, next) {
 		}
 	else if (isNew=='2') {
 	console.log("reset pass user");
+    req.session.destroy();
 
 		res.status(200).send({
 				'type': 'Сообщение',
@@ -100,38 +120,34 @@ router.get('/registration', function (req, res, next) {
 	var obj_id = new ObjectID(req.query.confirm);
 
 	dbloc.collection(meta_class).updateOne({
-		"_id": obj_id
-	}, {
-		$set: {
-			"state": new_state
-		}
-	},
-		function (err, docs) {
+						"_id": obj_id
+						}, 
+						{
+						$set: {
+						"state": new_state
+							}
+						},
+			function (err, docs) {
 				console.log(' updating document1 ');
-
-	console.log(docs);
-
+			//	console.log(docs);
+		
 		if (err || (!docs)|| (docs.result.n==0)) {
-
 		//	res.status(400).json({'msg': 'Ошибка регистрации пользователь не найден'});
 		  res.render('regfinish',{'msg':{'type':'error','msg': 'Ошибка регистрации пользователь не найден'}});
 
 		} else {
-//	console.log(' updating document2 ');
-//	console.log(docs);
-//	console.log(docs.ops);
-
+		req.session.user = obj_id;
+   
+  		pers_req.update_newuser_request(obj_id) ;
+ 			
 		  res.render('regfinish',{'msg':{'type':'message','msg':  "Спасибо за регистрацию"}});
 
 		}
-//		res.json(dataReturn);
+ 
 
-
-		//return  res.render('regfinish');
-	}); 
+ 	}); 
 	
- //   return res.redirect("./login");
-	
+ 	
 });
 
 

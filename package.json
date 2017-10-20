@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "fest-project",
   "version": "0.0.0",
   "private": true,
@@ -19,11 +19,11 @@
     "formidable": "^1.1.1",
     "mongodb-extended-json": "^1.9.0",
     "mongoose": "^4.9.1",
-    "morgan": "~1.7.0",
     "nconf": "^0.8.4",
     "nodemailer": "^4.0.1",
     "random-string": "^0.2.0",
     "react-input-mask": "^0.7.7",
+    "request": "^2.83.0",
     "serve-favicon": "~2.3.2",
     "winston": "^2.3.1"
   }

@@ -6,8 +6,9 @@
 	<%-partial('partials/leftMenu')%>
 	</div>
 
-	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="width: fit-content;">
 	<!--div class="col-sm-3 col-md-2 sidebar"-->
+<div id="main_workspace">
 	<div class="collapse navbar-collapse">
 	<div id="method_menu" class="nav navbar-nav">
   		<!--li><a class="menu_method" meta_class="meta_menu" meta_name="name" meta_value="enterprise_menu">Компания</a></li>
@@ -15,13 +16,11 @@
 	</div>
 	</div>
 	<!--/div-->
-
-    <table id="jqGrid"></table>
-
-    <div id="jqGridPager"></div>
-     <div id="detail_tabs">
-
+   <div id="grid_container">  <!--table id="vwGrid"></table> 
+   <div id="vwGridPager"></div-->
 </div>
+     <div id="detail_tabs"></div>
+
 <div id="BRUTform"> 
 <div id="BRUTbutton" style="position: relative;display: block;margin-bottom: 2%;">
 	<button class="btn btn-primary" id="brut_save">Сохранить</button>
@@ -32,4 +31,6 @@
 	<!--div id="BRUTcontainer" style="position: absolute;">
 	</div-->
 </div>
+</div>
+
 </div>

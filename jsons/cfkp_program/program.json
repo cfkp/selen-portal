@@ -1,0 +1,119 @@
+{
+    "_id": ObjectId("59cdd3e8cf14ac0ac2835297"),
+    "this_meta_class": "meta_class",
+    "meta_name": "cfkp_product",
+    "meta_table_name": "cfkp_product",
+    "data": {
+        "title": "Продукты ЦФКП",
+        "type": "object",
+        "meta_name": "cfkp_product",
+        "meta_table_name": "cfkp_product",
+        "properties": {
+            "program": {
+                "title": "Программа",
+                "type": "object",
+                "description": "Описание Программы",
+                "properties": {
+                    "name": {
+                        "required": true,
+                        "title": "Наименование",
+                        "type": "string"
+                    },
+                     "product": {
+                        "required": true,
+                        "title": "Продукт",
+                        "type": "string",
+                        "enum": [
+                            "Кредит",
+                            "Гарантия",
+                            "Займ",
+                            "Лизинг"
+                        ]
+                    },
+                    "institute": {
+                        "required": true,
+                        "title": "Институт Господдержки",
+                        "type": "string",
+                        "enum": [
+                            "ФРП",
+                            "КМСП",
+                            "МСПБ",
+                            "Гарантия",
+                            "Развитие бизнеса в ТОР"
+                        ]
+                    },
+                    "min_tax_percent": {
+                        "required": true,
+                        "title": "Min Ставка, годовых (От ..%)",
+                        "type": "number"
+                    },
+                    "max_month_limit": {
+                        "required": true,
+                        "title": "Срок max, мес.",
+                        "type": "number"
+                    },
+                    "comment": {
+                        "required": true,
+                        "title": "Комментарий",
+                        "type": "text"
+                    },
+                    "goal": {
+                        "title": "Цель привлечения  финансирования",
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                                    "required": true,
+                                    "title": "",
+                                    "type": "string",
+                                    "enum": [
+                                        "Инвестиции в развитие",
+                                        "Инвестиции в основные средства ",
+                                        "Пополнение оборотных средств",
+                                        "Гарантия",
+                                        "Развитие бизнеса в ТОР"
+                                    ]
+                            
+                        }
+                    }
+                }
+            },
+            "program_criteria": {
+                "title": "Условия",
+                "description": "Условия предоставления Программы",
+                "type": "object",
+                "properties": {
+                    "min_sum": {
+                        "required": true,
+                        "title": "Минимальная сумма запрашиваемого финансирования, млн. руб.",
+                        "type": "number"
+                    },
+                    "max_sum": {
+                        "required": true,
+                        "title": "Максимальная сумма запрашиваемого финансирования, млн. руб.",
+                        "type": "number"
+                    },
+                    "min_cost_project": {
+                        "required": true,
+                        "title": "Стоимость проекта min, млн. руб.",
+                        "type": "number"
+                    },
+                    "max_prc_product": {
+                        "required": true,
+                        "title": "Max доля продукта от суммы проекта, %",
+                        "type": "number"
+                    },
+                    "min_percent_owner": {
+                        "required": true,
+                        "title": "Min доля собственного участия, %",
+                        "type": "number"
+                    },
+                    "msp_nal": {
+                        "required": true,
+                        "title": "Требование о статусе МСП в едином реестре налоговой",
+                        "type": "boolean"
+                    }
+                }
+            }
+        }
+    }
+}

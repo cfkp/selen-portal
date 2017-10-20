@@ -1,16 +1,16 @@
 var bf_modal;
 
-function call_method  (meta_class,meta_method) {
-var id_list=get_selected_rows();
+function call_method  (meta_class,meta_method,container) {
+var id_list=get_selected_rows($('#main_workspace'));
 var obj_list ={"objectlist":id_list};
 
-	api_load('callmethod/'+meta_class+'/'+meta_method+'/init',JSON.stringify(obj_list),rendermethodform);
+	api_load('callmethod/'+meta_class+'/'+meta_method+'/init',JSON.stringify(obj_list),rendermethodform,container);
 
-//rendermethodform (form);                       
+
 
 };
 
-var execute_method = function (errors,value){
+var execute_method = function (errors,value,grid_container){
 	   if (errors){
                 alert("Ошибка");
             }
@@ -29,29 +29,16 @@ var execute_method = function (errors,value){
 
 	api_load('callmethod/'+meta_class+'/'+meta_method+'/execute',JSON.stringify(obj));
 	$('#method_execute').modal('hide');
-        jQuery('#refresh_jqGrid').click();
-          
-}
 
+	get_view_data(grid_container, undefined,refresh_grid);
+
+	}
 };
 
-var rendermethodform = function(formjson,data) {
-//    var schema =JSON.parse(datajson.responseText)[1].schema.json;
+var rendermethodform = function(formjson,data,container) {
 
     var schema =formjson.data;
     var value = data.data;
-   // $(".method_form").empty();
-
-/*    $('.method_form').jsonForm({
-        "schema":schema,
-        "value":value,
-        onSubmit: execute_method,
-        "validate": false
-    });  */
-//    $('.form-actions').hide();
-  //  var schema =datajson[0].schema;
-   // var value = datajson[1].value;
-
 
 
 	bf_modal = BrutusinForms.create(schema);
@@ -66,6 +53,12 @@ var rendermethodform = function(formjson,data) {
  	$('#method_execute').attr("meta_object_id",data._id);	
 
  	$('#method_execute #method_title').html(schema.title);	
+	$('#method_execute #execute').unbind('click');
+
+	$('#method_execute #execute').bind('click', function () {
+		execute_method(null, bf_modal.getData(),container);
+	});
+
 	$('#method_execute').modal();
 
 

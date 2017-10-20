@@ -5,8 +5,11 @@ var mailer = require('nodemailer');
 var transporter = mailer.createTransport({
    service: "Yandex",  // sets automatically host, port and connection security settings
    auth: {
-       user: "info@selen-it.ru",
-       pass: "Monday2017"
+       //user: "info@selen-it.ru",
+       //pass: "Monday2017"
+
+user:"finance@cfcp.ru",
+pass: "brAcj6Fs6zENXo"
    }
 ,tls: {rejectUnauthorized: false }
 });
@@ -22,7 +25,7 @@ console.log(message);
 }
 
 var mailOptions = {
-    from: "<info@selen-it.ru>", // sender address
+    from: "<finance@cfcp.ru>",//"<info@selen-it.ru>", // sender address
     to: to, // list of receivers
     subject: subject, // Subject line
     html: message// html body

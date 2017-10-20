@@ -1,0 +1,34 @@
+{
+    "_id": ObjectId("59d53cf67292cd00a097fa95"),
+    "this_meta_class": "meta_class",
+    "meta_name": "applications",
+    "meta_table_name": "applications",
+    "data": {
+        "title": "Приложения",
+        "type": "object",
+        "required": true,
+        "properties": {
+            "files": {
+                "title": "Файлы-приложения",
+                "type": "array",
+                "items": {
+                    "title": "Файл",
+                    "type": "object",
+                    "properties": {
+                        "app_file": {
+                            "required": true,
+                            "title": "Имя файла",
+                            "type": "string",
+                            "format": "file"
+                        },
+                        "comment": {
+                            "required": true,
+                            "title": "Описание",
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

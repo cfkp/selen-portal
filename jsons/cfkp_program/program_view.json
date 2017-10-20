@@ -1,0 +1,78 @@
+{
+    "_id": ObjectId("59cc0bd87292cd00a097fa92"),
+    "user_createid": "58c7c6b8c20d99116418a797",
+    "meta_name": "vw_cfkp_product",
+    "meta_class": "cfkp_product",
+    "data": {
+        "meta_name": "vw_cfkp_product",
+        "meta_class": "cfkp_product",
+        "title": "Пользовательские заявки по гарантиям",
+        "methods_menu": "menu_product_admin",
+        "colmodel": [
+            {
+                "label": "id",
+                "name": "_id",
+                "key": true,
+                "hidden": true
+            },
+            {
+                "name": "data.program.name",
+                "label": "Наименование"
+            },
+            {
+                "name": "data.program.product",
+                "label": "Продукт"
+            },
+            {
+                "name": "data.program.institute",
+                "label": "Институт Господдержки"
+            },
+            {
+                "name": "data.program.min_tax_percent",
+                "label": "Min Ставка, годовых (От ..%)",
+                "formatter": "number"
+            },
+            {
+                "name": "data.program.max_year_limit",
+                "label": "Срок max, лет",
+                "formatter": "number"
+            },
+            {
+                "name": "data.program.comment",
+                "label": "Комментарий"
+            },
+            {
+                "name": "data.program_criteria.min_sum",
+                "label": "Сумма min, млн. руб.",
+                "formatter": "number"
+            },
+            {
+                "name": "data.program_criteria.max_sum",
+                "label": "Сумма max, млн. руб.",
+                "formatter": "number"
+            },
+            {
+                "name": "data.program_criteria.min_cost_project",
+                "label": "Стоимость проекта min, млн. руб.",
+                "formatter": "number"
+            },
+            {
+                "name": "data.program_criteria.max_prc_product",
+                "label": "Max доля продукта от суммы проекта, %",
+                "formatter": "number"
+            },
+            {
+                "name": "data.program_criteria.min_percent_owner",
+                "label": "Min доля собственного участия, %",
+                "formatter": "number"
+            },
+            {
+                "name": "data.program_criteria.msp_nal",
+                "label": "Требование о статусе МСП в едином реестре налоговой",
+                "formatter": "boolean"
+            }
+        ]
+    },
+    "created": "2017-03-14T10:23:32.897Z",
+    "__v": 0
+}

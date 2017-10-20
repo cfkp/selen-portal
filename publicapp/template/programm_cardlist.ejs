@@ -1,0 +1,74 @@
+<div class="row"> 
+<% for(var i=0; i < rows.length; i++) { %>
+
+<div class="col-sm-6 col-md-4"> 
+<div class="thumbnail" >
+<img data-src="" alt="300x200" src="images/logo.png" style="height: 70px; ">
+      <div class="caption">
+<h1> <%= rows[i].data.program.institute%> </h1>
+<h1> <%= rows[i].data.program.product%> </h1>
+<h3><%= rows[i].data.program.name%></h3>
+<p><a href="../login?mode=registration&program_id=<%= rows[i]._id%>&<%= formparam%>" target="_blank" class="btn btn-primary" role="button">Оформить заявку</a> 
+
+<div class="panel-group" id="acrd<%= rows[i]._id%>">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#acrd<%= rows[i]._id%>" href="#clpse1_<%= rows[i]._id%>">
+		Проценты
+              </a>
+            </h4>
+    </div>
+    <div id="clpse1_<%= rows[i]._id%>" class="panel-collapse collapse in">
+      <div class="panel-body">
+	<p>Мин ставка <%= rows[i].data.program.min_tax_percent %>%</p>
+	<p>Срок max <%= rows[i].data.program.max_year_limit %> лет </p>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#acrd<%= rows[i]._id%>" href="#clpse2_<%= rows[i]._id%>">
+                Описание
+              </a>
+            </h4>
+    </div>
+    <div id="clpse2_<%= rows[i]._id%>" class="panel-collapse collapse">
+      <div class="panel-body">
+         <h4> <%= rows[i].data.program.group_program %> </h4>
+         <h4> <%= rows[i].data.program.goal%> </h4>
+ <p>
+	<%= rows[i].data.program.comment %>
+</p>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#acrd<%= rows[i]._id%>" href="#clpse3_<%= rows[i]._id%>">
+                 Условия
+              </a>
+            </h4>
+    </div>
+    <div id="clpse3_<%= rows[i]._id%>" class="panel-collapse collapse">
+      <div class="panel-body">
+	<p>Сумма min, млн. руб.  <%= rows[i].data.program_criteria.min_sum%></p>
+	<p>Сумма max, млн. руб. <%= rows[i].data.program_criteria.max_sum%></p>
+	<p>Стоимость проекта min, млн. руб. <%= rows[i].data.program_criteria.min_cost_project%></p>
+	<p>Max доля продукта от суммы проекта, % <%= rows[i].data.program_criteria.max_prc_product%></p>
+	<p>Min доля собственного участия, % <%= rows[i].data.program_criteria.min_percent_owner%> </p>
+	<% if (rows[i].data.program_criteria.msp_nal) {%>
+	<p>Cтатус МСП в едином реестре налоговой  </p>
+	<% } %>
+ 
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+<% } %>
+</div>

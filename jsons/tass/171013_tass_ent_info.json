@@ -1,0 +1,189 @@
+{
+    "_id": ObjectId("59e0ce6d623c3b49d5fae4c0"),
+
+    "this_meta_class": "meta_class",
+     "meta_name": "tass_ent_info",
+     "meta_name": "tass_ent_info",
+    "meta_table_name": "tass_ent_info",
+     "data": {
+        "title": "Внешние данные",
+        "type": "object",
+        "meta_name": "tass_ent_info",
+        "meta_table_name": "tass_ent_info",
+        "required": true,
+        "properties": {
+            "companyType": {
+                "required": true,
+                "title": "Тип компании",
+                "type": "integer",
+                "description": "Значение из Справочник норм собственности"
+            },
+            "fullName": {
+                "required": true,
+                "title": "Название полное",
+                "type": "string",
+                "format": "text",
+                "description": "Название полное"
+            },
+            "shortName": {
+                "required": true,
+                "title": "Название краткое",
+                "type": "string",
+                "description": "Название краткое"
+            },
+            "inn": {
+                "required": true,
+                "title": "ИНН",
+                "type": "string",
+                "description": "ИНН"
+            },
+            "ogrn": {
+                "required": true,
+                "title": "ОГРН",
+                "type": "string",
+                "description": "ОГРН"
+            },
+            "kpp": {
+                "required": true,
+                "title": "КПП",
+                "type": "string",
+                "description": "Код причины постановки на учет"
+            },
+            "registerDate": {
+                "required": true,
+                "title": "Дата присвоения ОГРНИП",
+                "type": "string",
+                "description": "Дата присвоения ОГРНИП"
+            },
+            "registerBody": {
+                "required": true,
+                "title": "Код налогового органа",
+                "type": "string",
+                "description": "Код налогового органа, поставившего на учет"
+            },
+            "mspMember": {
+                "required": true,
+                "title": "Входит в реестр МСП",
+                "type": "boolean",
+                "description": "Входит в реестр МСП"
+            },
+            "directors": {
+                "title": "Руководители (ФИО)",
+                "type": "array",
+				"items": {
+                    "title": "ФИО руководителя",
+                    "type": "string" 	}
+				}
+            ,
+            "directors_inn": {
+                "title": "Руководители (ИНН)",
+                "type": "array",
+				"items": {
+                    "title": "ИНН руководителя",
+                    "type": "string" 	}
+				}
+            ,
+            "directors_position": {
+                "title": "Руководители (должность)",
+                "type": "array",
+				"items": {
+                    "title": "Должность руководителя",
+                    "type": "string" 	}
+				}
+            ,
+            "address": {
+                "title": "Адреса компании",
+                "type": "array",
+				"items": {
+                    "title": "Адрес",
+                    "type": "string" 	}
+				}
+            ,
+            "fias": {
+                "title": "ФИАС",
+                "type": "array",
+				"items": {
+                    "title": "Значение по справочнику ФИАС",
+                    "type": "string" 	}
+				}
+            ,
+            "phone": {
+                "title": "Телефоны",
+                "type": "array",
+		"items": {
+                    "title": "Телефон",
+                    "type": "string" 
+			}
+		}
+            ,
+            "email": {
+                "title": "Электронные адреса",
+                "type": "array",
+				"items": {
+                    "title": "Электронный адрес",
+                    "type": "string"	}
+		}
+            ,
+            "closeDate": {
+                "required": true,
+                "title": "Дата закрытия компании",
+                "type": "string",
+                "description": "Дата закрытия компании"},
+            "companySize": {
+                "required": true,
+                "title": "Размер компании",
+                "type": "integer",
+                "description": "Размер компании"
+            },
+            "opf": {
+                "required": true,
+                "title": "???Основные производственные фонды???",
+                "type": "integer",
+                "description": "???Основные производственные фонды???"
+            },
+            "registerReason": {
+                "required": true,
+                "title": "Способ образования компании",
+                "type": "integer",
+                "description": "Способ образования компании"
+            },
+            "reasonClosing": {
+                "required": true,
+                "title": "Способ закрытия компаниии",
+                "type": "string",
+                "format": "text",
+                "description": "Способ закрытия компаниии"},
+            "okved": {
+                "required": true,
+                "title": "Вид деятельности, основной",
+                "type": "string",
+                "description": "Вид деятельности, основной"
+},
+            "okvedOther": {
+                "title": "Виды деятельности, дополнительные",
+                "type": "array",
+				"items": {
+                    "title": "Вид деятельности, дополнительный",
+                    "type": "string" 	}
+				}
+            ,
+            "registerCapital": {
+                "required": true,
+                "title": "Уставный фонд",
+                "type": "integer",
+                "description": "Уставный фонд"
+            },
+            "rating_checks": {
+                "required": false,
+                "title": "rating_checks",
+                "type": "integer",
+                "description": "rating_checks"
+            },
+            "rating": {
+                "required": true,
+                "title": "Интегральная оценка компании",
+                "type": "integer",
+                "description": "Интегральная оценка компании"
+            }
+        }
+    }}

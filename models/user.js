@@ -2,6 +2,7 @@ var crypto = require('crypto');
 var async = require('async');
 var util = require('util');
 var mailer = require('../middleware/sendmail'); //-- Your js file path
+var randomString = require('random-string');
 
 var mongoose = require('libs/mongoose'),
     Schema = mongoose.Schema;
@@ -78,7 +79,7 @@ schema.statics.authorize = function(isNew,email,fio, password,tel, callback) {
             },
             function (user, callback) {
                 if (user) {
-                    callback(new AuthError("Пользователь с таким email уже существует"));
+                    callback(new AuthError("Пользователь с таким email уже существует"),user);
                 }
                 else
                     User.findOne({tel: tel}, callback);
@@ -88,10 +89,12 @@ schema.statics.authorize = function(isNew,email,fio, password,tel, callback) {
                     callback(new AuthError("Пользователь с таким телефоном уже существует"));
                 }
                 else {
-                    var user = new User({email: email,fio:fio, tel: tel, password: password});
-                    user.save(function (err) {
+                    var rpassword = randomString({length: 6});
+		    var user = new User({email: email,fio:fio, tel: tel, password: rpassword});
+                     user.save(function (err) {
                     if (err) {return callback(err);}else{
-             
+ 			mailer(user.email,'Регистрация',null,'regmail',{user:user,password:rpassword});
+
                     callback(null, user); } 
                 });
             }}
@@ -128,7 +131,6 @@ schema.statics.authorize = function(isNew,email,fio, password,tel, callback) {
             },
             function (user, callback) {
                 if (user) {
-		    var randomString = require('random-string');
                     var password = randomString({length: 6});
 		    user.password=password;
                 user.save(function (err) {
