@@ -4,6 +4,8 @@ var util = require('util');
 var mailer = require('../middleware/sendmail'); //-- Your js file path
 var randomString = require('random-string');
 
+var config = require('config');
+
 var mongoose = require('libs/mongoose'),
     Schema = mongoose.Schema;
 
@@ -68,6 +70,7 @@ schema.methods.checkPassword = function(password) {
 
 schema.statics.authorize = function(isNew,email,fio, password,tel, callback) {
         console.log("user auth"+isNew);
+var server =config.get('server');
 
     var User = this;
     if (isNew=='1') {
@@ -93,7 +96,7 @@ schema.statics.authorize = function(isNew,email,fio, password,tel, callback) {
 		    var user = new User({email: email,fio:fio, tel: tel, password: rpassword});
                      user.save(function (err) {
                     if (err) {return callback(err);}else{
- 			mailer(user.email,'Регистрация',null,'regmail',{user:user,password:rpassword});
+ 			mailer(user.email,'Регистрация',null,'regmail',{server:server,user:user,password:rpassword});
 
                     callback(null, user); } 
                 });
@@ -135,7 +138,7 @@ schema.statics.authorize = function(isNew,email,fio, password,tel, callback) {
 		    user.password=password;
                 user.save(function (err) {
                     if (err) {return callback(err);}else{
-                 	mailer(user.email,'Сброс пароля',null,'temp_pass_mail',{user:user,password:password});
+                 	mailer(user.email,'Сброс пароля',null,'temp_pass_mail',{server:server, user:user,password:password});
                         callback(null,user);
 			}
 

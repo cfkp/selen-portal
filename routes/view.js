@@ -11,6 +11,7 @@ var jspath = require('JSONPath');
 var userID;
 
 router.all('/', checkAuth, function (request, response, next) {
+log.debug({req:req},'router all');
 	next();
 });
 
@@ -59,11 +60,9 @@ return result;
 };
 
 var get_col_list =function(colmodel){
-//	var colmodel = row.data.colmodel;
-	var selcols = {};
+ 	var selcols = {};
 	for (var i = 0; i < colmodel.length; i++) {
-		console.log(colmodel[i].name);
-
+ 
 		selcols[colmodel[i].name] = '1';
 
 	};
@@ -80,8 +79,7 @@ function jsonPathToValue(jsonData, path) {
      path = path.replace(/^\#/, ''); // strip a leading dot
 
     path = path.replace(/^\./, ''); // strip a leading dot
- console.log('jsonPathToValue path '+ path); 
-    var pathArray = path.split('.');
+     var pathArray = path.split('.');
     for (var i = 0, n = pathArray.length; i < n; ++i) {
         var key = pathArray[i];
         if (key in jsonData) {
@@ -99,11 +97,7 @@ function jsonPathToValue(jsonData, path) {
 
 
 var get_defcolmodel= function (root_src,src,parent_path, dst/*,i*/){
-/*  i=i-1;
-   if (i<0){
-	console.log('EXIT');
- return};*/
-	if (src&&src.$ref) {
+ 	if (src&&src.$ref) {
 		src=jsonPathToValue(root_src, src.$ref);
  	};
  	for (prop in src){
@@ -118,17 +112,14 @@ var get_defcolmodel= function (root_src,src,parent_path, dst/*,i*/){
  		    get_defcolmodel   (root_src,src[prop],path, dst/*,i*/)
 		   };
                  }; 
-//	console.log(JSON.stringify(src[prop]));
-
+ 
 	    if (src[prop]&&src[prop].type&&(src[prop].type=='string'||src[prop].type=='text'||src[prop].type=='number'||src[prop].type=='boolean'||src[prop].type=='integer')){
-	//	path=path+'.'+prop;
-                dst_row['name']=path;
+                 dst_row['name']=path;
                 dst_row['label']=src[prop].title;
 		if (src[prop].type=='number'||src[prop].type=='boolean'||src[prop].type=='integer') 
 	{	dst_row['formatter']=src[prop].type;
          }   	dst.push(dst_row);
-//	console.log(dst_row['path']);
-
+ 
  	      }
 
 
@@ -138,10 +129,9 @@ return;
 };
 
 var  get_gridcols_from_class =function (meta_class){
-	console.log('Формируем view  из модели класса');
-var plain=[];
-var view={};
-var colmodel=[{
+ 	var plain=[];
+	var view={};
+	var colmodel=[{
                 "label": "id",
                 "name": "_id",
                 "key": true,
@@ -155,22 +145,15 @@ var colmodel=[{
 };                                           
 
 router.post('/ref_value_list', function (req, res, next) {
-	console.log("post '/ref_value_list'");
-	console.log("post "+JSON.stringify(req.body) );
-   
-
+log.debug({req:req},'start');
+ 
 	userID = req.session.user;
 	var meta_class = req.body.meta_class;
 	var meta_view = req.body.meta_view;
 	var colmodel = req.body.colmodel;
-	
-
-	var req_filter = req.body.filter;
+ 	var req_filter = req.body.filter;
  
-	 /////////////////////////
-	
-	console.log('meta_class '+meta_class);
-	if (!colmodel) {colmodel=[{
+ 	if (!colmodel) {colmodel=[{
 			                "label": "id",
 			                "name": "_id",
 			                "key": true,
@@ -184,14 +167,11 @@ router.post('/ref_value_list', function (req, res, next) {
 
         var selcols=get_col_list(colmodel);
 					 
-	console.log('selcols '+JSON.stringify(selcols));
-        req_filter=get_filter(req_filter,req.body.value);
-	console.log('req_filter '+JSON.stringify(req_filter));
-
+         req_filter=get_filter(req_filter,req.body.value);
+ 
 	async.waterfall([
 			 function ( callback) {
-		 			console.log(' find doc');
-					var rows = db.get().collection(meta_class).find
+ 					var rows = db.get().collection(meta_class).find
 						(req_filter,selcols).limit(5).toArray( function (err, rows) {
 							var result = {};
 						 	result = rows;
@@ -200,9 +180,7 @@ router.post('/ref_value_list', function (req, res, next) {
 
 				},
 			function ( rows,callback) {
-				
-		 		console.log(' prepare data  '+rows);
-                                var result={rows}; 
+                                 var result={rows}; 
 				callback(null, result);
 				},
 			
@@ -219,13 +197,8 @@ router.post('/ref_value_list', function (req, res, next) {
 });
 
 router.post('/:meta_class/:meta_view', function (req, res, next) {
-
-	console.log("post '/:meta_class/:meta_view'");
-	console.log("post " + req.params.meta_class);
-	console.log("post " + req.params.meta_view);
-	console.log("post "+JSON.stringify(req.body) );
-
-        userID = req.session.user;
+log.debug({req:req},'start');
+         userID = req.session.user;
 
 	var meta_class = req.params.meta_class;
 	var meta_view = req.params.meta_view;
@@ -251,13 +224,10 @@ router.post('/:meta_class/:meta_view', function (req, res, next) {
  				var filter = {};
 				var vfilter ;
 				var selcols={};
-				console.log("model");
-                                console.log(model);
-				if (collectname=="meta_view"&& model!==null) {
+ 				if (collectname=="meta_view"&& model!==null) {
 				
 					selcols=get_col_list(model.data.colmodel) ;
-					console.log(selcols);
-					
+ 					
 					if (model.data.filter) {
 						vfilter = model.data.filter
 						
@@ -269,25 +239,21 @@ router.post('/:meta_class/:meta_view', function (req, res, next) {
 				if (collectname=='meta_class') 
 					{model['data']= get_gridcols_from_class(model)};	
 				if (vfilter&&user_filter)
-					{ console.log('filter 1' );
+					{  
 					 filter['and']=[];
 					 filter['and'].push(vfilter)    ;
 					 filter['and'].push(user_filter);
 					}
 				else if (vfilter) {
-					console.log('filter 2' );
-					filter=vfilter;
+ 					filter=vfilter;
 				}
  
 
 				else if (user_filter) {
-					console.log('filter 3' );
-					filter=user_filter; 
+ 					filter=user_filter; 
 				};
-                                console.log('filter4 '+JSON.stringify(filter));
-				filter=get_filter(filter,null);
-				console.log('filter5 '+JSON.stringify(filter));
-				var rows= dbloc.collection(meta_class).find
+ 				filter=get_filter(filter,null);
+ 				var rows= dbloc.collection(meta_class).find
 					(filter, selcols).toArray(function (err, rows) {
 						var result = {};
 						result.header = model.data;
@@ -298,9 +264,7 @@ router.post('/:meta_class/:meta_view', function (req, res, next) {
 				
 			}
 		], function (err, results) {
-		//console.log(results);
-
-		if (err)
+ 		if (err)
 			return next(err);
 		res.json(results);
 	});

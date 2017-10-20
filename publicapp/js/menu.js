@@ -121,10 +121,10 @@ else{
 			'	 Отчеты<span ></span>                                                        '+
 			'	 </a>                                                                         '+
  			'	<ul id="rep_menu" class="dropdown-menu" role="menu">                                        '+
-			'		 <li><a hreftempl="/report/report1/<%=meta_parent_value%>">Приложение 1.1. Чек-лист</a></li>             '+
- 			'	<li><a hreftempl="/report/report2/<%=meta_parent_value%>">Приложение 2. Заявка на получение независимой гарантии</a></li>                     '+
-			'		 <li><a hreftempl="/report/report3/<%=meta_parent_value%>">Резюме проекта</a></li>             '+
-			'	 <li><a hreftempl="/report/report4/<%=meta_parent_value%>">Приложение 1.2. Анкета проекта субъекта МСП</a></li>                       '+
+			'		 <li><a hreftempl="/report/rep1/<%=meta_parent_value%>">Приложение 1.1. Чек-лист</a></li>             '+
+ 			'	<li><a hreftempl="/report/rep2/<%=meta_parent_value%>">Приложение 2. Заявка на получение независимой гарантии</a></li>                     '+
+			'		 <li><a hreftempl="/report/rep3/<%=meta_parent_value%>">Резюме проекта</a></li>             '+
+			'	 <li><a hreftempl="/report/rep4/<%=meta_parent_value%>">Приложение 1.2. Анкета проекта субъекта МСП</a></li>                       '+
 			'	 </ul>    '+
 			 '</li>      ');
 

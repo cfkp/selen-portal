@@ -2,12 +2,13 @@ var db = require('../db/db');
 var async = require('async');
 var https = require('http');
 
+var config = require('config');
+var log = require('libs/log')(module);
 
 
 
 var create_request=function(userID,fio,phone,fin_amount,fin_period,program_id,enterprise_inn,goal,product) {
-console.log("create_request "+userID);
-/////////////////////////
+ /////////////////////////
 	var sysdate=   new Date().toISOString();
 
 	var dbloc=db.get();
@@ -22,83 +23,54 @@ console.log("create_request "+userID);
 	"program_id":program_id,
 	"goal":goal
      };
-    var row = {user_createid :userID,created:sysdate,need_ext_load:true,state:'Новый', data: pers_req };
-		console.log(' set row');
-		console.log(row);
-	        dbloc.collection("person_request").save(row, function (err, docs){
-	
-		console.log('save row');
-                console.log(docs);
 
+    var row = {user_createid :userID,created:sysdate,need_ext_load:true,state:'Новый', data: pers_req };
+log.info( {row:row},'create_request');
+ 	        dbloc.collection("person_request").save(row, function (err, docs){
+	
+ 
             if(err || docs.result === undefined){
-                console.error('Error inserting document', err);
-                //res.status(400).json({'msg': 'Error inserting document'});
-            }else{  }
+ 	log.error( {row:row},'create_request');
+             }else{  }
                 });
 }; 
 
-/*var load_request_info=function(request_id,next) {
-	console.log("load_request_info "+request_id);
  
-	var sysdate=   new Date().toISOString();
-    var options = {host:'selen-it.ru', 
-		port:'800',
-		path:'/ztassquery/query/tass/input?login=tishenkov@icgfirst.ru&password=Aa4224005&id='+request_id,
-		method : 'GET'};
- 
-    //making the https get call
-    var getReq = https.request(options, function(res) {
-        console.log("status code: ", res.statusCode);
-        res.on('data', function(data) {
-            console.log( data );
-        });
-	
-    });
-     //end the request
-    getReq.end();
-     getReq.on('error', function(err){
-        console.log("Error send load_request_info: "+request_id+ err);
-    }); 
-  
-
-};*/ 
-
 var load_request_info=function(request_id,next) {
-	console.log("load_request_info "+request_id);
  
 	var sysdate=   new Date().toISOString();
-    var options = {host:'selen-it.ru', 
-		port:'8080',
-//http://selen-it.ru:8080/ztassquery/query/tass/small?login=tishenkov@icgfirst.ru&password=Aa4224005&id=
-//		path:'/ztassquery/query/tass/input?login=tishenkov@icgfirst.ru&password=Aa4224005&id='+request_id,
-		path:'/ztassquery/query/tass/small?login=tishenkov@icgfirst.ru&password=Aa4224005&id='+request_id,
-		method : 'GET'};
- 
- var request = require('request');
+	
+	var options=config.get('tass_server');
+   
+	var request = require('request');
 //  Basic Authentication credentials   
 /*var username = "vinod"; 
 var password = "12345";
 var authenticationHeader = "Basic " + new Buffer(username + ":" + password).toString("base64");
 */
+log.info( {request_id:request_id,
+url : "http://"+options.host+':'+options.port+options.path+request_id},'load_request_info');
+
 request(   
 {
-url : "http://"+options.host+':'+options.port+options.path,
+url : "http://"+options.host+':'+options.port+options.path+request_id,
 headers : { /*"Authorization" : authenticationHeader */}  
 },
  function (error, response, body) {
-	console.log(response.statusCode)
-		if (error||response.statusCode!=200) {console.log("send load_request_info Error : "+request_id+ ' '+error);}
-		else
-	{console.log("send load_request_info: "+request_id+ 'success ');}
-	next(error,body);
+	if (error||response.statusCode!=200) {	log.error( {request_id:request_id,
+		statusCode:response.statusCode,error:error },'load_request_info');
+}	else {log.info( {request_id:request_id,
+		statusCode:response.statusCode,error:error },'load_request_info');
+ 	}
+			next(error,body);
    }  );     
   
 
 };
+
 var update_newuser_request=function(userID) {
-console.log("update_newuser_request "+userID);
-/////////////////////////
-	var sysdate=   new Date().toISOString();
+log.info( {userID:userID},'update_newuser_request');
+ 	var sysdate=   new Date().toISOString();
 
 	var dbloc=db.get();
  
@@ -110,21 +82,18 @@ console.log("update_newuser_request "+userID);
 				  callback);
 			},
 			function (row, callback) {
-			//	row ={};row._id='58f720c0931574157ced48ab';
-				console.log('сделали поиск заявки');
-
- 				if (row) {
-console.log('заявка найдена'); 
-				load_request_info (row._id,callback);
-				} else {console.log('заявка не найдена'); 
-};
+  				if (row) {
+				 log.info( {userID:userID,rowid:row._id},'update_newuser_request');
+					load_request_info (row._id,callback);
+				} else {
+				 log.error( {userID:userID },'update_newuser_request not found');
+ 
+				};
  			}
 
 		],
 		function (err, results) {
-		console.log('Завершили вызов http');
- 		console.log(results);
-		console.log(err);
+		return;
  	});
 
 
@@ -134,6 +103,5 @@ console.log('заявка найдена');
 
 
 exports.create_request=create_request;
-
 exports.update_newuser_request=update_newuser_request;
 exports.load_request_info=load_request_info;

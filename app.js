@@ -1,6 +1,6 @@
 var express = require('express');
 
-var favicon = require('serve-favicon');
+//var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
@@ -48,11 +48,7 @@ app.use(function(err, req, res, next) {
   } else {
     if (app.get('env') == 'development') {
      express.errorHandler()(err, req, res, next);
-      //res.status(err.status || 500);
-      //res.render('error', {
-      //  message: err.message,
-      //  error: err});
-    } else {
+     } else {
       log.error(err );
       err = new HttpError(500);
       res.sendHttpError(err);
@@ -66,21 +62,20 @@ var api= require('./routes/api');
 var view= require('./routes/view');
 var upload= require('./routes/fileupload');
 var report= require('./routes/report');
-
-var config = require('config');
-
+  
 db.connect(config.get('mongoose:uri'), function(err) {
   if (err) {
     console.log('Unable to connect to Mongo.')
     process.exit(1)
   } else {
       console.log('Connecting db')
+	log.info('Connecting db');	
     }
   }
 )
 
 
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'publicapp')));
 app.use('/', index);
 //app.use('/generateForm', generateForm);
