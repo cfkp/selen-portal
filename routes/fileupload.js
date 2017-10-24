@@ -10,6 +10,7 @@ var config = require('config');
 var fs = require("fs");
 var db = require('../db/db');
 var checkAuth = require('../middleware/checkAuth');
+var log = require('libs/log')(module);
  
 router.get('/down/:file(*)', function(req, res, next){
 

@@ -7,6 +7,7 @@ var db = require('../db/db');
 var checkAuth = require('../middleware/checkAuth');
 var ObjectID = require('mongodb').ObjectID;
 var jspath = require('JSONPath');
+var log = require('libs/log')(module);
 
 var userID;
 
