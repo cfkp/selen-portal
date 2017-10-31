@@ -49,9 +49,13 @@ result[newf]=s.replace('[value]', value);
 							
 	if (newf=="_id")
 	{  
-//	console.log('set object_id '+result[newf]);
+	console.log('set object_id '+result[newf]);
 	result[newf]= new ObjectID(result[newf]); 
-	}; }   catch(err){console.log('f= _id err '+err);};
+	}; }   catch(err){
+	console.log('set object_id err'+err);
+
+		log.error({filter:filter,value:value,error:err },'get_filter');
+	};
 
 
 };                      
@@ -146,7 +150,7 @@ var  get_gridcols_from_class =function (meta_class){
 };                                           
 
 router.post('/ref_value_list', function (req, res, next) {
-log.debug({req:req},'start');
+log.info({req:req},'start');
  
 	userID = req.session.user;
 	var meta_class = req.body.meta_class;
@@ -169,7 +173,8 @@ log.debug({req:req},'start');
         var selcols=get_col_list(colmodel);
 					 
          req_filter=get_filter(req_filter,req.body.value);
- 
+	console.log('req_filter '+JSON.stringify(req_filter));
+                                       
 	async.waterfall([
 			 function ( callback) {
  					var rows = db.get().collection(meta_class).find

@@ -66,7 +66,7 @@ var menu_item_click = function () {
 	if (obj.attr("meta_action_type")) {
 		if (obj.attr("meta_action_type") == "object") {
 			hide_formBRUT($("#main_workspace"));
-			load_class(this);
+			load_class($("#main_workspace"),this);//load_class(this);
 		} else if (obj.attr("meta_action_type") == "method") {
 			call_method(obj.attr("meta_class"), obj.attr("meta_method"),$('#main_workspace'));
 		} else if (obj.attr("meta_action_type") == "view") {

@@ -41,7 +41,7 @@ log.info({req:req},'start');
  				if (doc) {
 					result = doc;
 				};
-				console.log(result);
+				//console.log(result);
 
 				if (err)
 					return next(err);

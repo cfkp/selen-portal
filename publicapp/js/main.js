@@ -1,29 +1,7 @@
  var bf;
 var BrutusinForms;
+var selen_obj={};
 $(document).ready(function () {
-  	load_main_menu();
-/*
-	$('#method_execute .btn-primary').bind('click', function () {
-		execute_method(null, bf_modal.getData());
-	});
-*/
-	$('#brut_save').bind('click', function () {
-		//alert(JSON.stringify(bf.getData(), null, 4));
-		var meta_class = $('#BRUTform').attr("meta_class");
-		var meta_name = $('#BRUTform').attr("meta_name");
-		var meta_value = $('#BRUTform').attr("meta_value");
-		api_load("saveobj/" + meta_class + '/' + meta_name + '/' + meta_value, JSON.stringify(bf.getData()), null);
-	});
-
-	$('#brut_validate').bind('click', function () {
-		if (bf.validate()) {
-			alert('Ошибок нет');
-		} else {
-			alert('Ошибка проверки');
-		};
-	});
-
-	hide_formBRUT($("#main_workspace"));
 	BrutusinForms = brutusin["json-forms"];
 	BrutusinForms.bootstrap.addFormatDecorator("file", "file", "glyphicon-search",
 		function (element) {
@@ -40,53 +18,24 @@ $(document).ready(function () {
 	BrutusinForms.bootstrap.addFormatDecorator("date", "date");
 
 
-});
- /*
-var loaduserobj = function (meta_class, meta_name, meta_value) {
-	$.ajax({
-		type: "POST",
-		url: "/api/loaduserobj/" + meta_class,
-		contentType: "application/json",
-		dataType: "json",
-		//data: ,
-		statusCode: {
-			200: function (data) {
-				//$("form").attr("meta_class",meta_class);
-				//                loadForm(data);
-				loadFormBRUT(meta_class, meta_name, meta_value, data);
-			},
-			403: function () {
-				messagedlg(jqXHR.responseText);
-			},
-			500: function (jqXHR) {
-				messagedlg(jqXHR.responseText);
-			}
+   	load_main_menu();
 
-		}
-	});
-};
-  */
-function load_class(obj) {
-	var meta_class = $(obj).attr("meta_class");
-	var parent = $(obj).parents().find('#detail_tabs');
+  
+
+});
+
+function load_class(container,elem) {
+	var meta_class = $(elem).attr("meta_class");
+	var parent = $(elem).parents().find('#detail_tabs');
 
 	var meta_name = parent.attr("meta_parent_field");
 	var meta_value = parent.attr("meta_parent_value");
 	var meta_readonly=parent.attr("meta_readonly");
-	if (!meta_readonly){meta_readonly=false}
-	var datajson;
 
-	var func = function (schema, data) {
-		loadFormBRUT(schema, data, meta_class, meta_name, meta_value);
-		if ((meta_readonly)&&(meta_readonly=="true")){
-		$('#BRUTbutton').hide();
-		$('#BRUTcontainer').find(':input').attr('disabled', 'disabled');	
-		}else{$('#BRUTbutton').show();};
-	};
+  	selen_obj[$(container).attr('id')]=new SelenObject($("#detail_obj"),meta_class,meta_name,meta_value ,meta_readonly);
 
-	api_load('/loadclass/' + meta_class + '/' + meta_name + '/' + meta_value, null, func);
 
-}; 
+ }; 
  
 function api_load(url, requestdata, responsefunc,container) {
 	$.ajax({
@@ -148,37 +97,10 @@ var messagedlg = function (jsonmessage, usermessage, dlgtype,onclose) {
 
 };
  
-var prep_cont_BRUT = function (container, meta_class, meta_name, meta_value) {
  
-	var brutform =container.find('#BRUTform');
- 	var brutcont = container.find('#BRUTcontainer');
-
-	brutcont.empty();
-	brutform.attr('meta_class', meta_class);
-	brutform.attr('meta_name', meta_name);
-	brutform.attr('meta_value', meta_value);
-	brutform.show();
-
-	return brutcont[0];
+var  hide_formBRUT=function(container) {
+ if (selen_obj&&selen_obj[container.attr('id')]){
+	selen_obj[container.attr('id')].Destroy();selen_obj[container.attr('id')]=null;}
 };
 
-function hide_formBRUT(container) {
-	var brutform =container.find('#BRUTform');
-	if (brutform){
-        brutform.hide();} ;
-	var brutcont = container.find('#BRUTcontainer');
-	if (brutcont){
-	brutcont.empty();  };
-};
-
-var loadFormBRUT = function (schema, value, meta_class, meta_name, meta_value) {
-        var allbrutCont=$("#main_workspace");
-	if (meta_name === '_id') {
-		meta_value = value._id;
-	}
-
-	bf = BrutusinForms.create(schema.data);
-	var container = prep_cont_BRUT(allbrutCont, meta_class, meta_name, meta_value);
-	bf.render(container, value.data);
-//        $('#BRUTcontainer').find(':input').attr('disabled', 'disabled');
-};
+ 

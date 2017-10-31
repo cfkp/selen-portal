@@ -1,0 +1,17 @@
+﻿{
+    "this_meta_class": "meta_class",
+    "meta_name": "messages",
+    "meta_table_name": "messages",
+    "data": {
+        "title": "Сообщения",
+        "type": "object",
+        "meta_name": "messages",
+        "meta_table_name": "messages",
+        "properties": {
+            "message": {
+                "title": "Сообщение",
+                "description": "Текст сообщения",
+ 		"type": "string",
+		"format":"text"         }
+    }
+}}

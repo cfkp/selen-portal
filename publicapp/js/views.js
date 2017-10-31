@@ -118,7 +118,7 @@ var showgrid = function (grid_container, data,selectrows) {
 					detail_container.show();
 					detail_container.find("[root_menu='#detail_tabs']").show();	
 					detail_container.find('.active a').click();
-					container.jqGrid('setGridState', 'hidden');
+				//	container.jqGrid('setGridState', 'hidden');
 				} else {
 					detail_container.hide();
 					hide_formBRUT(grid_container);
@@ -329,8 +329,10 @@ var refviewmodal = function(meta_class,meta_view,selectFunc) {
         var rez ={};
 	var from_method=false;
         var grid_container=$('#refview');
+	var b = $('#method_execute');
+	var isfrom_modal= $('#method_execute').is(':visible');
         show_view (grid_container,meta_class, meta_view)
-if (!$('#method_execute').hidden){  from_method=true;$('#method_execute').modal('hide');};
+if (isfrom_modal===true){  from_method=true;$('#method_execute').modal('hide');};
 
 	grid_container.find('.btn-primary').unbind('click');
 
