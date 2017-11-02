@@ -1,4 +1,4 @@
-
+                                   
 function arrayToTable(meta_class, meta_view, data) {
     var table = $('<table class="table table-striped pageview"></table>');
     table.attr('id',meta_view);

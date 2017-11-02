@@ -1,6 +1,9 @@
  var bf;
 var BrutusinForms;
 var selen_obj={};
+var selen_view={};
+var main_menu={};
+
 $(document).ready(function () {
 	BrutusinForms = brutusin["json-forms"];
 	BrutusinForms.bootstrap.addFormatDecorator("file", "file", "glyphicon-search",
@@ -16,9 +19,11 @@ $(document).ready(function () {
 	});
 	BrutusinForms.bootstrap.addFormatDecorator("color", "color");
 	BrutusinForms.bootstrap.addFormatDecorator("date", "date");
-
-
-   	load_main_menu();
+ //selen_view=new SelenView($('#test_workspace'),'person_request','vw_persrequests');
+//selen_view = new SelenView($('#test_workspace'),'person_request','vw_expert_persrequests');
+main_menu  = new SelenMenu(undefined,'main_menu');
+//selen_view=new SelenView($('#test_workspace'),'users','vw_user_property');
+//   	load_main_menu();
 
   
 

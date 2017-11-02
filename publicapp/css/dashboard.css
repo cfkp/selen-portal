@@ -24,13 +24,15 @@ body {
 
 /* Hide for mobile, show later */
 .sidebar {
-  display: none;
-}
+   /*display: none;*/
+    padding: 5%;
+ 
+} 
 @media (min-width: 768px) {
   .sidebar {
     position: fixed;
-    top: 51px;
-    bottom: 0;
+/*    top: 51px;
+    bottom: 0;*/
     left: 0;
     z-index: 1000;
     display: block;
@@ -124,16 +126,9 @@ body {
 input[type="file"] {
   display: none;
 }
-.cont{    /* height: 600px;
-    overflow: auto;
-    position: relative;*/
-}
-
-/*.method_form .btn-primary 
-{display: none; }
-  */
-
-
+.btn {
+    margin: 1%;
+} 
 form.brutusin-form td {
     white-space: normal;
 }

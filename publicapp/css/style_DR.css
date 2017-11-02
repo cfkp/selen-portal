@@ -36,7 +36,7 @@ a.badge:hover{background-color:#b81a1a;}
 
 
 
-#detail_tabs  .nav-tabs>li.active>a,#detail_tabs .nav-tabs>li.active>a:hover,#detail_tabs .nav-tabs>li.active>a:focus {
+  .nav-tabs>li.active>a,#detail_tabs .nav-tabs>li.active>a:hover,#detail_tabs .nav-tabs>li.active>a:focus {
 background: transparent url('img/hdr-primary.png') no-repeat ;
 
 
@@ -45,31 +45,31 @@ border-radius: 0;
 border: none;
 }
 
-#detail_tabs .nav-tabs #detail_tabs .nav-tabs a {
+ .nav-tabs #detail_tabs .nav-tabs a {
 color:#f4f4f4;
 border:none ;
 border-radius: 0;
 }
 
-#detail_tabs .nav-tabs .menu_left {background: transparent url('img/blue_.png') no-repeat ; 
+ .nav-tabs .menu_left {background: transparent url('img/blue_.png') no-repeat ; 
 color:#f4f4f4;
 /*border:none ;
 border-radius: 0; */
 }
 
-#detail_tabs .nav-tabs>li>a {
+ .nav-tabs>li>a {
 color:#f4f4f4;
 }
 
-#detail_tabs .nav-tabs>li>a:hover {
+ .nav-tabs>li>a:hover {
     border-color: rgba(255, 255, 255, 0.15);
 }
 
-#detail_tabs .nav .open>a,#detail_tabs  .nav .open>a:hover,#detail_tabs  .nav .open>a:focus {
+ .nav .open>a,#detail_tabs  .nav .open>a:hover,#detail_tabs  .nav .open>a:focus {
     background-color: rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.15);
 }
-#detail_tabs  .nav>li>a:hover, #detail_tabs .nav>li>a:focus {
+  .nav>li>a:hover, #detail_tabs .nav>li>a:focus {
     text-decoration: none;
     background-color: rgba(255, 255, 255, 0.15);
 }

@@ -42,13 +42,13 @@ var log = bunyan.createLogger({   name: path,
     },
  streams: [
     {
-	type: 'rotating-file',
-        path: 'log/selen-info.log',
-        period: '1d'  }/*,
+      level: 'debug',
+
+        path: 'log/selen-info.log'},
     {
       level: 'error',
-      path: '/var/tmp/myapp-error.log'  // log ERROR and above to a file
-    }  */
+      path: 'log/selen-error.log'  // log ERROR and above to a file
+    }  
   ]
 });
 return log;
