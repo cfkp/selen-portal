@@ -1,22 +1,44 @@
+
+<% for(var irow=0; irow < rows.length; irow++) { %>
+
 <table class="table table-striped pageview" 
-	id="vw_user_property" 
-	meta_view="vw_user_property" 
+	id=<%= header.meta_name %>
+	meta_class=<%= header.meta_class %>
+	meta_view=<%= header.meta_name %>
 	meta_id="58c7c6b8c20d99116418a797">
 <tbody>
-<tr style="display: none;">
+<% for(var icol=0; icol < header.colmodel.length; icol++) { %>
+
+<!--tr style="display: none;">
 <td>id</td>
 <td>58c7c6b8c20d99116418a797</td>
+</tr-->
+<tr meta_name=<%= jsonPathToValue(header.colmodel[icol],'name') %> 
+	<% if (header.colmodel[icol].hidden) {%>
+		style="display: none;"
+	<% } %>
+
+
+>
+<td ><%= jsonPathToValue(header.colmodel[icol],'label') %></td>
+<td><%= jsonPathToValue(rows[irow],jsonPathToValue(header.colmodel[icol],'name')) %></td>
 </tr>
-<tr>
-<td>E-mail</td>
-<td>shemardin@gmail.com</td>
-</tr>
-<tr>
-<td>Фио</td>
-<td>undefined</td>
-</tr>
-<tr>
-<td>Телефон</td>
-<td>123123123</td>
-</tr></tbody>
+ <% } %>
+
+</tbody>
  </table>
+<% } %>
+
+
+<!--{"header":
+	{"meta_name":"vw_user_property","title":"Пользовательские данные","meta_class":"users","view_mode":"page",
+	"colmodel":[
+		{"label":"id","name":"_id","key":true,"hidden":true},
+		{"label":"E-mail","name":"email"},
+		{"label":"Фио","name":"fio"},
+		{"label":"Телефон","name":"tel"}],
+	"filter":{"_id":"session_user"}},
+"rows":[
+{"_id":"58c7c6b8c20d99116418a797","email":"shemardin@gmail.com","tel":"123123123"}
+]}
+-->

@@ -216,7 +216,10 @@ log.debug({req:req},'start');
    	var collectname= "meta_view";
 	var fil= {"meta_name": meta_view};
 
-		
+	if (typeof meta_class === 'undefined' ||!meta_class||meta_class===null||meta_class==='undefined') { 
+res.json({'error': 'class_undefined','msg': 'Неопределен класс'});
+return;
+	}	
 		if (typeof meta_view === 'undefined' ||!meta_view||meta_view===null||meta_view==='undefined') {
 			collectname="meta_class";
  			fil={"meta_name": meta_class};

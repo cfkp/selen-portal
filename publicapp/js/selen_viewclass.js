@@ -121,10 +121,25 @@ Show()
 
 showpage() {
 	this.view_mode='page'; 
-        var tpl=getfile_sync('../template/'+'default.ejs'); 
+
+ 	if (this.header.methods_menu) {
+/*	   	var div_detail = $('<div></div>'); 
+		div_detail.attr('id','method_menu');	 
+	        this.container.append(div_detail);*/
+		this.methods=new SelenMenu(this.container,this.header.methods_menu);
+		
+		
+	}; 
+     	var gr_cont = $('<div></div>');
+    
+     	gr_cont.attr('id',this.gridid.grid_id);
+        this.container.append(gr_cont);
+	
+	if (!this.header.template){this.header.template='default.ejs'};
+        var tpl=getfile_sync('../template/'+this.header.template); 
  	if (this.rows){ 
          var html = ejs.render(tpl.responseText,{header:this.header,rows:this.rows});
-         $(this.container).html(html);
+         gr_cont.html(html);
         };
      
 
@@ -149,7 +164,7 @@ var header=this.header;
 	pager.attr('id',this.gridid.gridpager_id)	 
         var gr_cont= this.container.append(table);
         gr_cont.append(pager);
-	var container=this.container.find(this.gridid.grid_id_);
+	var container=table;//this.container.find(this.gridid.grid_id_);
  	var detail_container;//=grid_container.find('#detail_tabs');
 
 
@@ -163,14 +178,22 @@ var header=this.header;
  		
 		
 	};*/
-  	$.jgrid.defaults.width = 900;
+/*var c=$(window).width()-$(container).offset().left;//$(window).width();
+var t= $(window).height()-$(container).offset().top ;
+
+var h=$(window).height();
+  	$.jgrid.defaults.width = c;*/
 	$.jgrid.defaults.responsive = true; 
 	$.jgrid.defaults.styleUI = 'Bootstrap';
+	$.jgrid.styleUI.Bootstrap.base.headerTable = "table table-bordered table-condensed";
+	$.jgrid.styleUI.Bootstrap.base.rowTable = "table table-bordered table-condensed";
+	$.jgrid.styleUI.Bootstrap.base.footerTable = "table table-bordered table-condensed";
+	$.jgrid.styleUI.Bootstrap.base.pagerTable = "table table-condensed";
 
 	container.jqGrid({
 		datatype: "local",
 		data: this.rows,
-		height: 400,
+		//height: t,
 		colModel: this.header.colmodel,
 		viewrecords: true, // show the current page, data rang and total records on the toolbar
 		caption: this.header.title,
