@@ -570,7 +570,10 @@ log.info({req:req},'start');
 	{
 		set$.user_expert=userID;
 	}; 
- 	var obj_id = new ObjectID(req.body._id);
+	var obj_id;
+	if (req.body.objectlist) {
+ 		 obj_id = new ObjectID(req.body.objectlist[0]);
+	};
 	dbloc.collection(meta_class).updateOne({
 		"_id": obj_id
 	}, {
@@ -613,7 +616,10 @@ log.info({req:req},'start');
 		return;
 	};
 
- 	var obj_id = new ObjectID(req.body._id);
+	var obj_id;
+	if (req.body.objectlist) {
+ 		 obj_id = new ObjectID(req.body.objectlist[0]);
+	};
 	dbloc.collection(meta_class).updateOne({
 		"_id": obj_id
 	}, {
@@ -659,7 +665,10 @@ log.info({req:req},'start');
 	};
 
 	//        var row = {"created":Date.now, "user_createid" :userID,state:"Новый","data": data};
-	var obj_id = new ObjectID(req.body._id);
+	var obj_id;
+	if (req.body.objectlist) {
+ 		 obj_id = new ObjectID(req.body.objectlist[0]);
+	};
 	dbloc.collection(meta_class).updateOne({
 		"_id": obj_id
 	}, {
@@ -755,8 +764,10 @@ log.info({req:req},'start');
 
  	var sysdate=   new Date().toISOString();
 	var obj_id;
-	if (meta_method=='edit'&&req.body._id) {
-		obj_id = new ObjectID(req.body._id);
+	if (req.body.objectlist) {
+ 		 obj_id = new ObjectID(req.body.objectlist[0]);
+	};
+	if (meta_method=='edit'&&obj_id) {
  		if (data !== null) {
 			dbloc.collection(meta_class).updateOne({
 				"_id": obj_id
@@ -775,8 +786,7 @@ log.info({req:req},'start');
 			});
 		}
 	} 
-	else if (meta_method=='delete'&&req.body._id){
-		obj_id = new ObjectID(req.body._id);
+	else if (meta_method=='delete'&&obj_id){
  		if ( data.confirm!== null&&data.confirm==true) {
 			dbloc.collection(meta_class).remove//updateOne
 				({
@@ -814,7 +824,7 @@ log.info({req:req},'start');
 				log.error({req:req},'Error inserting document', err);
  			} else {
 				if (meta_class=='person_request'){
-					 var pers_req = require('../db/person_request');
+					var pers_req = require('../db/person_request');
  					pers_req.load_request_info (docs.ops[0]._id,function(error,body){});	
 					 };
 				var dataReturn = '';

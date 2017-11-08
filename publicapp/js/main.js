@@ -5,6 +5,20 @@ var selen_view={};
 var main_menu={};
 
 $(document).ready(function () {
+/* window.onerror = function (message, url, lineNumber, columnNo, error) {	
+if (error.name&&error.name==='SelenError'){messagedlg(error.errobj);}
+else{	
+    alert("Поймана ошибка, выпавшая в глобальную область!\n" +
+      "Сообщение: " + message + "\n(" + url + ":" + lineNumber + ")");}
+
+  };
+  */
+window.addEventListener('error', function (e) {
+    var error = e.error;
+if (error.name&&error.name==='SelenError'){messagedlg(error.errobj);}
+
+ });
+
 	BrutusinForms = brutusin["json-forms"];
 	BrutusinForms.bootstrap.addFormatDecorator("file", "file", "glyphicon-search",
 		function (element) {
@@ -75,33 +89,7 @@ function api_load(url, requestdata, responsefunc,container) {
 
 };
 
-var messagedlg = function (jsonmessage, usermessage, dlgtype,onclose) {
-	if (!jsonmessage) {
-		jsonmessage = {
-			msg: usermessage,
-			type: dlgtype
-		}
-	} else {
-		jsonmessage = JSON.parse(jsonmessage)
-	};
-
-	var msg = jsonmessage.msg;
-	var dlgtype = jsonmessage.type;
-	var dlgtitle = "Сообщение";
-	if (!dlgtype || dlgtype == "error") {
-		dlgtitle = "Ошибка"
-	}
-	if (!msg) {
-		msg = "Неизвестная ошибка"
-	};
-
-	$('#messagedlg #msgtitle').html(dlgtitle);
-	$('#messagedlg #msg').html(msg);
-	$("#messagedlg").on("hidden.bs.modal", onclose);
-	$('#messagedlg').modal();
-
-};
- 
+  
  
 var  hide_formBRUT=function(container) {
  if (selen_obj&&selen_obj[container.attr('id')]){

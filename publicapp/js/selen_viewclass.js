@@ -1,30 +1,6 @@
 'use strict';
 
-function cb(object, fnc)
-{
-    return function() {
-        var args = [this];
-        for (var i in arguments) args.push(arguments[i]);
-        return fnc.apply(object, args);
-    }
-}
-
-function view_load_sync(url, requestdata) {
-var result=$.ajax({
-		url: "../view/" + url,
-		type: "POST",
-		data: requestdata,
-		contentType: "application/json",
-		dataType: "json",
-	            async: false });
- 	if(result.status!=200){
-		throw result.responseText//new IstoeServiceException(this.lastResult.status,xml+" "+this.lastResult.statusText,this.lastResult.responseText);
-	}
-
-	return  result;
-
-};
-
+ 
 function getfile_sync(file, callback) {
 var result=$.ajax(file, {
 		type: 'GET',
@@ -52,8 +28,9 @@ return id_cont;
 
 class SelenView {
 
-  constructor(cont,_meta_class,_meta_view) 
-{       this.parent_container=cont;
+  constructor(parentobj,_meta_class,_meta_view) 
+{       this.parent=parentobj;
+	this.parent_container=this.parent.container;
 
 	var obj_container = $('<div></div>'); 
 	obj_container.attr('class','sln_container');	 
@@ -73,6 +50,9 @@ class SelenView {
 	this.rows={};
 	this.methods=null;
 	this.detail=null;
+	if (parentobj&&parentobj.collection){
+	this.collection=Object.assign({},parentobj.collection);}
+
   	this.Load();
 	this.Show();
 }
@@ -126,7 +106,7 @@ showpage() {
 /*	   	var div_detail = $('<div></div>'); 
 		div_detail.attr('id','method_menu');	 
 	        this.container.append(div_detail);*/
-		this.methods=new SelenMenu(this.container,this.header.methods_menu);
+		this.methods=new SelenMenu(this,this.header.methods_menu);
 		
 		
 	}; 
@@ -152,7 +132,7 @@ var header=this.header;
 /*	   	var div_detail = $('<div></div>'); 
 		div_detail.attr('id','method_menu');	 
 	        this.container.append(div_detail);*/
-		this.methods=new SelenMenu(this.container,this.header.methods_menu);
+		this.methods=new SelenMenu(this,this.header.methods_menu);
 		
 		
 	}; 
@@ -210,30 +190,7 @@ var h=$(window).height();
 	            container.jqGrid("resetSelection");
 	            //return true;
 	        },
-		onSelectRow: cb(this,this.onSelectRow)/*function (rowid, selected) {
-			if ((header.detail) && (rowid != null)&&detail_container.length!=0) {
-
-				if (selected) {
-					detail_container.attr("meta_parent_field", "pers_request_id");
-					detail_container.attr("meta_parent_value", rowid);
-					detail_container.attr("meta_readonly",header.detail.readonly);
-					
-					var reports = detail_container.find("#rep_menu")
-					if (reports) {
-						reports.find( "li a" ).each(function( index ) {
-   							$( this ).attr("href",$( this ).attr("hreftempl").replace('<%=meta_parent_value%>',rowid))
- 						});	
-					}
-					detail_container.show();
-					detail_container.find("[root_menu='#detail_tabs']").show();	
-					detail_container.find('.active a').click();
- 				} else {
-					detail_container.hide();
-					hide_formBRUT(grid_container);
-				};
-			}
-		}    */
-	});
+		onSelectRow: cb(this,this.onSelectRow)	});
 
 	container.navGrid(this.gridid.gridpager_id_, {
 		search: true, // show search button on the toolbar
@@ -305,12 +262,14 @@ onSelectRow (elem,rowid, selected) {
 		this.detail=null;
 		};					
  		if (selected) {
-			this.detail=new SelenMenu(this.container,this.header.detail.menu);
+			this.detail=new SelenMenu(this,this.header.detail.menu);
 			this.detail.container.attr("meta_parent_field", "pers_request_id");
 			this.detail.container.attr("meta_parent_value", rowid);
 			this.detail.container.attr("meta_readonly",this.header.detail.readonly);
-			this.detail.meta_parent_field="pers_request_id";
-			this.detail.meta_parent_value="rowid";
+			this.detail.collection.meta_parent_class="person_request";
+ 			this.detail.collection.meta_parent_field="pers_request_id";
+			this.detail.collection.meta_parent_value=rowid;
+
 			this.detail.meta_readonly="this.header.detail.readonly";
 			var reports = this.detail.container.find("#rep_menu")
 			if (reports) {
@@ -328,6 +287,6 @@ this.detail.Show();
 	}
 }
 
-
+                
 };
 

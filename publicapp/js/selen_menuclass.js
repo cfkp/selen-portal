@@ -1,19 +1,12 @@
 'use strict';
 
-function cb(object, fnc)
-{
-    return function() {
-        var args = [this];
-        for (var i in arguments) args.push(arguments[i]);
-        return fnc.apply(object, args);
-    }
-}
-
+ 
 class SelenMenu {
 
-  constructor(cont,_meta_name) 
-{ if (cont){      
-	this.parent_container=cont;
+  constructor(parentobj,_meta_name) 
+{ if (parentobj){      
+	this.parent=parentobj;
+	this.parent_container=this.parent.container;
 	var obj_container = $('<div></div>'); 
 //	obj_container.attr('class','sln_container')	 
 	obj_container.attr('id','sln_cnt'+_meta_name);
@@ -28,12 +21,15 @@ class SelenMenu {
         this.meta_class="meta_menu";
         this.meta_name=_meta_name;
         this.meta_value=_meta_name;
+	this.collection={};
+	if (parentobj&&parentobj.collection){
+	this.collection=Object.assign({},parentobj.collection);}
 	this.child_obj={};
 	this.schema={};
 	this.data={};
 	this.bf=null;
   	this.Load();
-if (cont){
+if (this.parent){
 	this.makemenu(this.value.data,undefined,this.container);
 	}
 else
@@ -106,14 +102,19 @@ MenuClick(clickedElem)
 				this.child_obj[this.container.attr('id')].Destroy();
 				this.child_obj[this.container.attr('id')]=null;}
 
-			this.child_obj[this.container.attr('id')] = new SelenObject(this.container,obj.attr("meta_class") ,this.container.attr("meta_parent_field") ,this.container.attr("meta_parent_value") ,this.container.attr("meta_readonly"));
+			this.child_obj[this.container.attr('id')] = new SelenObject(this,obj.attr("meta_class") ,this.container.attr("meta_parent_field") ,this.container.attr("meta_parent_value") ,this.container.attr("meta_readonly"));
  		} else if (obj.attr("meta_action_type") == "method") {
-			call_method(obj.attr("meta_class"), obj.attr("meta_method"),this.container);
+			 if (this.child_meth ){
+				this.child_meth.Destroy();
+				this.child_meth=null;}
+
+				this.child_meth=new SelenMethod(this,obj.attr("meta_class"), obj.attr("meta_method"),this.parent.get_selected_rows())
+			//call_method(obj.attr("meta_class"), obj.attr("meta_method"),this.container);
 		} else if (obj.attr("meta_action_type") == "view") {
 			if (this.child_obj&&this.child_obj[this.container.attr('id')]){
 				this.child_obj[this.container.attr('id')].Destroy();
 				this.child_obj[this.container.attr('id')]=null;}
- 			this.child_obj[this.container.attr('id')] = new SelenView(this.container,obj.attr("meta_class") ,obj.attr("meta_view"));
+ 			this.child_obj[this.container.attr('id')] = new SelenView(this,obj.attr("meta_class") ,obj.attr("meta_view"));
 		};
 
 	};
@@ -150,7 +151,7 @@ makemenu(json, ulclass, root) {
 	var ul = $('<ul></ul>');
 	ul.attr('id', json.name);
 	ul.attr('class', ulclass.toString());
-	ul.attr('root_menu', json.root_menu);
+	ul.attr('root_menu', json.root_menu);                             
 	root.append(ul);
 	if ((json.root_menu !== '#top_menu') &&(json.root_menu !== '#method_menu')) {
 		ul.hide();

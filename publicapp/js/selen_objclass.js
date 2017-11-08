@@ -1,36 +1,12 @@
 'use strict';
 
-function cb(object, fnc)
-{
-    return function() {
-        var args = [this];
-        for (var i in arguments) args.push(arguments[i]);
-        return fnc.apply(object, args);
-    }
-}
-
-function api_load_sync(url, requestdata) {
-var result=$.ajax({
-		url: "../api/" + url,
-		type: "POST",
-		data: requestdata,
-		contentType: "application/json",
-		dataType: "json",
-	            async: false });
- 	if(result.status!=200){
-		throw result.responseText//new IstoeServiceException(this.lastResult.status,xml+" "+this.lastResult.statusText,this.lastResult.responseText);
-	}
-
-	return  result;
-
-};
-
-
+ 
 
 class SelenObject {
 
-  constructor(cont,_meta_class,_meta_name,_meta_value,meta_readonly) 
-{       this.parent_container=cont;
+  constructor(parentobj,_meta_class,_meta_name,_meta_value,meta_readonly) 
+{       this.parent=parentobj;
+	this.parent_container=this.parent.container;
 
 	var obj_container = $('<div></div>'); 
 	obj_container.attr('class','sln_container');	 
@@ -44,6 +20,9 @@ class SelenObject {
       this.meta_value=_meta_value;
 if ((meta_readonly)&&(meta_readonly=="true")){
 this.meta_readonly= true; }else {this.meta_readonly= false;};
+	if (parentobj&&parentobj.collection){
+	this.collection=Object.assign({},parentobj.collection);}
+
 	this.schema={};
 	this.data={};
 	this.bf=null;
