@@ -57,7 +57,10 @@ url : "http://"+options.host+':'+options.port+options.path+request_id,
 headers : { /*"Authorization" : authenticationHeader */}  
 },
  function (error, response, body) {
-	if (error||response.statusCode!=200) {	log.error( {request_id:request_id,
+	if (error||!response) {	log.error( {request_id:request_id,
+		statusCode:404,error:error },'load_request_info');
+}
+	else if (error||response.statusCode!=200) {	log.error( {request_id:request_id,
 		statusCode:response.statusCode,error:error },'load_request_info');
 }	else {log.info( {request_id:request_id,
 		statusCode:response.statusCode,error:error },'load_request_info');

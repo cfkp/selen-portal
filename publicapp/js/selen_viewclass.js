@@ -76,15 +76,15 @@ class SelenView {
    Load()
 	{
 
-	var requestdata ; 
+	var requestdata ={}; 
 	
  
 
 	if (this.user_filter){requestdata = {'filter':this.user_filter};};
+	if (this.collection) {requestdata['collection']=this.collection}
 
 
-
-	this.lastresponse= view_load_sync( this.meta_class + '/' + this.meta_view , requestdata);
+	this.lastresponse= view_load_sync( this.meta_class + '/' + this.meta_view , JSON.stringify(requestdata));
 	this.header=this.lastresponse.responseJSON.header;
 	this.rows=this.lastresponse.responseJSON.rows;
 	}
@@ -237,11 +237,12 @@ setSelection(){
 
 get_selected_rows() {
 	var s=[];
-	//var  page = viewcontainer.find(".pageview");
 	if (this.view_mode=='page') {
-	//	s.push(page.attr("meta_id")); 
+		var  page = this.container.find(".selectelem");
+
+	 	s.push(page.attr("meta_id")); 
 	}
-	else{     
+	else{           
  		let selrows;
 		selrows = $(this.gridid.grid_id_).jqGrid('getGridParam', 'selrow');
 		if (selrows){	

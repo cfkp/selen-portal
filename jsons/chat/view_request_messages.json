@@ -1,0 +1,65 @@
+﻿{
+    "_id": "5a09356a82a76a0b106ffd1d",
+    "user_createid": "58c7c6b8c20d99116418a797",
+    "meta_name": "vw_collection_messages",
+    "meta_class": "request_messages",
+    "data": {
+        "meta_name": "vw_collection_messages",
+        "title": "Сообщения по заявке",
+        "meta_class": "request_messages",
+        "methods_menu": "menu_message",
+        "view_mode": "page",
+        "template": "request_messages.ejs",
+        "colmodel": [
+            {
+                "label": "id",
+                "name": "_id",
+                "key": true,
+                "hidden": true
+            },
+            {
+                "label": "Дата создания",
+                "name": "created"
+            },
+            {
+                "label": "Сообщение",
+                "name": "data.message"
+            },
+            {
+                "label": "ИД Создатель",
+                "name": "user_createid._id",
+                "meta_ref": {
+                    "meta_class": "users",
+                    "localfield": "user_createid"
+                }
+            },
+            {
+                "label": "Создатель",
+                "name": "user_createid.email",
+                "meta_ref": {
+                    "meta_class": "users",
+                    "localfield": "user_createid"
+                }
+            },
+            {
+                "label": "Получатель",
+                "name": "data.recepient_group_id.title",
+                "meta_ref": {
+                    "meta_class": "role",
+                    "localfield": "data.recepient_group_id"
+                }
+            },
+            {
+                "label": "Получатель",
+                "name": "data.recepient_group_id._id",
+                "meta_ref": {
+                    "meta_class": "role",
+                    "localfield": "data.recepient_group_id"
+                }
+            }
+        ]
+    },
+    "created": "2017-03-14T10:23:32.897Z",
+    "__v": 0,
+    "this_meta_class": "meta_view"
+}

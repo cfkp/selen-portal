@@ -75,7 +75,7 @@ log.info({req:req},'start');
 router.post('/saveobj/:meta_class/:parent_name/:parent_id',checkAuth, function (req, res, next) {
 log.info({req:req},'start');
  
-	var userID = req.session.user;
+	var userID =req.session.user;
 	// var nameForm = req.params.idform;
 	var meta_class = req.params.meta_class;
 	var parent_name = req.params.parent_name;
@@ -110,7 +110,7 @@ log.info({req:req},'start');
 					row.data = data;
 					row.created = Date.now;
 				} else {
- 					var row = {
+ 					var row = { _id:new ObjectID().toString(),
 						user_createid: userID
 					};
 					if (parent_name) {
@@ -120,8 +120,7 @@ log.info({req:req},'start');
 
 				};
  				dbloc.collection(meta_class).save(row, function (err, docs) {
-
- 
+                         
 					if (err || docs.result === undefined) {
 						log.error({req:req},'Error inserting document');
 						//res.status(400).json({'msg': 'Error inserting document'});
@@ -149,32 +148,22 @@ log.debug({req:req},'start');
 	var meta_class = "meta_menu";
 	var meta_name = "name";
 	var meta_value = "client_menu";
+	var search_filter = {};
 
-	/////////////////////////
-	var dbloc = db.get();
+
+	if (req.user.role)
+		{  search_filter = { "_id": req.user.role.data.user_menu};
+ 		}
+	else {					
+		search_filter = { "name": "person_menu"};
+	};
+ 	var dbloc = db.get();
 
 	async.waterfall([
-			function (callback) {
-				db.get().collection("role").findOne({
-					'users.user_id': userID
-				}, callback);
-			},
-			function (row, callback) {
+ 			function ( callback) {
  
 				var result = {};
- 				var search_filter = {};
-
-				if (!row) {
-					search_filter = {
-						"name": "person_menu"
-					}
-				} else {
-					search_filter = {
-						"name": row.menu
-					};
-				}
- 
-				db.get().collection(meta_class).findOne(search_filter, function (err, doc) {
+ 				db.get().collection(meta_class).findOne(search_filter, function (err, doc) {
 					if (err) {
  						return next(err);
 					}
@@ -301,7 +290,7 @@ log.info({req:req},'start');
 			var result = {};
  			result = {};
 			if (req.body.objectlist) {
- 				var o_id = new ObjectID(req.body.objectlist[0]);
+ 				var o_id = req.body.objectlist[0];
 				db.get().collection(meta_class).findOne({
 					"_id": o_id
 				}, function (err, doc) {
@@ -329,7 +318,8 @@ log.info({req:req},'start');
 			res.status(500).send(err);
 			return;
 		};
-		if ((results.schema.data.objectlist !== undefined) && (results.schema.data.objectlist === "1") &&
+		if ((results.schema.data.objectlist !== undefined) && (results.schema.data.objectlist === 1||
+results.schema.data.objectlist === "1") &&
 			((!req.body.objectlist) || (req.body.objectlist.length === 0))) {
 			res.status(500).send({
 				'error': 'no_objectlist',
@@ -415,12 +405,12 @@ log.info({req:req},'start');
 			var result = {};
  			result = {};
 			if (req.body.objectlist) {
- 				var o_id = new ObjectID(req.body.objectlist[0]);
+ 				var o_id = req.body.objectlist[0];
 				db.get().collection(meta_class).findOne({
 					"_id": o_id
 				}, function (err, doc) {  
  					if (doc) {
-						if (doc.state&&doc.state !== "Новый"&&meta_method=='edit') {
+						if (doc.state&&doc.state !== "Новый"&&meta_method=='edit'&&meta_class=='person_request') {
 							callback({
 								'error': 'no_edit_right',
 								'msg': 'Документ не в состоянии "Новый"'
@@ -450,7 +440,8 @@ log.info({req:req},'start');
 			})
 		
 		};
-		if ((results.schema.data.objectlist !== undefined) && (results.schema.data.objectlist === "1") &&
+		if ((results.schema.data.objectlist !== undefined) && (results.schema.data.objectlist === 1||
+results.schema.data.objectlist === "1") &&
 			((!req.body.objectlist) || (req.body.objectlist.length === 0))) {
 			res.status(500).send({
 				'error': 'no_objectlist',
@@ -572,7 +563,7 @@ log.info({req:req},'start');
 	}; 
 	var obj_id;
 	if (req.body.objectlist) {
- 		 obj_id = new ObjectID(req.body.objectlist[0]);
+ 		 obj_id = req.body.objectlist[0];
 	};
 	dbloc.collection(meta_class).updateOne({
 		"_id": obj_id
@@ -618,7 +609,7 @@ log.info({req:req},'start');
 
 	var obj_id;
 	if (req.body.objectlist) {
- 		 obj_id = new ObjectID(req.body.objectlist[0]);
+ 		 obj_id =  req.body.objectlist[0];
 	};
 	dbloc.collection(meta_class).updateOne({
 		"_id": obj_id
@@ -648,7 +639,7 @@ log.info({req:req},'start');
 router.post('/callmethod/person_request/change_state2expert/execute',checkAuth, function (req, res, next) {
 log.info({req:req},'start');
  
-	var userID = req.session.user;
+	var userID =  req.session.user;
 	var meta_class = "person_request";
 	var meta_method = req.params.meta_method;
 	var meta_action = req.params.meta_action;
@@ -667,7 +658,7 @@ log.info({req:req},'start');
 	//        var row = {"created":Date.now, "user_createid" :userID,state:"Новый","data": data};
 	var obj_id;
 	if (req.body.objectlist) {
- 		 obj_id = new ObjectID(req.body.objectlist[0]);
+ 		 obj_id = req.body.objectlist[0];//new ObjectID(req.body.objectlist[0]);
 	};
 	dbloc.collection(meta_class).updateOne({
 		"_id": obj_id
@@ -698,7 +689,7 @@ log.info({req:req},'start');
 
 router.post('/callmethod/users/user_change_pass/execute',checkAuth, function (req, res, next) {
 log.info({req:req},'start');
- 	var userID = req.session.user;   
+ 	var userID =  req.session.user;
 	var meta_class = "users";
  
 
@@ -714,7 +705,7 @@ log.info({req:req},'start');
 		return;
 	};
 
- 	var obj_id = new ObjectID(userID);
+ 	var obj_id = userID;//new ObjectID(userID);
 	var salt= Math.random() + '';
 	var hashpass=crypto.createHmac('sha1', salt).update(data.newpassword).digest('hex');
 	
@@ -733,10 +724,8 @@ log.info({req:req},'start');
 				log.error({req:req},'Error update document', err);
 		} else {
 			var dataReturn = '';
-			if (docs.ops) {
- 
-				dataReturn = docs.ops[0]._id;
-			}
+			 				dataReturn = obj_id;
+			 
  		}
 
 		res.json(dataReturn);
@@ -748,7 +737,7 @@ log.info({req:req},'start');
 router.post('/callmethod/:meta_class/:meta_method/execute',checkAuth, function (req, res, next) {
 log.info({req:req},'start');
  
-	var userID = req.session.user;
+	var userID =  req.session.user ;
 	var meta_class = req.params.meta_class;
 	var meta_method = req.params.meta_method;
 	var meta_action = req.params.meta_action;
@@ -765,7 +754,7 @@ log.info({req:req},'start');
  	var sysdate=   new Date().toISOString();
 	var obj_id;
 	if (req.body.objectlist) {
- 		 obj_id = new ObjectID(req.body.objectlist[0]);
+ 		 obj_id = req.body.objectlist[0];//new ObjectID(req.body.objectlist[0]);
 	};
 	if (meta_method=='edit'&&obj_id) {
  		if (data !== null) {
@@ -812,27 +801,35 @@ log.info({req:req},'start');
 		};
 	}
 	else if (meta_method=='new'){
-		var row = {
+ 		 obj_id = new ObjectID().toString();
+		
+		var row = {"_id":obj_id,
 			"created": sysdate ,
 			"user_createid": userID,
 			state: "Новый",
 			"data": data
 		};
+		if (req.body.collection&&req.body.collection.meta_parent_field){
+	console.log('insert collection');
+	console.log(req.body.collection);
+
+		  row[req.body.collection.meta_parent_field]=req.body.collection.meta_parent_value;
+		}
+
 		dbloc.collection(meta_class).save(row, function (err, docs) {
 
 			if (err || docs.result === undefined) {
 				log.error({req:req},'Error inserting document', err);
  			} else {
+	console.log('insert doc');
+	console.log(docs);
+	
 				if (meta_class=='person_request'){
 					var pers_req = require('../db/person_request');
- 					pers_req.load_request_info (docs.ops[0]._id,function(error,body){});	
+ 					pers_req.load_request_info (obj_id,function(error,body){});	
 					 };
-				var dataReturn = '';
-				if (docs.ops) {
- 
-					dataReturn = docs.ops[0]._id;
-				}
- 			}
+				var dataReturn = obj_id;
+  			}
 
 			res.json(dataReturn);
 		});

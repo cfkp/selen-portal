@@ -1,0 +1,33 @@
+﻿<div class="message_container">
+  <div class="screen">
+
+<% for(var irow=0; irow < rows.length; irow++) { %>
+
+
+
+     <div class="message__list">
+ <% if (!rows[irow].mymessage) {%>
+      <img class="bot__image" src="images/logo.png">
+      <div class="message__item message__item--bot">
+        <span class="message message--bot">
+	<% } else{ %>
+      <div class="message__item message__item--user">
+ 	<% if (irow==0) {%>
+ 	 <div class="selectelem" meta_id=<%=rows[irow]._id%> ></div>
+	 <% } %>
+		
+        <span class="message message--user">
+	 <% } %>
+
+<%=rows[irow].data.message%>
+         </span>
+
+      </div>
+    </div>
+ 
+<% } %>
+                                                          	
+
+  </div>
+</div>
+

@@ -8,8 +8,11 @@ var config = require('config');
 
 var mongoose = require('libs/mongoose'),
     Schema = mongoose.Schema;
+var ObjectID = require('mongodb').ObjectID;
+
 
 var schema = new Schema( {
+_id:false,
     email: {
         type: String,
         unique: true,
@@ -39,17 +42,7 @@ var schema = new Schema( {
     state: {
         type: String,
 	default:"new"
-     },
-
-    userData: [{
-        paramName: {
-            type: String
-
-        },
-        paramValue: {
-            type: Object
-        }
-    }]
+     }
 });
 schema.methods.encryptPassword = function(password) {
     return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
@@ -93,7 +86,9 @@ var server =config.get('server');
                 }
                 else {
                     var rpassword = randomString({length: 6});
-		    var user = new User({email: email,fio:fio, tel: tel, password: rpassword});
+		    var user = new User({_id:new ObjectID().toString(), email: email,fio:fio, tel: tel, password: rpassword});
+ 		console.log(user._id);	
+ 		console.log(typeof user._id);	
                      user.save(function (err) {
                     if (err) {return callback(err);}else{
  			mailer(user.email,'Регистрация',null,'regmail',{server:server,user:user,password:rpassword});

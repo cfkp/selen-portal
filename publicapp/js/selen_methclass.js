@@ -20,9 +20,6 @@ class SelenMethod {
  	this.schema={};
 	if (parentobj&&parentobj.collection){
 	this.collection=Object.assign({},parentobj.collection);}
-	if (parentobj.collection){
-	this.collection.meta_class='dfgdfg';
-}
 	this.data={};
 	this.bf=null;
   	this.Init();
@@ -48,7 +45,7 @@ class SelenMethod {
 	}
 Execute(){
 	this.data=this.bf.getData();
- 	this.lastresponse=api_load_sync('callmethod/'+this.meta_class+'/'+this.meta_name+'/execute', JSON.stringify({objectlist:this.objectlist,data:this.data}));
+ 	this.lastresponse=api_load_sync('callmethod/'+this.meta_class+'/'+this.meta_name+'/execute', JSON.stringify({objectlist:this.objectlist,collection:this.collection,data:this.data}));
  	$('#method_execute').modal('hide');
 
 

@@ -8,9 +8,13 @@ function cb(object, fnc)
 }
 
 
-function SelenError(errobj) {
-  this.errobj = errobj;
-  this.name = 'SelenError';
+function SelenError(res) { 
+if (res.responseJSON){
+  this.errobj = res.responseJSON;
+  this.name = 'SelenError';} 
+else {
+  this.message = res.responseText;
+  this.name = 'unknow';} 
 	
 //  this.stack = cause.stack;
 }
@@ -24,7 +28,7 @@ var result=$.ajax({
 		dataType: "json",
 	            async: false });
  	if(result.status!=200){
-		throw new SelenError(result.responseJSON)//new IstoeServiceException(this.lastResult.status,xml+" "+this.lastResult.statusText,this.lastResult.responseText);
+		throw new SelenError(result)//new IstoeServiceException(this.lastResult.status,xml+" "+this.lastResult.statusText,this.lastResult.responseText);
 	}
 
 	return  result;
@@ -40,7 +44,7 @@ var result=$.ajax({
 		dataType: "json",
 	            async: false });
  	if(result.status!=200){
-		throw result.responseText//new IstoeServiceException(this.lastResult.status,xml+" "+this.lastResult.statusText,this.lastResult.responseText);
+		throw new SelenError(result)//new IstoeServiceException(this.lastResult.status,xml+" "+this.lastResult.statusText,this.lastResult.responseText);
 	}
 
 	return  result;

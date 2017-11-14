@@ -1,11 +1,12 @@
 
 <% for(var irow=0; irow < rows.length; irow++) { %>
 
-<table class="table table-striped pageview" 
+<table class="table table-striped selectelem" 
 	id=<%= header.meta_name %>
 	meta_class=<%= header.meta_class %>
-	meta_view=<%= header.meta_name %>
-	meta_id="58c7c6b8c20d99116418a797">
+	meta_view= <%= header.meta_name %>
+	meta_id=   <%= rows[irow]._id%>
+>
 <tbody>
 <% for(var icol=0; icol < header.colmodel.length; icol++) { %>
 

@@ -110,7 +110,7 @@ router.get('/registration', function (req, res, next) {
 	/////////////////////////
 	var dbloc = db.get();
 	var new_state="work";
-	var obj_id = new ObjectID(req.query.confirm);
+	var obj_id = req.query.confirm;//new ObjectID(req.query.confirm);
 
 	dbloc.collection(meta_class).updateOne({
 						"_id": obj_id
