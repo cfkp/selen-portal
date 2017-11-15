@@ -1,0 +1,27 @@
+{
+    "_id": "5a0c0f7e82a76a0b106ffd26",
+    "user_createid": "58c7c6b8c20d99116418a797",
+    "meta_name": "vw_admin_roles",
+    "meta_class": "roles",
+    "data": {
+        "meta_name": "vw_admin_roles",
+        "meta_class": "roles",
+        "title": "Роли",
+        "methods_menu": "menu_roles_methods",
+        "colmodel": [
+            {
+                "label": "id",
+                "name": "_id",
+                "key": true,
+                "hidden": true
+            },
+            {
+                "name": "data.name",
+                "label": "Группа "
+            }
+        ]
+    },
+    "created": "2017-03-14T10:23:32.897Z",
+    "__v": 0,
+    "this_meta_class": "meta_view"
+}

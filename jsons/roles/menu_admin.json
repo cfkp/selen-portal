@@ -1,0 +1,53 @@
+{
+    "_id": "5a0c026182a76a0b106ffd24",
+    "name": "admin_menu",
+    "title": "Меню админа",
+    "data": {
+        "name": "admin_menu",
+        "title": "Меню админа",
+        "root_menu": "#top_menu",
+        "items": [
+            {
+                "name": "menu_dostup",
+                "title": "Доступ",
+                "root_menu": "#left_menu",
+                "active": true,
+                "items": [
+                    {
+                        "title": "Роли",
+                        "meta_action_type": "view",
+                        "meta_class": "roles",
+                        "meta_view": "vw_admin_roles"
+                    },
+                    {
+                        "title": "Пользователи",
+                        "meta_action_type": "view",
+                        "meta_class": "users",
+                        "meta_view": "vw_admin_users"
+                    }
+                ]
+            },
+            {
+                "name": "user_menu",
+                "title": "Данные пользователя",
+                "root_menu": "#left_menu",
+                "items": [
+                    {
+                        "title": "Мои данные",
+                        "meta_action_type": "view",
+                        "meta_class": "users",
+                        "meta_view": "vw_user_property",
+                        "active": true
+                    },
+                    {
+                        "title": "Изменить пароль",
+                        "meta_action_type": "method",
+                        "meta_class": "users",
+                        "meta_method": "user_change_pass"
+                    }
+                ]
+            }
+        ]
+    },
+    "this_meta_class": "meta_menu"
+}

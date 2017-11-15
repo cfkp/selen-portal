@@ -1,0 +1,43 @@
+{
+    "_id": "5a0c188282a76a0b106ffd2b",
+    "user_createid": "58c7c6b8c20d99116418a797",
+    "meta_name": "vw_admin_users",
+    "meta_class": "users",
+    "data": {
+        "meta_name": "vw_admin_users",
+        "title": "Пользовательские данные",
+        "meta_class": "users",
+        "methods_menu": "menu_users_methods",
+        "colmodel": [
+            {
+                "label": "id",
+                "name": "_id",
+                "key": true,
+                "hidden": true
+            },
+            {
+                "label": "E-mail",
+                "name": "email"
+            },
+            {
+                "label": "Фио",
+                "name": "fio"
+            },
+            {
+                "label": "Телефон",
+                "name": "tel"
+            },
+            {
+                "label": "Роль",
+                "name": "data.role.data.name",
+                "meta_ref": {
+                    "meta_class": "roles",
+                    "localfield": "data.role"
+                }
+            }
+        ]
+    },
+    "created": "2017-03-14T10:23:32.897Z",
+    "__v": 0,
+    "this_meta_class": "meta_view"
+}

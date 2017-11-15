@@ -1,0 +1,31 @@
+{
+    "_id": "5a0c1c6082a76a0b106ffd2d",
+    "this_meta_class": "meta_menu",
+    "name": "menu_roles_methods",
+    "title": "Меню вьюхи",
+    "data": {
+        "name": "menu_roles_methods",
+        "title": "Меню вьюхи",
+        "root_menu": "#method_menu",
+        "items": [
+            {
+                "title": "Добавить",
+                "meta_action_type": "method",
+                "meta_class": "roles",
+                "meta_method": "new"
+            },
+            {
+                "title": "Редактировать",
+                "meta_action_type": "method",
+                "meta_class": "roles",
+                "meta_method": "edit"
+            },
+            {
+                "title": "Удалить",
+                "meta_action_type": "method",
+                "meta_class": "roles",
+                "meta_method": "delete"
+            }
+        ]
+    }
+}
