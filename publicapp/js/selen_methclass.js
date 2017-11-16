@@ -47,7 +47,9 @@ Execute(){
 	this.data=this.bf.getData();
  	this.lastresponse=api_load_sync('callmethod/'+this.meta_class+'/'+this.meta_name+'/execute', JSON.stringify({objectlist:this.objectlist,collection:this.collection,data:this.data}));
  	$('#method_execute').modal('hide');
-
+ 	if (this.parent&&this.parent.parent instanceof SelenView ) {
+                                           this.parent.parent.refresh();
+};
 
 
 }
@@ -92,11 +94,6 @@ Show()
 	
  	this.bf.render(bfcont[0], this.value.data);
 
-/* 	$('#method_execute').attr("meta_class",schema.meta_class);	
- 	$('#method_execute').attr("meta_method",schema.meta_method);	
- 	$('#method_execute').attr("method_type",schema.method_type);	
- 	$('#method_execute').attr("meta_object_id",data._id);	
- */
  	this.modal_container.find('#method_title').html(this.schema.data.title);	
 	this.modal_container.find('#execute').unbind('click');
 
@@ -106,18 +103,6 @@ Show()
 
   }
 
-SaveClick(sayOk)
-{ 	this.data=this.bf.getData();
-	if (this.data == null){
-		messagedlg(null, "Ошибка сохранения данных", "message");
-
-	}else{
-		var resp=api_load_sync("saveobj/" + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, JSON.stringify(this.data));
-		if (sayOk){
-		messagedlg(null, "Данные сохранены", "message");
-	}
-	}
-}
 
 CheckClick()
 {
