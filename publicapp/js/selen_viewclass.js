@@ -160,11 +160,13 @@ var header=this.header;
  		
 		
 	};*/
-/*var c=$(window).width()-$(container).offset().left;//$(window).width();
-var t= $(window).height()-$(container).offset().top ;
+var w=$(window).width()-$(container).offset().left;//$(window).width();
+//var t= $(window).height()-$(container).offset().top ;
 
 var h=$(window).height();
-  	$.jgrid.defaults.width = c;*/
+w=900;
+h=400;
+  	$.jgrid.defaults.width = w;
 	$.jgrid.defaults.responsive = true; 
 	$.jgrid.defaults.styleUI = 'Bootstrap';
 	$.jgrid.styleUI.Bootstrap.base.headerTable = "table table-bordered table-condensed";
@@ -175,7 +177,7 @@ var h=$(window).height();
 	container.jqGrid({
 		datatype: "local",
 		data: this.rows,
-		//height: t,
+		height: h,
 		colModel: this.header.colmodel,
 		viewrecords: true, // show the current page, data rang and total records on the toolbar
 		caption: this.header.title,

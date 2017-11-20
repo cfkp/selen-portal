@@ -94,4 +94,7 @@
   display: inline-block;
   cursor: pointer;
 }
-
+.mess_prop{
+font-size: xx-small;
+text-align: right;
+}

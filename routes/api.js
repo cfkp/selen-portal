@@ -531,7 +531,7 @@ log.info({req:req},'start');
 
 	});
 });
-
+ 
 router.post('/callmethod/person_request/process_request/execute',checkAuth, function (req, res, next) {
 log.info({req:req},'start');
  
@@ -572,17 +572,15 @@ log.info({req:req},'start');
 		$set: set$
 		
 	}, function (err, docs) {
+	var dataReturn =obj_id;
+
  		if (err || docs.result === undefined) {
  			log.error({req:req},'Error inserting document', err);
-			//res.status(400).json({'msg': 'Error inserting document'}); } else
-			{
-				var dataReturn = '';
-				if (docs.ops) {
- 					dataReturn = docs.ops[0]._id;
-				}
- 			}
-			res.json(dataReturn);
-		};
+                      console.log('err '+err);
+                }
+
+	res.json(dataReturn);
+	
 	});
 });
 
