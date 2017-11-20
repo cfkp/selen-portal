@@ -21,6 +21,14 @@
 
 <%=rows[irow].data.message%>
 <div class="mess_prop">
+ <% if (rows[irow].data.app_file) { var app = JSON.parse(rows[irow].data.app_file);%>
+   		<div class="message--fileupload" >
+
+		<a class="glyphicon glyphicon glyphicon-paperclip" href="<%=app.url%>" aria-hidden="false"><%=app.name%></a>
+ 		</div>
+
+ 	 <% } %>
+
         <div class=" message--prop">
 <%=rows[irow].user_createid.email%>
          </div>
