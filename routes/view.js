@@ -291,8 +291,8 @@ user_role=config.get('def_role_id');
 };
 
 				filter['and'].push({"deleted":{ $exists: false}});
- 				filter['and'].push({$or :[{"user_createid":userID } ,
-				{"data.recepient_group_id": user_role } ]});
+ 				/*filter['and'].push({$or :[{"user_createid":userID } ,
+				{"data.recepient_group_id": user_role } ]});   */
  				var vfilter ;
 				var selcols={};
  				if (collectname=="meta_view"&& model!==null) {
