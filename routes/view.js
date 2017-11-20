@@ -115,7 +115,7 @@ var get_aggregate_params =function(filter ,colmodel){
 
 	};
  res.push({'$project':selcols});
-res.push({ $sort : { created : -1} });
+res.push({ $sort : { created : 1} });
 return res;//{selcols:selcols,joins:joins};	
 
 }; 
