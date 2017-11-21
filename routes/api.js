@@ -599,16 +599,7 @@ log.info({req:req},'start');
 	var data = req.body.data;
 	var new_state='В работу';
 	var set$={};
-	if ((data.new_state) && (data.new_state !== undefined)) {
-		new_state = data.new_state;
-	} else {
-		res.status(500).send({
-			'error': 'no_new_state',
-			'msg': 'Не указано состояние'
-		});
-		return;
-	};
-	
+ 	
 	set$.state=new_state;
 	
  	set$.user_expert=userID;
