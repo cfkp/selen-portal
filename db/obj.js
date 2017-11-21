@@ -25,7 +25,7 @@ function getschema(metaclass,nextfunc){
 
 function getobj(metaclass,this_id,nextfunc){
  var search_filter = {};
- if (id_schema) {search_filter["id_"]= this_id;}
+ search_filter["id_"]= this_id;
 	db.get().collection(metaclass).findOne({
 				search_filter
 			}, function (err,doc) {
