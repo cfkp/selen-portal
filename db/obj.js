@@ -29,6 +29,7 @@ function getobj(metaclass,this_id,nextfunc){
 	db.get().collection(metaclass).findOne({
 				search_filter
 			}, function (err,doc) {
+console.log('getobj '+JSON.stringify(doc));
 				nextfunc(err, doc);
 			});
 };
