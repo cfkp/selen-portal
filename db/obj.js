@@ -49,4 +49,4 @@ function getobjfull(metaclass,this_id,nextfunc){
  
 
 ////////////////////////////////////////
-module.exports = router;
+exports.getobj=getobj;
