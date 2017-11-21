@@ -658,7 +658,7 @@ log.info({req:req},'start');
 			function (callback) {
                                 objlib.getobj(meta_class,obj_id,callback)
 			},
-			function (obj) {
+			function (obj,callback) {
 				dbloc.collection(meta_class).updateOne({
 					"_id": obj_id	
 					}, {
