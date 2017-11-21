@@ -17,6 +17,12 @@ log.debug({req:req},'router all');
 	next();
 });
 
+
+function replaceAll(str, find, strreplace) {
+    return str.replace(new RegExp(find, 'g'), strreplace);
+};
+
+
 function get_filter (filter,value) {
 var result;
 var newf;
@@ -27,7 +33,7 @@ if (filter instanceof Array) {result=[];} else {result={};};
 		newf=f;
 if (f=='or'||f=='regex'||f=='options'|| f=='and' || f=='or'|| f=='lt'|| f=='gt'|| f=='lte'||f=='gte'|| f=='eq')
 { newf='$'+newf;};
-	
+newf=replaceAll(f,'#','.');	
 	if (filter[f]!=undefined&&filter[f] instanceof Object)
 {
 
