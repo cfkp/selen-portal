@@ -43,6 +43,7 @@ function audit(userid,meta_class,meta_method,obj_id,data){
 		
 		var row = {"_id":id,
 			"created": sysdate ,
+			this_meta_class:"audit",
 			"user_createid": userid,
 			"meta_class":meta_class,
 			"meta_method":meta_method,
@@ -65,6 +66,7 @@ function save_obj_hist(userid,meta_class,obj){
 	if (obj){	
 		var row = {"_id":id,
 			"created": sysdate ,
+			this_meta_class:"object_history",
 			"user_createid": userid,
 			"meta_class":meta_class,
 			"object_id":obj._id,

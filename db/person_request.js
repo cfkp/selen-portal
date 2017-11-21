@@ -24,7 +24,9 @@ var create_request=function(userID,fio,phone,fin_amount,fin_period,program_id,en
 	"goal":goal
      };
 
-    var row = {user_createid :userID,created:sysdate,need_ext_load:true,state:'Новый', data: pers_req };
+    var row = {user_createid :userID,created:sysdate,
+			this_meta_class:"person_request",
+need_ext_load:true,state:'Новый', data: pers_req };
 log.info( {row:row},'create_request');
  	        dbloc.collection("person_request").save(row, function (err, docs){
 	
