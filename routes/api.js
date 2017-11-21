@@ -8,6 +8,7 @@ var async = require('async');
 var _ = require('lodash');
 var fs = require("fs");
 var db = require('../db/db');
+var objlib=require('../db/obj');
 var crypto = require('crypto');
 var mailer = require('../middleware/sendmail'); //-- Your js file path
 
@@ -655,7 +656,7 @@ log.info({req:req},'start');
 
 	async.waterfall([
 			function (callback) {
-                                getobj(meta_class,obj_id,callback)
+                                objlib.getobj(meta_class,obj_id,callback)
 			},
 			function (obj) {
 				dbloc.collection(meta_class).updateOne({
