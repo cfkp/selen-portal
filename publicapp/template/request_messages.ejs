@@ -22,10 +22,10 @@
 <%=rows[irow].data.message%>
 <div class="mess_prop">
  <% if (rows[irow].data.app_file) { var app = JSON.parse(rows[irow].data.app_file);%>
-   		<button type = "button" class="message--fileupload btn btn-primary btn-xs" href="<%=app.url%>">
+   		<a type = "button" class="message--fileupload btn btn-primary btn-xs" href="<%=app.url%>">
 
 		<span class="glyphicon glyphicon glyphicon-paperclip"  aria-hidden="false"></span><%=app.name%>
- 		</button>
+ 		</a>
 
  	 <% } %>
 
