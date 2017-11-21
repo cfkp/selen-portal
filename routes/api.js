@@ -549,22 +549,17 @@ log.info({req:req},'start');
 	var data = req.body.data;
 	var new_state;
 	var set$={};
-	if ((data.new_state) && (data.new_state !== undefined)) {
-		new_state = data.new_state;
-	} else {
-		res.status(500).send({
+	if (!data.confirm)   {
+ 		res.status(500).send({
 			'error': 'no_new_state',
-			'msg': 'Не указано состояние'
+			'msg': 'Действие не подтверждено'
 		});
 		return;
 	};
 	
-	set$.state=new_state;
+	set$.state='В работе';
 	
-	if (new_state==='Экспертиза') 
-	{
 		set$.user_expert=userID;
-	}; 
 	var obj_id;
 	if (req.body.objectlist) {
  		 obj_id = req.body.objectlist[0];
