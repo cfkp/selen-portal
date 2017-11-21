@@ -597,7 +597,7 @@ log.info({req:req},'start');
 	/////////////////////////
 	var dbloc = db.get();
 	var data = req.body.data;
-	var new_state='В работу';
+	var new_state='В работе';
 	var set$={};
  	
 	set$.state=new_state;
@@ -643,7 +643,7 @@ log.info({req:req},'start');
 	} else {
 		res.status(500).send({
 			'error': 'no_new_state',
-			'msg': 'Не указано состояние'
+			'msg': 'Не указано Действие'
 		});
 		return;
 	};
@@ -652,28 +652,29 @@ log.info({req:req},'start');
 	if (req.body.objectlist) {
  		 obj_id =  req.body.objectlist[0];
 	};
-	dbloc.collection(meta_class).updateOne({
-		"_id": obj_id
-	}, {
-		$set: {
-			"state": new_state
-		}
-	},
-		function (err, docs) {
 
- 
-		if (err || docs.result === undefined) {
-				log.error({req:req},'Error update document', err);
- 		} else {
-			var dataReturn = '';
-			if (docs.ops) {
- 
-				dataReturn = docs.ops[0]._id;
+	async.waterfall([
+			function (callback) {
+                                getobj(meta_class,obj_id,callback)
+			},
+			function (obj) {
+				dbloc.collection(meta_class).updateOne({
+					"_id": obj_id	
+					}, {
+						$set: {
+						"state": new_state
+						}},callback);
+			                                 
 			}
- 		}
 
-		res.json(dataReturn);
+		],
+		function (err, results) {
+ 		res.json(results);
+		/*                if (!results.schema) {res.status(500).send({'error':'no_data_found'})}
+		else {res.json(results);}*/
 	});
+
+
 
 });
 
