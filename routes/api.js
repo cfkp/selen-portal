@@ -655,8 +655,14 @@ log.info({req:req},'start');
 	};
 
 	async.waterfall([
+//			function (callback) {
+                                //objlib.getobj(meta_class,obj_id,callback)
 			function (callback) {
-                                objlib.getobj(meta_class,obj_id,callback)
+				var search_filter = {};
+				search_filter['_id'] = obj_id;
+                                console.log('search_filter'+search_filter);
+				db.get().collection(meta_class).findOne(search_filter, callback);
+
 			},
 			function (obj,callback) {
 			console.log(obj);
