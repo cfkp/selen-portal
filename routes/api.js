@@ -638,9 +638,9 @@ log.info({req:req},'start');
  	/////////////////////////
 	var dbloc = db.get();
 	var data = req.body.data;
-	var new_state;
+	var new_state_act,new_state_act;
 	if ((data.new_state) && (data.new_state !== undefined)) {
-		new_state = data.new_state;
+		new_state_act = data.new_state;
 	} else {
 		res.status(500).send({
 			'error': 'no_new_state',
@@ -659,6 +659,32 @@ log.info({req:req},'start');
                                 objlib.getobj(meta_class,obj_id,callback)
 			},
 			function (obj,callback) {
+			console.log(obj);
+			if  (!obj ){callback({
+			'error': 'no_object',
+			'msg': 'Не найден документ'
+				});}	
+			if (new_state_act==='Выполнено'){
+				if (obj.state='В работе'){new_state="На проверку"}
+				else if (obj.state='На проверку'){new_state="На рассмотрение"}
+				else if (obj.state='На рассмотрение'){new_state="Одобрено КМСП"}
+				;
+
+			}
+			else if(new_state_act==='Вернуть'){
+				if (obj.state='В работе'){}
+				else if (obj.state='На проверку'){new_state="В работе"}
+				else if (obj.state='На рассмотрение'){new_state="Отказано КМСП"}
+				;
+
+			}
+			if (!new_state) {var err={
+			'error': 'no_new_state',
+			'msg': 'Не найдено следующее состояние'
+				};
+			callback(err);
+			}	
+	
 				dbloc.collection(meta_class).updateOne({
 					"_id": obj_id	
 					}, {
