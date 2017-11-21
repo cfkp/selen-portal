@@ -660,7 +660,7 @@ log.info({req:req},'start');
 			},
 			function (obj,callback) {
 			console.log(obj);
-			if  (!obj ){callback({
+			if  (!obj||obj==null ){callback({
 			'error': 'no_object',
 			'msg': 'Не найден документ'
 				});}	
