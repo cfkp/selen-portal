@@ -671,19 +671,20 @@ log.info({req:req},'start');
 			'msg': 'Не найден документ'
 				});}	
 			if (new_state_act==='Выполнено'){
-				if (obj.state='В работе'){new_state="На проверку"}
-				else if (obj.state='На проверку'){new_state="На рассмотрение"}
-				else if (obj.state='На рассмотрение'){new_state="Одобрено КМСП"}
+				if (obj.state==='В работе'){new_state="На проверку"}
+				else if (obj.state==='На проверку'){new_state="На рассмотрение"}
+				else if (obj.state==='На рассмотрение'){new_state="Одобрено КМСП"}
 				;
 
 			}
 			else if(new_state_act==='Вернуть'){
-				if (obj.state='В работе'){}
-				else if (obj.state='На проверку'){new_state="В работе"}
-				else if (obj.state='На рассмотрение'){new_state="Отказано КМСП"}
+				if (obj.state==='В работе'){}
+				else if (obj.state==='На проверку'){new_state="В работе"}
+				else if (obj.state==='На рассмотрение'){new_state="Отказано КМСП"}
 				;
 
 			}
+			
 			if (!new_state) {var err={
 			'error': 'no_new_state',
 			'msg': 'Не найдено следующее состояние'
