@@ -5494,18 +5494,24 @@ $.jgrid.extend({
 		return this.each(function(){
 			var $t = this;
 			if(timeout === undefined) {
-				timeout = 500;
+				timeout = 50;
 			}
 			setTimeout(function(){
 				try {
 					var winwidth = $(window).width(),
 					parentwidth = $("#gbox_"+$.jgrid.jqID($t.p.id)).parent().width(),
 					ww = $t.p.width;
+					console.info("#gbox_"+$.jgrid.jqID($t.p.id)+" before ww: "+ww+" winwidth: "+winwidth+" parentwidth: "+parentwidth);
+					 		
+					
 					if( (winwidth-parentwidth) > 3 ) {
 						ww = parentwidth;
 					} else {
 						ww = winwidth;
 					}
+					if(parentwidth<=0)ww = winwidth-62;
+					console.info("#gbox_"+$.jgrid.jqID($t.p.id)+" after ww: "+ww);
+					 
 					$("#"+$.jgrid.jqID($t.p.id)).jqGrid('setGridWidth', ww);
 				} catch(e){}
 			}, timeout);

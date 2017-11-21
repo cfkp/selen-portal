@@ -10,6 +10,7 @@ var config = require('config');
 var fs = require("fs");
 var db = require('../db/db');
 var checkAuth = require('../middleware/checkAuth');
+var log = require('libs/log')(module);
  
 router.get('/down/:file(*)', function(req, res, next){
 
@@ -17,7 +18,7 @@ router.get('/down/:file(*)', function(req, res, next){
  var userid= req.session.user;
  var file = req.params.file;
 
-  var  filename =config.get('upload_path') + file;
+  var  filename =path.join(__dirname,config.get('upload_path'))+'/' + file;
 
 
   var newfilename=filename.substr(filename.indexOf("$")+1);
@@ -39,8 +40,8 @@ router.post('/up', function(req, res){
   form.multiples = true;
  
   // store all uploads in the /uploads directory
-  form.uploadDir = config.get('upload_path');// path.join(__dirname, '../uploads');
- 
+  form.uploadDir = path.join(__dirname,config.get('upload_path'));// path.join(__dirname, '../uploads');
+//console.log('uploadDir'+form.uploadDir); 
   // every time a file has been uploaded successfully,
   // rename it to it's orignal name
   form.on('file', function(field, file) {

@@ -1,0 +1,19 @@
+{
+    "_id": "59cc0cd57292cd00a097fa93",
+    "this_meta_class": "meta_menu",
+    "name": "menu_users_methods",
+    "title": "Меню вьюхи",
+    "data": {
+        "name": "menu_users_methods",
+        "title": "Меню вьюхи",
+        "root_menu": "#method_menu",
+        "items": [
+            {
+                "title": "Редактировать",
+                "meta_action_type": "method",
+                "meta_class": "users",
+                "meta_method": "edit"
+            }
+        ]
+    }
+}

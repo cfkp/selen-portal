@@ -15,15 +15,17 @@
     "ejs": "~2.5.5",
     "ejs-locals": "^1.0.2",
     "express": "~4.14.1",
+    "express-error-handler": "^1.1.0",
     "express-session": "^1.15.1",
     "file-system": "^2.2.2",
     "formidable": "^1.1.1",
+    "mongo-join": "^1.0.0",
     "mongodb-extended-json": "^1.9.0",
     "mongoose": "^4.9.1",
     "nconf": "^0.8.4",
     "nodemailer": "^4.0.1",
     "random-string": "^0.2.0",
     "react-input-mask": "^0.7.7",
-    "request": "^2.83.0" 
+    "request": "^2.83.0"
   }
 }

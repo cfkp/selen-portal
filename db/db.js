@@ -1,4 +1,5 @@
 var MongoClient = require('mongodb').MongoClient
+var ObjectID = require('mongodb').ObjectID;
 
 var state = {
   db: null,
@@ -33,3 +34,49 @@ exports.close = function(done) {
     })
   }
 }
+
+function audit(userid,meta_class,meta_method,obj_id,data){
+ 		var id = new ObjectID().toString();
+         	var sysdate=   new Date().toISOString();
+
+		var dbloc = this.get();
+		
+		var row = {"_id":id,
+			"created": sysdate ,
+			"user_createid": userid,
+			"meta_class":meta_class,
+			"meta_method":meta_method,
+			"object_id":obj_id,
+			"data": data
+		};
+
+		dbloc.collection("audit").save(row, function (err, docs) {
+
+		});
+
+
+};
+
+function save_obj_hist(userid,meta_class,obj){
+	var id = new ObjectID().toString();
+ 	var sysdate=   new Date().toISOString();
+
+	var dbloc = this.get();
+	if (obj){	
+		var row = {"_id":id,
+			"created": sysdate ,
+			"user_createid": userid,
+			"meta_class":meta_class,
+			"object_id":obj._id,
+			"object": obj
+		};
+
+		dbloc.collection("object_history").save(row, function (err, docs) {
+
+		});
+	};	
+
+};
+
+exports.audit=audit;
+exports.save_obj_hist=save_obj_hist;

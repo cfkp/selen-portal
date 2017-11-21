@@ -1,0 +1,51 @@
+﻿<div class="message_container">
+  <div class="screen">
+
+<% for(var irow=0; irow < rows.length; irow++) { %>
+
+
+
+     <div class="message__list">
+ <% if (!rows[irow].mymessage) {%>
+ 
+      <div class="message__item message__item--bot">
+        <span class="message message--bot">
+	<% } else{ %>
+      <div class="message__item message__item--user">
+ 	<% if (irow==0) {%>
+ 	 <div class="selectelem" meta_id=<%=rows[irow]._id%> ></div>
+	 <% } %>
+		
+        <span class="message message--user">
+	 <% } %>
+
+<%=rows[irow].data.message%>
+<div class="mess_prop">
+ <% if (rows[irow].data.app_file) { var app = JSON.parse(rows[irow].data.app_file);%>
+   		<a type = "button" class="message--fileupload btn btn-primary btn-xs" href="<%=app.url%>">
+
+		<span class="glyphicon glyphicon glyphicon-paperclip"  aria-hidden="false"></span><%=app.name%>
+ 		</a>
+
+ 	 <% } %>
+
+        <div class=" message--prop">
+<%=rows[irow].user_createid.email%>
+         </div>
+
+        <div class="message--prop">
+<%=new Date(rows[irow].created).toLocaleString()%>
+         </div>
+ 
+</div>
+         </span>
+
+      </div>
+    </div>
+ 
+<% } %>
+                                                          	
+
+  </div>
+</div>
+

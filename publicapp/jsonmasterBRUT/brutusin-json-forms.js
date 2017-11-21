@@ -182,6 +182,12 @@ if (typeof brutusin === "undefined") {
         renderers["text"] = function (container, id, parentObject, propertyProvider, value) {
             renderers["string"](container, id, parentObject, propertyProvider, value);
         };
+        renderers["email"] = function (container, id, parentObject, propertyProvider, value) {
+            renderers["string"](container, id, parentObject, propertyProvider, value);
+        };
+        renderers["currency"] = function (container, id, parentObject, propertyProvider, value) {
+            renderers["string"](container, id, parentObject, propertyProvider, value);
+        };
 
         renderers["number"] = function (container, id, parentObject, propertyProvider, value) {
             renderers["string"](container, id, parentObject, propertyProvider, value);
@@ -278,6 +284,10 @@ if (typeof brutusin === "undefined") {
 
                 }
             }
+	    if (s.mask){input.setAttribute("data-mask",  s.mask);input.setAttribute("data-placeholder"," ");};
+	    if (s.type==='currency'){ 
+		$(input).maskMoney({symbol:'', allowZero:false,precision:0, allowNegative:true, defaultZero:false});
+		};			
             input.schema = schemaId;
             input.setAttribute("autocorrect", "off");
 
@@ -1624,6 +1634,12 @@ if (typeof brutusin === "undefined") {
                 if (!isFinite(value)) {
                     value = null;
                 }
+            } else if (schema.type === "currency") {
+                value = parseFloat(value.replace(/[^\d\.\-]/g, ""))  ;
+                if (!isFinite(value)) {
+                    value = null;
+                }
+
             } else if (schema.type === "boolean") {
                 if (input.tagName.toLowerCase() === "input") {
                     value = input.checked;

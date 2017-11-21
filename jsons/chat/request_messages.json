@@ -1,0 +1,41 @@
+﻿{
+    "_id": "59f6e4c6bb66dd0f88f3afc1",
+    "this_meta_class": "meta_class",
+    "meta_name": "request_messages",
+    "meta_table_name": "request_messages",
+    "data": {
+        "title": "Сообщения заявки",
+        "type": "object",
+        "meta_name": "request_messages",
+        "meta_table_name": "request_messages",
+        "properties": {
+            "recepient_group_id": {
+                "title": "Группа",
+                "description": "Группа получатель",
+                "type": "string",
+                "meta_ref": {
+                    "meta_class": "roles",
+                     
+                    "colmodel": [
+                        {
+                            "label": "id",
+                            "name": "_id",
+                            "key": true,
+                            "hidden": true
+                        },
+                        {
+                            "label": "Получатель",
+                            "name": "data.name"
+                        }
+                    ]
+                }
+            },
+            "message": {
+                "title": "Сообщение",
+                "description": "Текст сообщения",
+                "type": "string",
+                "format": "text"
+            }
+        }
+    }
+}

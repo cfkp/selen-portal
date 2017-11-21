@@ -1,0 +1,114 @@
+'use strict';
+
+ 
+
+class SelenObject {
+
+  constructor(parentobj,_meta_class,_meta_name,_meta_value,meta_readonly) 
+{       this.parent=parentobj;
+	this.parent_container=this.parent.container;
+
+	var obj_container = $('<div></div>'); 
+	obj_container.attr('class','sln_container');	 
+	obj_container.attr('id','sln_cnt'+_meta_name);
+	this.parent_container.append(obj_container);
+		
+	this.container=obj_container;
+
+      this.meta_class=_meta_class;
+      this.meta_name=_meta_name;
+      this.meta_value=_meta_value;
+if ((meta_readonly)&&(meta_readonly=="true")){
+this.meta_readonly= true; }else {this.meta_readonly= false;};
+	if (parentobj&&parentobj.collection){
+	this.collection=Object.assign({},parentobj.collection);}
+
+	this.schema={};
+	this.data={};
+	this.bf=null;
+  	this.Load();
+	this.Show();
+}
+   Destroy()
+	{
+	this.SaveClick();
+	this.container.remove();
+	/*var meth_cont =this.container.find("#methods_container"); 
+	meth_cont.remove();
+	var bfcont=this.container.find("#data_container");
+	bfcont.remove();
+	*/
+
+	for (var prop in this){
+		this[prop]=null;
+	};
+ 	}
+
+   Load()
+	{
+	this.lastresponse= api_load_sync('/loadclass/' + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, null);
+	this.schema=this.lastresponse.responseJSON.schema;
+	this.value=this.lastresponse.responseJSON.value;
+	}
+
+Show()
+{
+/*	<div id="methods_container" style="position: relative;display: block;margin-bottom: 2%;">
+	</div>
+	<div id="data_container"></div>
+*/
+	var div_meth = $('<div id="methods_container"></div>');
+	var div_data = $('<div id="data_container"></div>');
+	this.container.append(div_meth,div_data);
+
+ 	if (!this.meta_readonly){
+
+		var savebtn = document.createElement("button");
+                savebtn.className = "btn btn-primary";
+                savebtn.appendChild(document.createTextNode('Сохранить'));
+                savebtn.onclick = cb(this, this.SaveClick);
+ 
+	var check_btn = document.createElement("button");
+                check_btn.className = "btn btn-primary";
+                check_btn.appendChild(document.createTextNode('Проверить'));
+                check_btn.onclick = cb(this, this.CheckClick);
+
+	var  meth_cont =this.container.find("#methods_container"); 
+		meth_cont.append(savebtn,check_btn);
+	}
+	var bfcont=this.container.find("#data_container");
+		this.bf = BrutusinForms.create(this.schema.data);
+ 		this.bf.render(bfcont[0], this.value.data);
+ 	if (this.meta_readonly){
+	bfcont.find(':input').attr('disabled', 'disabled');}	
+  }
+
+SaveClick(sayOk)
+{ this.data=this.bf.getData();
+if (this.data == null){
+	messagedlg(null, "Ошибка сохранения данных", "message");
+}
+else if(this.value&&this.data&&JSON.stringify(this.value.data)===JSON.stringify(this.data)){
+console.log('no change data');
+
+}
+else{
+	var resp=api_load_sync("saveobj/" + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, JSON.stringify(this.data));
+	if (sayOk){
+	messagedlg(null, "Данные сохранены", "message");
+	}
+}
+}
+
+CheckClick()
+{
+	if (this.bf.validate()) {
+	messagedlg(null, "Ошибок нет", "message");
+		} else {
+	messagedlg(null, "Найдены ошибки", "error");
+		};
+	 
+}
+
+};
+

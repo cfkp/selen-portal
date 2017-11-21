@@ -1,0 +1,26 @@
+{
+    "_id": "59f6e739bb66dd0f88f3afc2",
+    "user_createid": "58c7c6b8c20d99116418a797",
+    "meta_name": "vw_meta_menu",
+    "meta_class": "meta_menu",
+    "data": {
+        "meta_name": "vw_meta_menu",
+        "meta_class": "meta_menu",
+        "title": "Μενώ",
+        "colmodel": [
+            {
+                "label": "id",
+                "name": "_id",
+                "key": true,
+                "hidden": true
+            },
+            {
+                "name": "title",
+                "label": "Μενώ"
+            }
+        ]
+    },
+    "created": "2017-03-14T10:23:32.897Z",
+    "__v": 0,
+    "this_meta_class": "meta_view"
+}

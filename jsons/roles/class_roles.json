@@ -1,0 +1,43 @@
+﻿{
+    "_id": "5a0bfb7282a76a0b106ffd23",
+    "meta_name": "roles",
+    "meta_table_name": "roles",
+    "data": {
+        "title": "Роли",
+        "type": "object",
+        "required": true,
+        "properties": {
+            "name": {
+                "required": true,
+                "title": "Наименование",
+                "type": "string"
+            },
+            "code": {
+                "required": true,
+                "title": "код",
+                "type": "string"
+            },
+            "user_menu": {
+                "type": "string",
+                "title": "Меню пользователя",
+                "meta_ref": {
+                    "meta_class": "meta_menu",
+                    "meta_view": "vw_meta_menu",
+                    "colmodel": [
+                        {
+                            "label": "id",
+                            "name": "_id",
+                            "key": true,
+                            "hidden": true
+                        },
+                        {
+                            "label": "Меню",
+                            "name": "title"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "this_meta_class": "meta_class"
+}

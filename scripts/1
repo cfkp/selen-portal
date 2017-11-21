@@ -1,0 +1,323 @@
+MongoDB shell version v3.4.4
+connecting to: mongodb://127.0.0.1:27017
+MongoDB server version: 3.4.4
+connecting to: mongodb://127.0.0.1:27017/first
+MongoDB server version: 3.4.4
+Find programm
+Collection: applications
+59f794527e3cb111a03fedbf
+string
+59fabe3a164da409b895126f
+string
+5a0a872913297e10ecbcb675
+string
+Collection: cfkp_product
+59d4c7c4f175400e80c723c4
+string
+59d4c7d6f175400e80c723c6
+string
+59d49a544ab0230830756487
+string
+59d54c9fc7dca20f68244f87
+string
+59d54cedc7dca20f68244f89
+string
+59d54d07c7dca20f68244f8a
+string
+Collection: components
+58c7c4a49da5e80ea8f42e74
+string
+58c8e68260bfbd14e0219b0e
+string
+Collection: enterprise
+5a097b2811953211b800746d
+string
+5a0986c1b6e4160960490898
+string
+5a0a86078e4bc811f8d9ae84
+string
+Collection: garant_request
+58eb7e23022c291430ef2a95
+string
+58eb5044a499ff1214a5e5c1
+string
+58eb50936b4ad21210699c00
+string
+58eb51506b4ad21210699c01
+string
+58eb5163f3ddb612dcc4b562
+string
+58eb545fcbc3d110fc4cb3ae
+string
+58eb7ca0022c291430ef2a94
+string
+58eb8f69022c291430ef2a96
+string
+58ec7020fb15310c3872d6d5
+string
+58ed13888f3f70026c92d947
+string
+58f08cc605732d037879f41f
+string
+Collection: messages
+5a0211d1af90f8072c778ab0
+string
+5a0212da1f51b20a08c22263
+string
+5a02151da5baa00ac437444d
+string
+5a0352c7a5a58f0178a9030a
+string
+5a035b6d7898b90974dde74d
+string
+5a0413f47898b90974dde755
+string
+5a0415f533c739163cc7d535
+string
+Collection: meta_class
+58cb3545e03a2f3db026e98e
+string
+58d7e8845bec860861afffd5
+string
+59d53cf67292cd00a097fa95
+string
+59f6e4c6bb66dd0f88f3afc1
+string
+58d7e90f5bec860861afffd6
+string
+58e5317a5ccef14173b0bf47
+string
+58cb3166e03a2f3db026e98d
+string
+58d7e6935bec860861afffd4
+string
+58d7e9c35bec860861afffd7
+string
+58d7eac95bec860861afffd8
+string
+58db105eaf01676cba8a9d24
+string
+58e62b865ccef14173b0bf49
+string
+58ecd6a35ccef14173b0bf4b
+string
+59cbf2b17292cd00a097fa91
+string
+5a0bfb7282a76a0b106ffd23
+string
+58ca5f9806f7300b90e28e04
+string
+58d9b8ff548f592b4a520fc6
+string
+5913816b1e79274ee23acd3c
+string
+59831b35ea28ee1384bc7f6b
+string
+Collection: meta_menu
+58d1cf9830859578f33f44d0
+string
+58d26f9a30859578f33f44d2
+string
+58d94ddc548f592b4a520fc4
+string
+593397b956bd0a0944cc82b3
+string
+58f1191c5ccef14173b0bf4f
+string
+58f66f26c712876d64247bff
+string
+5a020a96076a9e03e0817533
+string
+58d1d88030859578f33f44d1
+string
+58d7f2c65bec860861afffd9
+string
+58f5173ec712876d64247bf9
+string
+592e8f1f56bd0a0944cc82b0
+string
+593511e556bd0a0944cc82b4
+string
+59cc0cd57292cd00a097fa93
+string
+5a0c026182a76a0b106ffd24
+string
+admin_menu
+string
+5a0c1c6082a76a0b106ffd2d
+string
+Collection: meta_method
+58e6240d5ccef14173b0bf48
+string
+58f5f602c712876d64247bfc
+string
+58f60617c712876d64247bfd
+string
+58f7207f2805170b12677cb8
+string
+59cca0f77292cd00a097fa94
+string
+58d023ea30859578f33f44ca
+string
+58f112b85ccef14173b0bf4c
+string
+Collection: meta_view
+58f115865ccef14173b0bf4d
+string
+58f51a44c712876d64247bfa
+string
+58f66914c712876d64247bfe
+string
+592c7a6b56bd0a0944cc82ae
+string
+5930686856bd0a0944cc82b2
+string
+59f6e739bb66dd0f88f3afc2
+string
+58e62c985ccef14173b0bf4a
+string
+59cc0bd87292cd00a097fa92
+string
+5a09356a82a76a0b106ffd1d
+string
+5a0c0f7e82a76a0b106ffd26
+string
+5a0c188282a76a0b106ffd2b
+string
+Collection: orgs
+58c90e7cfe6eb60fe89afc3a
+string
+59436d018b67f50368dcbf28
+string
+5975c8bfb5c1e20338002e33
+string
+5a0a874013297e10ecbcb676
+string
+Collection: person
+58e22643315ca45eba2265e9
+string
+58e266f1315ca45eba2265ee
+string
+593084ed0b1f390d144b52bc
+string
+Collection: person_request
+58f89475e8546a27677e2d11
+string
+59310e3e0b1f390d144b52bd
+string
+59d5c6e080727e19c45f7d20
+string
+59d5c71480727e19c45f7d22
+string
+59d5c72f80727e19c45f7d24
+string
+59d5c85280727e19c45f7d25
+string
+59d5c8b480727e19c45f7d28
+string
+59d5c90f752f621534c478f2
+string
+59d5eca135b61c14c8feb88e
+string
+59d5ed0d95cfbd1148329e6f
+string
+59d5f5f8532f7f0f882c037f
+string
+59dd2b2d6c3a8e0efc50a39f
+string
+59dd2b7232d88516786acf2a
+string
+59dd2c2532d88516786acf2b
+string
+59dd2d2567b0ed012848b8a5
+string
+59dd2e0153a5241514780e11
+string
+59f7a06d7e3cb111a03fedc0
+string
+5a0a7c2f243df50d14a9d2a4
+string
+58f720c0931574157ced48ab
+string
+59dd2ac56c3a8e0efc50a39e
+string
+5a0a7d107a33a8101c09e13e
+string
+5a0a7e050a633f05cc0726c4
+string
+5a0a7e4ea5bd80167ca99a06
+string
+5a0a7ebb09bf0714acbe6daf
+string
+5a0a7ef03c5f9315408ac483
+string
+5a0a7faa6078bf14f81348e0
+string
+5a0a80da8e4bc811f8d9ae82
+string
+Collection: project
+595e6dd2502faa13d009b1b0
+string
+59fa0682d0380609ecfb16e0
+string
+5a0a860e8e4bc811f8d9ae85
+string
+58da6c377b83a2028e8371ef
+string
+58e2634d315ca45eba2265ed
+string
+Collection: project_ent
+5a0a872013297e10ecbcb674
+string
+Collection: request_messages
+5a09392646dc9e0bc8479e47
+string
+5a093a1746dc9e0bc8479e4a
+string
+5a0972a374bc2b1188d4664b
+string
+5a0a8974fdd9681538939c6f
+string
+5a0ab6ab0ee60712ece236f5
+string
+5a0b4b58c5421f1070e0122f
+string
+5a0bf616d14c221584b846c6
+string
+Collection: role
+58d9d432c970d8028d65885a
+string
+58f118745ccef14173b0bf4e
+string
+592e8ec356bd0a0944cc82af
+string
+5a0c0de782a76a0b106ffd25
+string
+Collection: roles
+5a0c23cdfb34d60870d64a72
+string
+5a0c145fa0b3d515742fa277
+string
+5a0c14a1a0b3d515742fa278
+string
+Collection: sessions
+vZr-P0S2UIbkj4SlkEgHcYUb1RpiVFsU
+string
+pZIc6gKa2PK_09TC0k0Cway8cnnu5Yyq
+string
+ASwSD6Wx1lFnnHwvhR6DgWOJzow8Ixmw
+string
+Collection: socketkeys
+Collection: system.indexes
+Collection: test
+59183a54fa1dd9118c38c92b
+string
+Collection: user_data
+58e546ba05ebfa0be4c43c30
+string
+Collection: user_password
+Collection: users
+5a0a7b11243df50d14a9d2a3
+string
+5a0a83138e4bc811f8d9ae83
+string

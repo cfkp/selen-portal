@@ -12,7 +12,7 @@ function load_main_menu(obj) {
 	var meta_name = "main_menu";
 	var meta_value = "0";
 
-	var datajson;
+ 	var datajson;
 
 	var func = function (schema, menu) {
 		makeList2(menu.data, 'nav navmenu-nav');
@@ -22,7 +22,7 @@ function load_main_menu(obj) {
 	}
 
 	api_load('load_main_menu', null, func);
-
+ 
 };
 
 function load_menu(menu_name) {
@@ -40,6 +40,7 @@ function load_menu(menu_name) {
 	api_load('/load_menu/' + meta_value, null, func);
  
 };
+
 
 
 var menu_item_click = function () {
@@ -66,7 +67,7 @@ var menu_item_click = function () {
 	if (obj.attr("meta_action_type")) {
 		if (obj.attr("meta_action_type") == "object") {
 			hide_formBRUT($("#main_workspace"));
-			load_class(this);
+			load_class($("#main_workspace"),this);//load_class(this);
 		} else if (obj.attr("meta_action_type") == "method") {
 			call_method(obj.attr("meta_class"), obj.attr("meta_method"),$('#main_workspace'));
 		} else if (obj.attr("meta_action_type") == "view") {

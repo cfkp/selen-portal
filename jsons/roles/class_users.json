@@ -1,0 +1,42 @@
+﻿{
+    "_id": "58cb3166e03a2f3db026e98d",
+    "user_createid": "58c7c6b8c20d99116418a797",
+    "meta_name": "users",
+    "meta_table_name": "users",
+    "meta_parent_class": "",
+    "data": {
+        "meta_name": "users",
+        "title": "Редактировать Дополнительные Данные пользователя",
+        "description": "Данные пользователя",
+        "meta_table_name": "users",
+        "meta_parent_class": "",
+        "type": "object",
+        "properties": {
+            "role": {
+                "type": "string",
+                "title": "Роль",
+                "description": "Роль пользователя",
+                "required": true,
+                "meta_ref": {
+                    "meta_class": "roles",
+                    "meta_view": "vw_admin_roles",
+                    "colmodel": [
+                        {
+                            "label": "id",
+                            "name": "_id",
+                            "key": true,
+                            "hidden": true
+                        },
+                        {
+                            "name": "data.name",
+                            "label": "Группа "
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "created": "2017-03-14T10:23:32.897Z",
+    "__v": 0,
+    "this_meta_class": "meta_class"
+}

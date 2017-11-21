@@ -1,0 +1,31 @@
+﻿{
+    "_id": "5a020a96076a9e03e0817533",
+    "this_meta_class": "meta_menu",
+    "name": "menu_message",
+    "title": "Меню чата",
+    "data": {
+        "name": "menu_message",
+        "title": "Меню чата",
+        "root_menu": "#method_menu",
+        "items": [
+            {
+                "title": "Добавить сообщение",
+                "meta_action_type": "method",
+                "meta_class": "request_messages",
+                "meta_method": "new"
+            },
+            {
+                "title": "Редактировать",
+                "meta_action_type": "method",
+                "meta_class": "request_messages",
+                "meta_method": "edit"
+            },
+            {
+                "title": "Удалить",
+                "meta_action_type": "method",
+                "meta_class": "request_messages",
+                "meta_method": "delete"
+            }
+        ]
+    }
+}

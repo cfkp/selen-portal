@@ -1,5 +1,5 @@
 var express = require('express');
-
+var errorHandler = require('express-error-handler');
 //var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -14,6 +14,8 @@ var mongoose = require('libs/mongoose');
 var HttpError = require('error').HttpError;
 
 var app = express();
+
+app.use(errorHandler());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.engine('ejs', require('ejs-locals'));
