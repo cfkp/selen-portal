@@ -113,7 +113,8 @@ log.info({req:req},'start');
 					row.created = Date.now;
 				} else {
  					var row = { _id:new ObjectID().toString(),
-						user_createid: userID
+						user_createid: userID,
+						this_meta_class:meta_class
 					};
 					if (parent_name) {
 						row[parent_name] = parent_id;
@@ -811,6 +812,7 @@ log.info({req:req},'start');
 		var row = {"_id":obj_id,
 			"created": sysdate ,
 			"user_createid": userID,
+			this_meta_class:meta_class,
 			state: "Новый",
 			"data": data
 		};
