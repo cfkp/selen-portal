@@ -87,8 +87,12 @@ SaveClick(sayOk)
 { this.data=this.bf.getData();
 if (this.data == null){
 	messagedlg(null, "Ошибка сохранения данных", "message");
+}
+else if(this.value&&this.data&&JSON.stringify(this.value.data)===JSON.stringify(this.data)){
+console.log('no change data');
 
-}else{
+}
+else{
 	var resp=api_load_sync("saveobj/" + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, JSON.stringify(this.data));
 	if (sayOk){
 	messagedlg(null, "Данные сохранены", "message");

@@ -104,6 +104,8 @@ log.info({req:req},'start');
 			},
 			function (row, callback) {
 				if (row) {
+
+					db.save_obj_hist(userID,meta_class,row);
  					if (parent_name) {
 						row[parent_name] = parent_id;
 					};
@@ -756,6 +758,8 @@ log.info({req:req},'start');
 	};
 	if (meta_method=='edit'&&obj_id) {
  		if (data !== null) {
+		db.audit(userID,meta_class,meta_method,obj_id,data);
+
 			dbloc.collection(meta_class).updateOne({
 				"_id": obj_id
 			}, {
@@ -775,7 +779,10 @@ log.info({req:req},'start');
 	} 
 	else if (meta_method=='delete'&&obj_id){
  		if ( data.confirm!== null&&data.confirm==true) {
-			dbloc.collection(meta_class).remove//updateOne
+
+		db.audit(userID,meta_class,meta_method,obj_id,data);
+		
+		dbloc.collection(meta_class).remove//updateOne
 				({
 				"_id": obj_id
 			}/*, {
@@ -808,19 +815,19 @@ log.info({req:req},'start');
 			"data": data
 		};
 		if (req.body.collection&&req.body.collection.meta_parent_field){
-	console.log('insert collection');
-	console.log(req.body.collection);
+//	console.log('insert collection');
+//	console.log(req.body.collection);
 
 		  row[req.body.collection.meta_parent_field]=req.body.collection.meta_parent_value;
 		}
-
+		db.audit(userID,meta_class,meta_method,obj_id,row);
 		dbloc.collection(meta_class).save(row, function (err, docs) {
 
 			if (err || docs.result === undefined) {
 				log.error({req:req},'Error inserting document', err);
  			} else {
-	console.log('insert doc');
-	console.log(docs);
+//	console.log('insert doc');
+//	console.log(docs);
 	
 				if (meta_class=='person_request'){
 					var pers_req = require('../db/person_request');

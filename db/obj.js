@@ -9,7 +9,7 @@ var _ = require('lodash');
 var fs = require("fs");
 var db = require('../db/db');
 
-var ObjectID = require('mongodb').ObjectID;
+
 
 function getschema(metaclass,nextfunc){
  var search_filter = {};
