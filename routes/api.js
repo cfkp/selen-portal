@@ -586,6 +586,55 @@ log.info({req:req},'start');
 	
 	});
 });
+router.post('/callmethod/person_request/set_expert/execute',checkAuth, function (req, res, next) {
+log.info({req:req},'start');
+ 
+	var userID = req.session.user;
+	var meta_class = "person_request";
+	var meta_method = "set_expert";
+	var meta_action = "execute";
+ 
+	/////////////////////////
+	var dbloc = db.get();
+	var data = req.body.data;
+	var new_state='В работу';
+	var set$={};
+	if ((data.new_state) && (data.new_state !== undefined)) {
+		new_state = data.new_state;
+	} else {
+		res.status(500).send({
+			'error': 'no_new_state',
+			'msg': 'Не указано состояние'
+		});
+		return;
+	};
+	
+	set$.state=new_state;
+	
+ 	set$.user_expert=userID;
+ 	var obj_id;
+	if (req.body.objectlist) {
+ 		 obj_id = req.body.objectlist[0];
+	};
+
+       db.audit(userID,meta_class,meta_method,obj_id,{$set: set$});
+
+	dbloc.collection(meta_class).updateOne({
+		"_id": obj_id
+	}, {
+		
+		$set: set$
+		
+	}, function (err, docs) {
+	var dataReturn =obj_id;
+
+ 		if (err || docs.result === undefined) {
+ 			log.error({req:req},'Error inserting document', err);
+                      console.log('err '+err);
+                }
+ 	res.json(dataReturn);
+ 	});
+});
 
 router.post('/callmethod/person_request/change_state/execute',checkAuth, function (req, res, next) {
 log.info({req:req},'start');
