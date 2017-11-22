@@ -322,8 +322,7 @@ log.info({req:req},'start');
 			res.status(500).send(err);
 			return;
 		};
-		if ((results.schema.data.objectlist !== undefined) && (results.schema.data.objectlist === 1||
-results.schema.data.objectlist === "1") &&
+		if ((results.schema.data.objectlist !== undefined) && (results.schema.data.objectlist == "1") &&
 			((!req.body.objectlist) || (req.body.objectlist.length === 0))) {
 			res.status(500).send({
 				'error': 'no_objectlist',
@@ -444,8 +443,7 @@ log.info({req:req},'start');
 			})
 		
 		};
-		if ((results.schema.data.objectlist !== undefined) && (results.schema.data.objectlist === 1||
-results.schema.data.objectlist === "1") &&
+		if ((results.schema.data.objectlist !== undefined) && (results.schema.data.objectlist == "1") &&
 			((!req.body.objectlist) || (req.body.objectlist.length === 0))) {
 			res.status(500).send({
 				'error': 'no_objectlist',
@@ -564,6 +562,8 @@ log.info({req:req},'start');
 	if (req.body.objectlist) {
  		 obj_id = req.body.objectlist[0];
 	};
+       db.audit(userID,meta_class,meta_method,obj_id,{$set: set$});
+
 	dbloc.collection(meta_class).updateOne({
 		"_id": obj_id
 	}, {
@@ -705,8 +705,6 @@ log.info({req:req},'start');
 		if (!err){
  		res.json(results);}
 		else {res.status(500).send(err);};
-		/*                if (!results.schema) {res.status(500).send({'error':'no_data_found'})}
-		else {res.json(results);}*/
 	});
 
 
@@ -718,7 +716,7 @@ log.info({req:req},'start');
  
 	var userID =  req.session.user;
 	var meta_class = "person_request";
-	var meta_method = req.params.meta_method;
+	var meta_method = 'change_state2expert';
 	var meta_action = req.params.meta_action;
  	/////////////////////////
 	var dbloc = db.get();
@@ -737,6 +735,8 @@ log.info({req:req},'start');
 	if (req.body.objectlist) {
  		 obj_id = req.body.objectlist[0];//new ObjectID(req.body.objectlist[0]);
 	};
+       db.audit(userID,meta_class,meta_method,obj_id,{$set: {"state": new_state	}});
+
 	dbloc.collection(meta_class).updateOne({
 		"_id": obj_id
 	}, {
