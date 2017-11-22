@@ -633,7 +633,7 @@ log.info({req:req},'start');
  	/////////////////////////
 	var dbloc = db.get();
 	var data = req.body.data;
-	var new_state_act,new_state_act;
+	var new_state_act,new_state;
 	if ((data.new_state) && (data.new_state !== undefined)) {
 		new_state_act = data.new_state;
 	} else {
@@ -684,7 +684,7 @@ log.info({req:req},'start');
 			'error': 'no_new_state',
 			'msg': 'Не найдено следующее состояние'
 				};
-			callback(err);
+			return callback(err);
 			}	
 	
 				dbloc.collection(meta_class).updateOne({
@@ -698,7 +698,9 @@ log.info({req:req},'start');
 
 		],
 		function (err, results) {
- 		res.json(results);
+		if (!err){
+ 		res.json(results);}
+		else {res.status(500).send(err);};
 		/*                if (!results.schema) {res.status(500).send({'error':'no_data_found'})}
 		else {res.json(results);}*/
 	});
