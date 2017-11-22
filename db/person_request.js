@@ -60,15 +60,24 @@ url : "http://"+options.host+':'+options.port+options.path+request_id,
 headers : { /*"Authorization" : authenticationHeader */}  
 },
  function (error, response, body) {
+	var err;
 	if (error||!response) {	log.error( {request_id:request_id,
 		statusCode:404,error:error },'load_request_info');
+		err={
+			'error': 'no_load_request_info',
+			'msg': 'Ошибка загрузки 404'
+		}; 
 }
 	else if (error||response.statusCode!=200) {	log.error( {request_id:request_id,
 		statusCode:response.statusCode,error:error },'load_request_info');
+			err={
+			'error': 'no_load_request_info',
+			'msg': 'Ошибка загрузки  '+response.statusCode
+		};
 }	else {log.info( {request_id:request_id,
 		statusCode:response.statusCode,error:error },'load_request_info');
  	}
-			next(error,body);
+			next(err,body);
    }  );     
   
 

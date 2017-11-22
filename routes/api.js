@@ -334,7 +334,7 @@ log.info({req:req},'start');
 	});
 
 });
-
+                                
 router.post('/callmethod/:meta_class/:meta_method/init',checkAuth, function (req, res, next) {
 log.info({req:req},'start');
  	
@@ -710,6 +710,46 @@ log.info({req:req},'start');
 
 
 });
+
+router.post('/callmethod/person_request/load_data_from_ext/execute',checkAuth, function (req, res, next) {
+log.info({req:req},'start');
+ 
+	var userID =  req.session.user;
+	var meta_class = "person_request";
+	var meta_method = 'load_data_from_ext';
+	var meta_action = req.params.meta_action;
+ 	/////////////////////////
+	var dbloc = db.get();
+	var data = req.body.data;
+var pers_req = require('../db/person_request');
+
+ 	if (!data.confirm)   {
+ 		res.status(500).send({
+			'error': 'no_new_state',
+			'msg': 'Действие не подтверждено'
+		});
+		return;
+	};
+
+ 	var obj_id;
+	if (req.body.objectlist) {
+ 		 obj_id = req.body.objectlist[0];//new ObjectID(req.body.objectlist[0]);
+	};
+
+
+        db.audit(userID,meta_class,meta_method,obj_id,{});
+        pers_req.load_request_info (obj_id, function (err, docs) {
+ 
+		if (err) {
+		res.json(err);
+ 		} else {		res.json(obj_id);
+
+ 		};
+
+ 	});
+
+});
+
 
 router.post('/callmethod/person_request/change_state2expert/execute',checkAuth, function (req, res, next) {
 log.info({req:req},'start');
