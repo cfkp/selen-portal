@@ -69,7 +69,7 @@ headers : { /*"Authorization" : authenticationHeader */}
 		}; 
 }
 	else if (error||response.statusCode!=200) {	log.error( {request_id:request_id,
-		statusCode:response.statusCode,error:error },'load_request_info');
+		statusCode:response.statusCode,res:response,error:error },'load_request_info');
 			err={
 			'error': 'no_load_request_info',
 			'msg': 'Ошибка загрузки  '+response.statusCode

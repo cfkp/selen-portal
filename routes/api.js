@@ -741,7 +741,7 @@ var pers_req = require('../db/person_request');
         pers_req.load_request_info (obj_id, function (err, docs) {
  
 		if (err) {
-		res.json(err);
+		res.status(500).json(err);
  		} else {		res.json(obj_id);
 
  		};
