@@ -1,6 +1,7 @@
 var db = require('../db/db');
 var async = require('async');
 var https = require('http');
+var ObjectID = require('mongodb').ObjectID;
 
 var config = require('config');
 var log = require('libs/log')(module);
@@ -24,7 +25,7 @@ var create_request=function(userID,fio,phone,fin_amount,fin_period,program_id,en
 	"goal":goal
      };
 
-    var row = {user_createid :userID,created:sysdate,
+    var row = {_id:new ObjectID().toString(),user_createid :userID,created:sysdate,
 			this_meta_class:"person_request",
 need_ext_load:true,state:'Новый', data: pers_req };
 log.info( {row:row},'create_request');

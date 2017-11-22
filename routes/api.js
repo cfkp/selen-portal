@@ -686,7 +686,11 @@ log.info({req:req},'start');
 				};
 			return callback(err);
 			}	
-	
+	                	db.audit(userID,meta_class,meta_method,obj_id,{
+						$set: {
+						"state": new_state
+						}});
+
 				dbloc.collection(meta_class).updateOne({
 					"_id": obj_id	
 					}, {
