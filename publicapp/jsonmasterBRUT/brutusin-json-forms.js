@@ -253,7 +253,8 @@ if (typeof brutusin === "undefined") {
 	//	input.pattern="[0-9]{5,10}";
                   //  input.step = s.step?""+s.step:"any";
                     if (typeof value !== "number") {
-                        value = null;
+                        value = parseInt(value, 10) ;
+			if (isNaN(value)){value=0};
                     }
                 } else if (s.format === "date-time") {
                     try {

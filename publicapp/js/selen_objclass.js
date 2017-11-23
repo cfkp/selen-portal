@@ -93,10 +93,12 @@ console.log('no change data');
 
 }
 else{
+var save = confirm("Данные не сохранены.Сохранить?");
+if (save){
 	var resp=api_load_sync("saveobj/" + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, JSON.stringify(this.data));
 	if (sayOk){
 	messagedlg(null, "Данные сохранены", "message");
-	}
+	} }
 }
 }
 
