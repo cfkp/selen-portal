@@ -265,6 +265,7 @@ if (typeof brutusin === "undefined") {
                     }
                 } else if (s.format === "date"||s.type === "date") {
                     input.type = "date";
+			value=new Date(value);//.toISOString();
                 } else if (s.format === "time") {
                     input.type = "time";
                 } else if (s.format === "email") {
@@ -279,7 +280,11 @@ if (typeof brutusin === "undefined") {
                 }
                 if (value !== null && typeof value !== "undefined") {
                     // readOnly?
-                    input.value = value;
+			if(input.type=="date"){ 
+			input.valueAsDate =value;}
+			else {
+
+                    input.value = value;};
                     if (s.readOnly)
                         input.disabled = true;
 
@@ -1656,7 +1661,13 @@ if (typeof brutusin === "undefined") {
                         value = null;
                     }
                 }
-            } else if (schema.type === "any") {
+            }
+		else if (schema.type === "date") {
+                if (value) {  
+			value = new Date(input.valueAsDate).toISOString();
+                }
+            }
+		 else if (schema.type === "any") {
                 if (value) {
                     eval("value=" + value);
                 }
