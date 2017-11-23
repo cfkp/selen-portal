@@ -79,23 +79,31 @@ Show()
 	var bfcont=this.container.find("#data_container");
 		this.bf = BrutusinForms.create(this.schema.data);
  		this.bf.render(bfcont[0], this.value.data);
+		this.data=this.bf.getData();
  	if (this.meta_readonly){
 	bfcont.find(':input').attr('disabled', 'disabled');}	
   }
 
 SaveClick(sayOk)
-{ this.data=this.bf.getData();
-if (this.data == null){
-	messagedlg(null, "Ошибка сохранения данных", "message");
-}
-else if(this.value&&this.data&&JSON.stringify(this.value.data)===JSON.stringify(this.data)){
-console.log('no change data');
-
-}
-else{
-	var resp=api_load_sync("saveobj/" + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, JSON.stringify(this.data));
-	if (sayOk){
-	messagedlg(null, "Данные сохранены", "message");
+{       var save ;
+	 if (this.meta_readonly) {return;};
+	var newdata=this.bf.getData();
+	if (newdata == null){
+		messagedlg(null, "Ошибка сохранения данных - пустые данные", "message");
+	}
+	else if(newdata&&this.data&&JSON.stringify(newdata)===JSON.stringify(this.data)){
+	console.log('no change data');
+	if (sayOk) {
+	alert("Данные не изменялись.");}
+	}
+	else{
+	save = confirm("Данные не сохранены.Сохранить?");
+	if (save){
+		this.data=newdata;
+		var resp=api_load_sync("saveobj/" + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, JSON.stringify(this.data));
+		if (sayOk){
+		messagedlg(null, "Данные сохранены", "message");
+		}
 	}
 }
 }

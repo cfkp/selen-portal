@@ -25,10 +25,14 @@ function getschema(metaclass,nextfunc){
 
 function getobj(metaclass,this_id,nextfunc){
  var search_filter = {};
- if (id_schema) {search_filter["id_"]= this_id;}
+ search_filter["id_"]= this_id;
+
+console.log('getobj metaclass '+metaclass);
+console.log('getobj search '+JSON.stringify(search_filter));
 	db.get().collection(metaclass).findOne({
 				search_filter
 			}, function (err,doc) {
+console.log('getobj '+JSON.stringify(doc));
 				nextfunc(err, doc);
 			});
 };
@@ -49,4 +53,4 @@ function getobjfull(metaclass,this_id,nextfunc){
  
 
 ////////////////////////////////////////
-module.exports = router;
+exports.getobj=getobj;

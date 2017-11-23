@@ -8,6 +8,7 @@ var async = require('async');
 var _ = require('lodash');
 var fs = require("fs");
 var db = require('../db/db');
+var objlib=require('../db/obj');
 var crypto = require('crypto');
 var mailer = require('../middleware/sendmail'); //-- Your js file path
 
@@ -321,8 +322,7 @@ log.info({req:req},'start');
 			res.status(500).send(err);
 			return;
 		};
-		if ((results.schema.data.objectlist !== undefined) && (results.schema.data.objectlist === 1||
-results.schema.data.objectlist === "1") &&
+		if ((results.schema.data.objectlist !== undefined) && (results.schema.data.objectlist == "1") &&
 			((!req.body.objectlist) || (req.body.objectlist.length === 0))) {
 			res.status(500).send({
 				'error': 'no_objectlist',
@@ -334,7 +334,7 @@ results.schema.data.objectlist === "1") &&
 	});
 
 });
-
+                                
 router.post('/callmethod/:meta_class/:meta_method/init',checkAuth, function (req, res, next) {
 log.info({req:req},'start');
  	
@@ -443,8 +443,7 @@ log.info({req:req},'start');
 			})
 		
 		};
-		if ((results.schema.data.objectlist !== undefined) && (results.schema.data.objectlist === 1||
-results.schema.data.objectlist === "1") &&
+		if ((results.schema.data.objectlist !== undefined) && (results.schema.data.objectlist == "1") &&
 			((!req.body.objectlist) || (req.body.objectlist.length === 0))) {
 			res.status(500).send({
 				'error': 'no_objectlist',
@@ -548,26 +547,23 @@ log.info({req:req},'start');
 	var data = req.body.data;
 	var new_state;
 	var set$={};
-	if ((data.new_state) && (data.new_state !== undefined)) {
-		new_state = data.new_state;
-	} else {
-		res.status(500).send({
+	if (!data.confirm)   {
+ 		res.status(500).send({
 			'error': 'no_new_state',
-			'msg': 'Не указано состояние'
+			'msg': 'Действие не подтверждено'
 		});
 		return;
 	};
 	
-	set$.state=new_state;
+	set$.state='В работе';
 	
-	if (new_state==='Экспертиза') 
-	{
 		set$.user_expert=userID;
-	}; 
 	var obj_id;
 	if (req.body.objectlist) {
  		 obj_id = req.body.objectlist[0];
 	};
+       db.audit(userID,meta_class,meta_method,obj_id,{$set: set$});
+
 	dbloc.collection(meta_class).updateOne({
 		"_id": obj_id
 	}, {
@@ -586,6 +582,46 @@ log.info({req:req},'start');
 	
 	});
 });
+router.post('/callmethod/person_request/set_expert/execute',checkAuth, function (req, res, next) {
+log.info({req:req},'start');
+ 
+	var userID = req.session.user;
+	var meta_class = "person_request";
+	var meta_method = "set_expert";
+	var meta_action = "execute";
+ 
+	/////////////////////////
+	var dbloc = db.get();
+	var data = req.body.data;
+	var new_state='В работе';
+	var set$={};
+ 	
+	set$.state=new_state;
+	
+ 	set$.user_expert=userID;
+ 	var obj_id;
+	if (req.body.objectlist) {
+ 		 obj_id = req.body.objectlist[0];
+	};
+
+       db.audit(userID,meta_class,meta_method,obj_id,{$set: set$});
+
+	dbloc.collection(meta_class).updateOne({
+		"_id": obj_id
+	}, {
+		
+		$set: set$
+		
+	}, function (err, docs) {
+	var dataReturn =obj_id;
+
+ 		if (err || docs.result === undefined) {
+ 			log.error({req:req},'Error inserting document', err);
+                      console.log('err '+err);
+                }
+ 	res.json(dataReturn);
+ 	});
+});
 
 router.post('/callmethod/person_request/change_state/execute',checkAuth, function (req, res, next) {
 log.info({req:req},'start');
@@ -597,13 +633,13 @@ log.info({req:req},'start');
  	/////////////////////////
 	var dbloc = db.get();
 	var data = req.body.data;
-	var new_state;
+	var new_state_act,new_state;
 	if ((data.new_state) && (data.new_state !== undefined)) {
-		new_state = data.new_state;
+		new_state_act = data.new_state;
 	} else {
 		res.status(500).send({
 			'error': 'no_new_state',
-			'msg': 'Не указано состояние'
+			'msg': 'Не указано Действие'
 		});
 		return;
 	};
@@ -612,37 +648,115 @@ log.info({req:req},'start');
 	if (req.body.objectlist) {
  		 obj_id =  req.body.objectlist[0];
 	};
-	dbloc.collection(meta_class).updateOne({
-		"_id": obj_id
-	}, {
-		$set: {
-			"state": new_state
-		}
-	},
-		function (err, docs) {
 
- 
-		if (err || docs.result === undefined) {
-				log.error({req:req},'Error update document', err);
- 		} else {
-			var dataReturn = '';
-			if (docs.ops) {
- 
-				dataReturn = docs.ops[0]._id;
+	async.waterfall([
+//			function (callback) {
+                                //objlib.getobj(meta_class,obj_id,callback)
+			function (callback) {
+				var search_filter = {};
+				search_filter['_id'] = obj_id;
+                                console.log('search_filter'+search_filter);
+				db.get().collection(meta_class).findOne(search_filter, callback);
+
+			},
+			function (obj,callback) {
+			console.log(obj);
+			if  (!obj||obj==null ){callback({
+			'error': 'no_object',
+			'msg': 'Не найден документ'
+				});}	
+			if (new_state_act==='Выполнено'){
+				if (obj.state==='В работе'){new_state="На проверку"}
+				else if (obj.state==='На проверку'){new_state="На рассмотрение"}
+				else if (obj.state==='На рассмотрение'){new_state="Одобрено КМСП"}
+				;
+
 			}
- 		}
+			else if(new_state_act==='Вернуть'){
+				if (obj.state==='В работе'){}
+				else if (obj.state==='На проверку'){new_state="В работе"}
+				else if (obj.state==='На рассмотрение'){new_state="Отказано КМСП"}
+				;
 
-		res.json(dataReturn);
+			}
+			
+			if (!new_state) {var err={
+			'error': 'no_new_state',
+			'msg': 'Не найдено следующее состояние'
+				};
+			return callback(err);
+			}	
+	                	db.audit(userID,meta_class,meta_method,obj_id,{
+						$set: {
+						"state": new_state
+						}});
+
+				dbloc.collection(meta_class).updateOne({
+					"_id": obj_id	
+					}, {
+						$set: {
+						"state": new_state
+						}},callback);
+			                                 
+			}
+
+		],
+		function (err, results) {
+		if (!err){
+ 		res.json(results);}
+		else {res.status(500).send(err);};
 	});
 
+
+
 });
+
+router.post('/callmethod/person_request/load_data_from_ext/execute',checkAuth, function (req, res, next) {
+log.info({req:req},'start');
+ 
+	var userID =  req.session.user;
+	var meta_class = "person_request";
+	var meta_method = 'load_data_from_ext';
+	var meta_action = req.params.meta_action;
+ 	/////////////////////////
+	var dbloc = db.get();
+	var data = req.body.data;
+var pers_req = require('../db/person_request');
+
+ 	if (!data.confirm)   {
+ 		res.status(500).send({
+			'error': 'no_new_state',
+			'msg': 'Действие не подтверждено'
+		});
+		return;
+	};
+
+ 	var obj_id;
+	if (req.body.objectlist) {
+ 		 obj_id = req.body.objectlist[0];//new ObjectID(req.body.objectlist[0]);
+	};
+
+
+        db.audit(userID,meta_class,meta_method,obj_id,{});
+        pers_req.load_request_info (obj_id, function (err, docs) {
+ 
+		if (err) {
+		res.status(500).json(err);
+ 		} else {		res.json(obj_id);
+
+ 		};
+
+ 	});
+
+});
+
 
 router.post('/callmethod/person_request/change_state2expert/execute',checkAuth, function (req, res, next) {
 log.info({req:req},'start');
  
 	var userID =  req.session.user;
 	var meta_class = "person_request";
-	var meta_method = req.params.meta_method;
+	var meta_method = 'change_state2expert';
 	var meta_action = req.params.meta_action;
  	/////////////////////////
 	var dbloc = db.get();
@@ -661,6 +775,8 @@ log.info({req:req},'start');
 	if (req.body.objectlist) {
  		 obj_id = req.body.objectlist[0];//new ObjectID(req.body.objectlist[0]);
 	};
+       db.audit(userID,meta_class,meta_method,obj_id,{$set: {"state": new_state	}});
+
 	dbloc.collection(meta_class).updateOne({
 		"_id": obj_id
 	}, {
