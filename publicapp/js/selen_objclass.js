@@ -85,16 +85,19 @@ Show()
   }
 
 SaveClick(sayOk)
-{      if (this.meta_readonly) {return;};
+{       var save ;
+	 if (this.meta_readonly) {return;};
 	var newdata=this.bf.getData();
 	if (newdata == null){
-		messagedlg(null, "Ошибка сохранения данных", "message");
+		messagedlg(null, "Ошибка сохранения данных - пустые данные", "message");
 	}
 	else if(newdata&&this.data&&JSON.stringify(newdata)===JSON.stringify(this.data)){
 	console.log('no change data');
+	if (sayOk) {
+	alert("Данные не изменялись.");}
 	}
 	else{
-	var save = confirm("Данные не сохранены.Сохранить?");
+	save = confirm("Данные не сохранены.Сохранить?");
 	if (save){
 		this.data=newdata;
 		var resp=api_load_sync("saveobj/" + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, JSON.stringify(this.data));
