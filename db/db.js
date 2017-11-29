@@ -18,8 +18,7 @@ exports.connect = function(url, done) {
 	function(err, dbres) {
     		if (err) return done(err);
     		 dbconnection = dbres;
-		 this.dbconnection_=dbres;
-  done();
+   done();
 	  })
 }
 
@@ -51,7 +50,7 @@ exports.audit=function(userid,meta_class,meta_method,obj_id,data){
 			"data": data
 		};
 
-		this.dbconnection.collection("audit").save(row, function (err, docs) {
+		dbconnection.collection("audit").save(row, function (err, docs) {
 
 		});
 
@@ -60,7 +59,7 @@ exports.audit=function(userid,meta_class,meta_method,obj_id,data){
 
 
 exports.findone=function(meta_class,search_filter,nextfunc){
-  		 this.dbconnection.collection(metaclass).findOne(
+  		 dbconnection.collection(meta_class).findOne(
 				search_filter,nextfunc
                 	);
  };
@@ -80,7 +79,7 @@ exports.save_obj_hist=function(userid,meta_class,obj){
 			"object": obj
 		};
 
-		this.dbconnection.collection("object_history").save(row, function (err, docs) {
+		dbconnection.collection("object_history").save(row, function (err, docs) {
 
 		});
 	};	

@@ -334,8 +334,29 @@ log.info({req:req},'start');
 	});
 
 });
-                                
+
 router.post('/callmethod/:meta_class/:meta_method/init',checkAuth, function (req, res, next) {
+log.info({req:req},'start');
+	var userID = req.session.user;
+	var meta_class = req.params.meta_class;
+	var meta_method = req.params.meta_method;
+	var meta_action = req.params.meta_action;
+	
+	async.waterfall(
+		[objlib.init_method.bind(null,meta_class,meta_method,req.body.objectlist)
+		],
+	        function (err, result) {
+
+		if (err){res.status(500).send(err)}else {
+		res.json(result);		
+		};
+	}
+	);
+
+});    
+
+                            
+router.post('/callmethod1/:meta_class/:meta_method/init',checkAuth, function (req, res, next) {
 log.info({req:req},'start');
  	
 	var userID = req.session.user;
