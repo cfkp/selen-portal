@@ -13,35 +13,27 @@ var db = require('../db/db');
 
 function getschema(metaclass,nextfunc){
  var search_filter = {};
-// if (id_schema) {search_filter["id_"]=new ObjectID(id_schema);}
- if (metaclass) {search_filter["meta_name"]=metaclass;}
+  if (metaclass) {search_filter["meta_name"]=metaclass;}
 
-	db.get().collection("meta_class").findOne({
+	db.get().collection("meta_class").findOne(
 				search_filter
-			}, function (err,schema) {
+			, function (err,schema) {
 				nextfunc(err, schema);
 			});
 };
 
 function getobj(metaclass,this_id,nextfunc){
  var search_filter = {};
- search_filter["id_"]= this_id;
-
-console.log('getobj metaclass '+metaclass);
-console.log('getobj search '+JSON.stringify(search_filter));
-	db.get().collection(metaclass).findOne({
-				search_filter
-			}, function (err,doc) {
-console.log('getobj '+JSON.stringify(doc));
-				nextfunc(err, doc);
-			});
+ search_filter["_id"]= this_id;
+ console.log('getobj metaclass '+metaclass);
+ console.log('getobj search '+JSON.stringify(search_filter));
+ db.findone(metaclass,search_filter, nextfunc);
 };
 
 function getobjfull(metaclass,this_id,nextfunc){
 	async.parallel({
-		"schema": 
-			getschema(metaclass,callback) ,
-		"value": getobj(metaclass,this_id,callback)
+		"schema":getschema.bind(null,metaclass),
+		"value": getobj.bind(null,metaclass,this_id)
 		 
 	},
 		function (err, result) {

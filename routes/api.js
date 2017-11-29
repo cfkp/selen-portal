@@ -16,7 +16,7 @@ var checkAuth = require('../middleware/checkAuth');
 var ObjectID = require('mongodb').ObjectID;
 
 router.all('/', checkAuth, function (request, response, next) {
-log.info({req:req},"router.all");
+	log.info({req:req},"router.all");
 
 	next();
 });
@@ -628,7 +628,7 @@ log.info({req:req},'start');
  
 	var userID = req.session.user;
 	var meta_class = "person_request";
-	var meta_method = req.params.meta_method;
+	var meta_method = "change_state";
 	var meta_action = req.params.meta_action;
  	/////////////////////////
 	var dbloc = db.get();
@@ -650,17 +650,11 @@ log.info({req:req},'start');
 	};
 
 	async.waterfall([
-//			function (callback) {
-                                //objlib.getobj(meta_class,obj_id,callback)
 			function (callback) {
-				var search_filter = {};
-				search_filter['_id'] = obj_id;
-                                console.log('search_filter'+search_filter);
-				db.get().collection(meta_class).findOne(search_filter, callback);
-
+                        objlib.getobj(meta_class,obj_id,callback);
 			},
 			function (obj,callback) {
-			console.log(obj);
+			console.log("callback "+obj);
 			if  (!obj||obj==null ){callback({
 			'error': 'no_object',
 			'msg': 'Не найден документ'

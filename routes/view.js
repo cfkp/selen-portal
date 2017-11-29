@@ -443,8 +443,8 @@ log.debug({req:req},'start');
   
 var aggreg=get_aggregate_params(filter,model.data.colmodel);
 
-console.log('view aggreg');
-console.log(JSON.stringify(aggreg,4,4));
+//console.log('view aggreg');
+//console.log(JSON.stringify(aggreg,4,4));
   			dbloc.collection(meta_class).aggregate(aggreg).toArray(function (err, rows) {
 						var result = {};
 						result.header = model.data;
@@ -542,8 +542,8 @@ return;
   
 var aggreg=get_aggregate_params(filter,model.data.colmodel);
  
-console.log('view aggreg');
- console.log(JSON.stringify(aggreg,4,4));
+//console.log('view aggreg');
+// console.log(JSON.stringify(aggreg,4,4));
 
   			dbloc.collection(meta_class).aggregate(
    				aggreg).toArray(function (err, rows) {

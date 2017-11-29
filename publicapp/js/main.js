@@ -15,7 +15,7 @@ else{
   */
 window.addEventListener('error', function (e) {
     var error = e.error;
-if (error.name&&error.name==='SelenError'){messagedlg(error.errobj);}
+if (error.name&&error.name==='SelenError'|| error instanceof SelenError){messagedlg(error.errobj);}
 
  });
 
