@@ -562,7 +562,7 @@ log.info({req:req},'start');
 	if (req.body.objectlist) {
  		 obj_id = req.body.objectlist[0];
 	};
-       db.audit(userID,meta_class,meta_method,obj_id,{$set: set$});
+       db.audit(userID,meta_class,meta_method,obj_id,{set: set$});
 
 	dbloc.collection(meta_class).updateOne({
 		"_id": obj_id
@@ -604,7 +604,7 @@ log.info({req:req},'start');
  		 obj_id = req.body.objectlist[0];
 	};
 
-       db.audit(userID,meta_class,meta_method,obj_id,{$set: set$});
+       db.audit(userID,meta_class,meta_method,obj_id,{set: set$});
 
 	dbloc.collection(meta_class).updateOne({
 		"_id": obj_id
@@ -681,7 +681,7 @@ log.info({req:req},'start');
 			return callback(err);
 			}	
 	                	db.audit(userID,meta_class,meta_method,obj_id,{
-						$set: {
+						set: {
 						"state": new_state
 						}});
 
@@ -769,7 +769,7 @@ log.info({req:req},'start');
 	if (req.body.objectlist) {
  		 obj_id = req.body.objectlist[0];//new ObjectID(req.body.objectlist[0]);
 	};
-       db.audit(userID,meta_class,meta_method,obj_id,{$set: {"state": new_state	}});
+       db.audit(userID,meta_class,meta_method,obj_id,{set: {"state": new_state	}});
 
 	dbloc.collection(meta_class).updateOne({
 		"_id": obj_id
