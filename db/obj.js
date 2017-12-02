@@ -16,7 +16,7 @@ function getObjectSchema(metaclass,nextfunc){
   if (metaclass) {search_filter["meta_name"]=metaclass;
 	db.findone("meta_class",search_filter, nextfunc);};
 
-/// Добавить обработку ошики если metaclass не указан	
+/// Р”РѕР±Р°РІРёС‚СЊ РѕР±СЂР°Р±РѕС‚РєСѓ РѕС€РёРєРё РµСЃР»Рё metaclass РЅРµ СѓРєР°Р·Р°РЅ	
  	/*db.get().collection("meta_class").findOne(
 				search_filter
 			,  nextfunc);*/
@@ -44,7 +44,7 @@ function getMethodSchema(meta_class,meta_method,nextfunc){
 			}else if(!schema_method&&(meta_method=='new'||meta_method=='edit')) {	
 				getObjectSchema(meta_class,callback);
 			}else if(!doc&&meta_method=='delete'){
-///можно поставить рекурсию но пока не будем		getMethodSchema('default','delete',nextfunc)	
+///РјРѕР¶РЅРѕ РїРѕСЃС‚Р°РІРёС‚СЊ СЂРµРєСѓСЂСЃРёСЋ РЅРѕ РїРѕРєР° РЅРµ Р±СѓРґРµРј		getMethodSchema('default','delete',nextfunc)	
 				search_filter={
 					'meta_class': 'default',
 					'meta_name': 'delete'
@@ -54,7 +54,7 @@ function getMethodSchema(meta_class,meta_method,nextfunc){
 
  			   callback ({
 				'error': 'no_schema',
-				'msg': 'Не определена схема для операции'
+				'msg': 'РќРµ РѕРїСЂРµРґРµР»РµРЅР° СЃС…РµРјР° РґР»СЏ РѕРїРµСЂР°С†РёРё'
 				});
 
 			};
@@ -76,6 +76,14 @@ function getobj(metaclass,this_id,nextfunc){
  console.log('getobj search '+JSON.stringify(search_filter));
  db.findone(metaclass,search_filter, nextfunc);
 };
+exports.getobj=getobj;
+
+function getobjbyfilter(metaclass,search_filter,nextfunc){
+ console.log('getobjbyfilter metaclass '+metaclass);
+ console.log('getobjbyfilter search '+JSON.stringify(search_filter));
+ db.findone(metaclass,search_filter, nextfunc);
+};
+exports.getobjbyfilter=getobjbyfilter;
 
 function getobjfull(metaclass,this_id,nextfunc){
 	async.parallel({
@@ -86,16 +94,36 @@ function getobjfull(metaclass,this_id,nextfunc){
   		nextfunc
  	);
 };
- 
+exports.getobjfull=getobjfull;
 
-exports.init_method=function(meta_class,meta_method,obj_list,nextfunc) {
+/// РїРѕР»СѓС‡РёС‚СЊ РѕР±СЉРµРєС‚ РєРѕР»Р»РµРєС†РёРё  
+// metaclass - РёРјСЏ РґРѕС‡РµСЂРЅРµРіРѕ РјРµС‚Р° РєР»Р°СЃСЃР° 
+// collection - {meta_parent_field:'РёРјСЏ РїРѕР»СЏ',meta_parent_value:'Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ'} 
+ 
+function getchildobj (metaclass,collection,nextfunc){
+        var search_filter={};
+        if (collection&&collection.meta_parent_field){
+		search_filter[collection.meta_parent_field]=collection.meta_parent_value; 
+	};
+
+ 	async.parallel({
+		"schema":getObjectSchema.bind(null,metaclass),
+		"value": getobjbyfilter.bind(null,metaclass,search_filter)
+	},
+  		nextfunc
+ 	);
+};
+exports.getchildobj =getchildobj;
+
+
+function init_method(meta_class,meta_method,obj_list,nextfunc) {
  console.log('init_method meta_class '+meta_class);
  console.log('init_method meta_method '+meta_method);
  console.log('init_method obj_list '+obj_list);
 
  	if (meta_class=='undefined'||meta_method=='undefined') {
 	return	{ 		'error': 'no_class',
-				'msg': 'Не определен класс или операция'
+				'msg': 'РќРµ РѕРїСЂРµРґРµР»РµРЅ РєР»Р°СЃСЃ РёР»Рё РѕРїРµСЂР°С†РёСЏ'
 			};
 	
 	};
@@ -118,7 +146,7 @@ exports.init_method=function(meta_class,meta_method,obj_list,nextfunc) {
 			((!obj_list) || (obj_list.length === 0))) {
 			nextfunc({
 				'error': 'no_objectlist',
-				'msg': 'Не выбраны документы'
+				'msg': 'РќРµ РІС‹Р±СЂР°РЅС‹ РґРѕРєСѓРјРµРЅС‚С‹'
 			})
 		} else {
 			nextfunc(null,results);
@@ -126,8 +154,9 @@ exports.init_method=function(meta_class,meta_method,obj_list,nextfunc) {
 	});
 
 };
+exports.init_method=init_method;
 
 
 
 ////////////////////////////////////////
-exports.getobj=getobj;
+

@@ -517,20 +517,16 @@ return;
  
 				if (collectname=='meta_class') 
 					{model['data']= get_gridcols_from_class(model)};	
-				if (vfilter&&user_filter)
+				if (user_filter)
 					{  
-					 filter['and'].push(vfilter)    ;
 					 filter['and'].push(user_filter);
 					}
-				else if (vfilter) {
+console.log(vfilter);
+				if (vfilter) {
 					 filter['and'].push(vfilter)    ;
 				}
- 
-
-				else if (user_filter) {
- 					filter=user_filter; 
-				};
-				if (collection&&collection.meta_parent_field){
+console.log(filter); 
+                        	if (collection&&collection.meta_parent_field){
 				var colfilt={};
 				colfilt[collection.meta_parent_field]=collection.meta_parent_value; 
 					 filter['and'].push(colfilt);
@@ -543,7 +539,7 @@ return;
 var aggreg=get_aggregate_params(filter,model.data.colmodel);
  
 //console.log('view aggreg');
-// console.log(JSON.stringify(aggreg,4,4));
+ console.log(JSON.stringify(aggreg,4,4));
 
   			dbloc.collection(meta_class).aggregate(
    				aggreg).toArray(function (err, rows) {
