@@ -1,4 +1,5 @@
 ﻿{
+    "_id": "5a2702cb80f4900b48ea24fe",
     "meta_name": "create_request",
     "meta_class": "person_request",
     "data": {
@@ -7,6 +8,7 @@
         "objectlist": "0",
         "required": true,
         "title": "Подать заявку",
+        "type": "object",
         "properties": {
             "fio": {
                 "required": true,
@@ -55,6 +57,7 @@
                 "required": true,
                 "title": "Продукт",
                 "type": "string",
+                "readOnly":true,
                 "enum": [
                     "Кредит/Займ",
                     "Гарантия",
@@ -64,6 +67,7 @@
             "goal": {
                 "required": true,
                 "title": "Цель привлечения  финансирования",
+                "readOnly":true,
                 "type": "string",
                 "enum": [
                     "Капитальные вложения",
@@ -71,17 +75,20 @@
                 ]
             },
             "fin_amount": {
+                "readOnly":true,
                 "required": true,
                 "title": "Сумма финансирования (тыс.руб)",
                 "type": "integer",
                 "description": "Размер запрашиваемого  финансирования;"
             },
             "fin_period": {
+                "readOnly":true,
                 "required": true,
                 "title": "Срок финансирования (мес)",
                 "type": "integer"
             },
             "program_id": {
+                "readOnly":true,
                 "type": "string",
                 "title": "Программа",
                 "meta_ref": {
@@ -100,8 +107,6 @@
                     ]
                 }
             }
-
-
         }
     },
     "this_meta_class": "meta_method"

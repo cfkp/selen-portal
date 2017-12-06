@@ -271,7 +271,7 @@ log.info({req:req},'start');
  	
 	set$.state=new_state;
 	
- 	set$.user_expert=userID;
+ 	set$.user_expert=data.expert_user;
  	var obj_id;
 	if (req.body.objectlist) {
  		 obj_id = req.body.objectlist[0];
@@ -564,7 +564,7 @@ log.info({req:req},'start');
 //			console.log('res ' +JSON.stringify(res,4,4));   
 
 		 	if (res.user.state='new'&&institute&&institute==='Корпорация МСП'){
-	 			mailer('a.shemardin@selen-it.ru','Заявка на финансирование',null,'registerwithpersreq',res);
+	 			mailer(user.email,'Заявка на финансирование',null,'registerwithpersreq',res);
  			        callback(null,{'msg':{'type':'msg','msg': 'Ваша заявка зарегистрирована, для подтверждения Вам выслано письмо.'}})
 
 			}else if (res.user.state='work'&&institute&&institute==='Корпорация МСП'){
@@ -572,7 +572,7 @@ log.info({req:req},'start');
  			        callback(null,{'msg':{'type':'msg','msg': 'Ваша заявка зарегистрирована в вашем Личном кабинете, для работы с ней зайдите в личный кабинет'}})
 			}
 			else if (institute&&(institute==='ФРП'||institute==='МСП Банк'))
-			{ mailer('a.shemardin@selen-it.ru','Заявка на финансирование',null,'no_registerwithpersreq',res);
+			{ mailer(user.email,'Заявка на финансирование',null,'no_registerwithpersreq',res);
 
  			        callback(null,{'msg':{'type':'msg','msg': 'Ваша заявка зарегистрирована, для подтверждения Вам выслано письмо.'}})
    			} 
