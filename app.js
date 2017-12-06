@@ -38,7 +38,7 @@ app.use(session({
 }));
 
 app.use(require('middleware/sendHttpError'));
-app.use(require('middleware/loadUser'));
+app.use(require('middleware/session').setCurrentUser);
 
 app.use(function(err, req, res, next) {
   if (typeof err == 'number') { // next(404);
@@ -48,13 +48,14 @@ app.use(function(err, req, res, next) {
   if (err instanceof HttpError) {
     res.sendHttpError(err);
   } else {
-    if (app.get('env') == 'development') {
+   /* if (app.get('env') == 'development') {
      express.errorHandler()(err, req, res, next);
-     } else {
+     } else { */
+console.log("error "+err);
       log.error(err );
       err = new HttpError(500);
       res.sendHttpError(err);
-    }
+   // }       */
   }
 });
 

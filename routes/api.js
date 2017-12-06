@@ -15,8 +15,11 @@ var mailer = require('../middleware/sendmail'); //-- Your js file path
 var checkAuth = require('../middleware/checkAuth');
 var ObjectID = require('mongodb').ObjectID;
 
+var pers_req = require('../db/person_request');
+
+
 router.all('/', checkAuth, function (request, response, next) {
-log.info({req:req},"router.all");
+	log.info({req:req},"router.all");
 
 	next();
 });
@@ -29,49 +32,18 @@ log.info({req:req},'start');
 	var parent_name = req.params.parent_name;
 	var parent_id = req.params.parent_id;
 
-	/////////////////////////
-	var dbloc = db.get();
- 
-	async.parallel({
-		"schema": function (callback) {
-			var result = {};
- 
-			db.get().collection("meta_class").findOne({
-				'meta_name': meta_class
-			}, function (err, doc) {
- 				if (doc) {
-					result = doc;
-				};
-				//console.log(result);
-
-				if (err)
-					return next(err);
-				callback(err, result);
-			});
-		},
-		"value": function (callback) {
-			var result = {};
- 			var search_filter = {};
-			search_filter[parent_name] = parent_id;
-			/*		if (meta_name!="user_createid" ){ search_filter={"name":meta_value}}
-			else{ search_filter={"user_created":userID };}	*/
- 
-			db.get().collection(meta_class).findOne(search_filter, function (err, doc) {
-				if (err) {
- 					return next(err);
-				}
-
- 				if (doc) {
- 					result = doc;
-				}
-				callback(err, result);
-			});
+ 	var child_coll ={'meta_parent_field':parent_name,'meta_parent_value':parent_id}; 
+ 	
+	async.waterfall(
+		[objlib.getchildobj.bind(null,meta_class,child_coll) 
+		],
+	        function (err, result) {
+ 			if (err){res.status(500).send(err)}else {
+			res.json(result);		
+			};
 		}
-	},
-		function (err, results) {
- 		res.json(results);
- 	});
-});
+	);
+ });
 
 router.post('/saveobj/:meta_class/:parent_name/:parent_id',checkAuth, function (req, res, next) {
 log.info({req:req},'start');
@@ -153,73 +125,22 @@ log.debug({req:req},'start');
 	var meta_name = "name";
 	var meta_value = "client_menu";
 	var search_filter = {};
-
-
-	if (req.user.role)
-		{  search_filter = { "_id": req.user.role.data.user_menu};
+	if (req.user.role){
+		search_filter = { "_id": req.user.role.data.user_menu};
  		}
 	else {					
 		search_filter = { "name": "person_menu"};
 	};
- 	var dbloc = db.get();
 
-	async.waterfall([
- 			function ( callback) {
- 
-				var result = {};
- 				db.get().collection(meta_class).findOne(search_filter, function (err, doc) {
-					if (err) {
- 						return next(err);
-					}
-
- 					if (doc) {
- 						result["value"] = doc;
-					}
-					callback(err, result);
-				});
-			}
-		],
+	async.parallel({
+ 			'value':objlib.getobjbyfilter.bind(null,meta_class,search_filter)
+		},
 		function (err, results) {
- 		res.json(results);
-		/*                if (!results.schema) {res.status(500).send({'error':'no_data_found'})}
-		else {res.json(results);}*/
-	});
-});
-
-router.post('/load_tab_menu',checkAuth, function (req, res, next) {
-log.debug({req:req},'start');
-	var userID = req.session.user;
-	var meta_class = "meta_menu";
-	var meta_name = "name";
-	var meta_value = "request_detail_menu";
-
-	/////////////////////////
-	var dbloc = db.get();
- 
-	async.waterfall([
-			function (callback) {
-
-				var result = {};
- 				var search_filter = {
-					"name": meta_value
-				};
- 
-				db.get().collection(meta_class).findOne(search_filter, function (err, doc) {
-					if (err) {
- 						return next(err);
-					}
-
- 					if (doc) {
- 						result["value"] = doc;
-					}
-					callback(err, result);
-				});
-			}
-		],
-		function (err, results) {
- 		res.json(results);
-		/*                if (!results.schema) {res.status(500).send({'error':'no_data_found'})}
-		else {res.json(results);}*/
+		if (err){res.status(500).send(err)}else {
+		//var result={};
+		//result['value']= results;
+		res.json(results);		
+		};
 	});
 });
 
@@ -231,308 +152,59 @@ log.debug({req:req},'start');
 	var meta_value = req.params.menu_name;
 
 	/////////////////////////
-	var dbloc = db.get();
- 
-	async.waterfall([
-			function (callback) {
-
-				var result = {};
- 				var search_filter = {
-					"name": meta_value
-				};
-
- 
-				db.get().collection(meta_class).findOne(search_filter, function (err, doc) {
-					if (err) {
- 						return next(err);
-					}
-
- 					if (doc) {
- 						result["value"] = doc;
-					}
-					callback(err, result);
-				});
-			}
-		],
-		function (err, results) {
- 		res.json(results);
-		/*                if (!results.schema) {res.status(500).send({'error':'no_data_found'})}
-		else {res.json(results);}*/
-	});
-});
-
-router.post('/callmethod/person_request/edit_request/init',checkAuth, function (req, res, next) {
-log.info({req:req},'start');
- 
-	var userID = req.session.user;
-	var meta_class = "person_request";
-	var meta_method = "edit_request";
-	var meta_action = "init";
-
-	/////////////////////////
-	var dbloc = db.get();
- 
-	async.parallel({
- 		"schema": function (callback) {
-
-			var result = {};
- 
-			db.get().collection("meta_method").findOne({
-				'meta_class': meta_class,
-				'meta_name': meta_method
-			}, function (err, doc) {
- 				if (doc) {
-					result = doc;
-				};
- 
-				if (err)
-					return next(err);
-				callback(null, result);
-			});
-		},
-		"value": function (callback) {
-			var result = {};
- 			result = {};
-			if (req.body.objectlist) {
- 				var o_id = req.body.objectlist[0];
-				db.get().collection(meta_class).findOne({
-					"_id": o_id
-				}, function (err, doc) {
-
-					if (doc) {
-						if (doc.state !== "Новый") {
-							callback({
-								'error': 'no_edit_right',
-								'msg': 'Документ не в состоянии "Новый"'
-							});
-							return;
-						};
-						result = doc;
-					};
- 
-					callback(null, result);
-				});
-			} else {
-				callback(null, result);
+	var search_filter = {
+			"name": meta_value
 			};
-		}
-	},
-		function (err, results) {
- 		if (err) {
-			res.status(500).send(err);
-			return;
-		};
-		if ((results.schema.data.objectlist !== undefined) && (results.schema.data.objectlist == "1") &&
-			((!req.body.objectlist) || (req.body.objectlist.length === 0))) {
-			res.status(500).send({
-				'error': 'no_objectlist',
-				'msg': 'Не выбраны документы'
-			})
-		} else {
-			res.json(results);
-		}
-	});
 
+	async.parallel({
+ 			'value':objlib.getobjbyfilter.bind(null,meta_class,search_filter)
+		},
+		function (err, results) {
+		if (err){res.status(500).send(err)}else {
+		//var result={};
+		//result['value']= results;
+		res.json(results);		
+		};
+	});
 });
-                                
-router.post('/callmethod/:meta_class/:meta_method/init',checkAuth, function (req, res, next) {
+
+
+router.post('/callmethod/:meta_class/:meta_method/init', function (req, res, next) {
 log.info({req:req},'start');
- 	
 	var userID = req.session.user;
 	var meta_class = req.params.meta_class;
 	var meta_method = req.params.meta_method;
 	var meta_action = req.params.meta_action;
-
-	if (meta_class=='undefined'||meta_method=='undefined') {
-	return	res.status(500).send({
-				'error': 'no_class',
-				'msg': 'Не определен класс или операция'
-			})
 	
-	};
-	/////////////////////////
-	var dbloc = db.get();
- 
-	async.parallel({
+	async.waterfall(
+		[objlib.init_method.bind(null,meta_class,meta_method,req.body.objectlist),
+		function (meth,callback) {  
+			console.log('after init '+JSON.stringify (meth));
+ 			if (meth.value
+				&&meth.value.state
+				&&meth.value.state !== "Новый"
+				&&meth.schema.meta_name=='edit'
+				&&meth.schema.meta_class=='person_request') {
+				callback({'error': 'no_edit_right',
+					'msg': 'Документ не в состоянии "Новый"'
+					});
+										}
+ 			else {
+			callback(null,meth);
+			}}
+		],
+	        function (err, result) {
 
-		"schema": function (callback) {
-
-			var result = {};
- 
-			db.get().collection("meta_method").findOne({
-				'meta_class': meta_class,
-				'meta_name': meta_method
-			}, function (err, doc) {
- 				if (doc) {
-					result = doc;
-					callback(null, result); 
-				}else if(!doc&&(meta_method=='new'||meta_method=='edit'))
-				{
- 				   db.get().collection("meta_class").findOne({
-					'meta_name': meta_class}, function (err, doc) {
- 
-					if (doc&&doc.data) {
-						doc.data["meta_class"]=meta_class;
-						doc.data["meta_method"]=meta_method;
-					if (meta_method=='edit')
-						{doc.data["objectlist"]=1};
-					result = doc;
-                                 	};
-				if (err)
-					return next(err);
-				callback(null, doc);
-
-				 });
-				}else if(!doc&&meta_method=='delete')
-				{
- 				   db.get().collection("meta_method").findOne({
-					'meta_class': 'default','meta_name':'delete'}, function (err, doc) {
- 
-					if (doc&&doc.data) {
-						doc.data["meta_class"]=meta_class;
-						doc.data["meta_method"]=meta_method;
- 					result = doc;
-                                 	};
-				if (err)
-					return next(err);
-				callback(null, doc);
-
-				 });
-				} 
- 
-				if (err)
-					return next(err);
- 			});
-		},
-		"value": function (callback) {
-			var result = {};
- 			result = {};
-			if (req.body.objectlist) {
- 				var o_id = req.body.objectlist[0];
-				db.get().collection(meta_class).findOne({
-					"_id": o_id
-				}, function (err, doc) {  
- 					if (doc) {
-						if (doc.state&&doc.state !== "Новый"&&meta_method=='edit'&&meta_class=='person_request') {
-							callback({
-								'error': 'no_edit_right',
-								'msg': 'Документ не в состоянии "Новый"'
-							});
-							return;
-						};
-						result = doc;
-					};
- 					callback(null, result);
-				});
-			} else {
-				callback(null, result);
-			};
-		}
-	},
-		function (err, results) {
- 		if (err) {
-			res.status(500).send(err);
-			return;
+		if (err){res.status(500).send(err)}else {
+		res.json(result);		
 		};
+	}
+	);
 
-		if (_.isEmpty(results.schema)) {
- 	
-	return	res.status(500).send({
-				'error': 'no_schema',
-				'msg': 'Не определена схема для операции'
-			})
-		
-		};
-		if ((results.schema.data.objectlist !== undefined) && (results.schema.data.objectlist == "1") &&
-			((!req.body.objectlist) || (req.body.objectlist.length === 0))) {
-			res.status(500).send({
-				'error': 'no_objectlist',
-				'msg': 'Не выбраны документы'
-			})
-		} else {
-			res.json(results);
-		}
-	});
+});    
 
-});
+                            
 
-router.post('/callmethod/garant_request/create_request/execute',checkAuth, function (req, res, next) {
-log.info({req:req},'start');
- 	var userID = req.session.user;
-	var meta_class = 'garant_request'; //req.params.meta_class;
-	var meta_method = 'create_request'; //req.params.meta_method;
-	var meta_action = 'execute'; // req.params.meta_action;
-
-	/////////////////////////
-	var dbloc = db.get();
-
-	async.parallel({
-		"enterprise":
-		function (callback) {
-			var result = {};
-			var meta_class = 'enterprise';
- 			db.get().collection(meta_class).findOne({
-				'user_createid': userID
-			}, function (err, doc) {
-				if (err) {
- 					return next(err);
-				}
-
- 				if (doc) {
- 					result = doc;
-				}
-				callback(err, result);
-			});
-		},
-		"project":
-		function (callback) {
-			var result = {};
-			var meta_class = 'project';
- 			db.get().collection(meta_class).findOne({
-				'user_createid': userID
-			}, function (err, doc) {
-				if (err) {
- 					return next(err);
-				}
-
- 				if (doc) {
- 					result = doc;
-				}
-				callback(err, result);
-			});
-		}
-
-	},
-		function (err, results) {
- 		var data = results;
-		data.comment = req.body.comment;
-		data.bank = req.body.bank;
-		data.state = "Новый";
-
-		var row = {
-			"created": Date.now,
-			"user_createid": userID,
-			"data": data
-		};
-
- 		dbloc.collection(meta_class).save(row, function (err, docs) {
- 
-			if (err || docs.result === undefined) {
-				log.error({req:req},'Error inserting document', err);
-				//res.status(400).json({'msg': 'Error inserting document'});
-			} else {
-				var dataReturn = '';
-				if (docs.ops) {
- 
-					dataReturn = docs.ops[0]._id;
-				}
- 			}
-
-			res.json(dataReturn);
-		});
-
-	});
-});
  
 router.post('/callmethod/person_request/process_request/execute',checkAuth, function (req, res, next) {
 log.info({req:req},'start');
@@ -567,7 +239,7 @@ log.info({req:req},'start');
 	dbloc.collection(meta_class).updateOne({
 		"_id": obj_id
 	}, {
-		
+		                
 		$set: set$
 		
 	}, function (err, docs) {
@@ -582,6 +254,7 @@ log.info({req:req},'start');
 	
 	});
 });
+
 router.post('/callmethod/person_request/set_expert/execute',checkAuth, function (req, res, next) {
 log.info({req:req},'start');
  
@@ -598,7 +271,7 @@ log.info({req:req},'start');
  	
 	set$.state=new_state;
 	
- 	set$.user_expert=userID;
+ 	set$.user_expert=data.expert_user;
  	var obj_id;
 	if (req.body.objectlist) {
  		 obj_id = req.body.objectlist[0];
@@ -650,17 +323,11 @@ log.info({req:req},'start');
 	};
 
 	async.waterfall([
-//			function (callback) {
-                                //objlib.getobj(meta_class,obj_id,callback)
 			function (callback) {
-				var search_filter = {};
-				search_filter['_id'] = obj_id;
-                                console.log('search_filter'+search_filter);
-				db.get().collection(meta_class).findOne(search_filter, callback);
-
+                        objlib.getobj(meta_class,obj_id,callback);
 			},
 			function (obj,callback) {
-			console.log(obj);
+			console.log("callback "+obj);
 			if  (!obj||obj==null ){callback({
 			'error': 'no_object',
 			'msg': 'Не найден документ'
@@ -849,6 +516,81 @@ log.info({req:req},'start');
 	});
 
 });
+
+
+router.post('/callmethod/person_request/create_request/execute', function (req, res, next) {
+log.info({req:req},'start');
+ 
+	var userID =  req.session.user ;
+	var meta_class = req.params.meta_class;
+	var meta_method = req.params.meta_method;
+	var meta_action = req.params.meta_action;
+ 	var data = req.body.data;
+ 	if (meta_class=='undefined'||meta_method=='undefined') {
+	return	res.status(500).send({
+				'error': 'no_class',
+				'msg': 'Не определен класс или операция'
+			})
+	
+	};
+
+ 	var sysdate= new Date().toISOString();
+	var obj_id;
+	var institute;
+	obj_id = new ObjectID().toString();
+	/// ищем продукт в каталоге продуктов   	
+        if  (!(data&&data.program_id)) {
+		return	res.status(500).send({
+				'error': 'no_program_id',
+				'msg': 'Не указана програма'
+			})
+	
+	};
+
+
+	async.waterfall(
+		[objlib.getobj.bind(null,'cfkp_product',data.program_id),
+		function  (programm,callback) {
+			if (!programm)
+			{callback({
+				'error': 'no_program_id',
+				'msg': 'Не указана програма c id='+data.program_id})
+				};
+			institute=programm.data.program.institute;
+ 			pers_req.create_NewUser_pers_request(data,callback);
+ 
+ 		},
+		function  (res, callback) {
+//			console.log('res ' +JSON.stringify(res,4,4));   
+
+		 	if (res.user.state='new'&&institute&&institute==='Корпорация МСП'){
+	 			mailer(user.email,'Заявка на финансирование',null,'registerwithpersreq',res);
+ 			        callback(null,{'msg':{'type':'msg','msg': 'Ваша заявка зарегистрирована, для подтверждения Вам выслано письмо.'}})
+
+			}else if (res.user.state='work'&&institute&&institute==='Корпорация МСП'){
+//	 			mailer('a.shemardin@selen-it.ru','Заявка на финансирование',null,'registerwithpersreq',res);
+ 			        callback(null,{'msg':{'type':'msg','msg': 'Ваша заявка зарегистрирована в вашем Личном кабинете, для работы с ней зайдите в личный кабинет'}})
+			}
+			else if (institute&&(institute==='ФРП'||institute==='МСП Банк'))
+			{ mailer(user.email,'Заявка на финансирование',null,'no_registerwithpersreq',res);
+
+ 			        callback(null,{'msg':{'type':'msg','msg': 'Ваша заявка зарегистрирована, для подтверждения Вам выслано письмо.'}})
+   			} 
+			else  {
+ 			        callback({'msg':{'type':'error','msg': 'Указана програма c неизвестным институтом'+institute}})
+
+ 			}  
+ 		}
+
+		],
+	        function (err, result) {
+ 			if (err){res.status(500).send(err)}else {
+			res.json(result);		
+			};
+		}
+	);
+});
+
 
 
 router.post('/callmethod/:meta_class/:meta_method/execute',checkAuth, function (req, res, next) {

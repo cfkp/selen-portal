@@ -2,8 +2,11 @@ var db = require('../db/db');
 var async = require('async');
 var https = require('http');
 var ObjectID = require('mongodb').ObjectID;
+var User = require('models/user').User;
+
 
 var config = require('config');
+var sess=require('middleware/session');
 var log = require('libs/log')(module);
 
 
@@ -24,16 +27,13 @@ var create_request=function(userID,fio,phone,fin_amount,fin_period,program_id,en
 	"program_id":program_id,
 	"goal":goal
      };
-
     var row = {_id:new ObjectID().toString(),user_createid :userID,created:sysdate,
 			this_meta_class:"person_request",
-need_ext_load:true,state:'Новый', data: pers_req };
-log.info( {row:row},'create_request');
+			need_ext_load:true,state:'Новый', data: pers_req };
+		log.info( {row:row},'create_request');
  	        dbloc.collection("person_request").save(row, function (err, docs){
-	
- 
-            if(err || docs.result === undefined){
- 	log.error( {row:row},'create_request');
+             if(err || docs.result === undefined){
+ 		log.error( {row:row},'create_request');
              }else{  }
                 });
 }; 
@@ -115,6 +115,62 @@ log.info( {userID:userID},'update_newuser_request');
 
 
  }; 
+
+
+var create_NewUser_pers_request=function(pers_data,next) {
+
+   var pers_req={
+	"email": pers_data.email,
+        "fio": pers_data.fio,
+        "phone": pers_data.phone,
+        "project_name": pers_data.project_name,
+	"product":pers_data.product,
+        "INN": pers_data.INN,
+        "fin_amount": pers_data.fin_amount,
+        "fin_period": pers_data.fin_period,
+	"program_id":pers_data.program_id,
+	"goal":pers_data.goal
+     };
+var user$;
+	async.waterfall([
+			function (callback) {
+	console.log('create_NewUser_pers_request check_user');
+				if (!sess.CurrentUserId())
+				{
+					console.log('create_NewUser_pers_request check_user no find or create user');
+
+				User.authorize(3,pers_data.email,pers_data.fio ,null,pers_data.phone ,callback);
+				}
+				else {callback(null,sess.CurrentUserId())};
+				
+			},
+			function (user,callback){
+			user$=user;
+	console.log('set_current_user'+user$);
+		
+			if (!sess.CurrentUserId())
+			        {console.log('set_current_user1' );
+				sess.setCurrentUserbyID(user._id,callback);}
+			else {console.log('set_current_user2' );callback(null)}
+			},
+			function (callback) {   
+	console.log('create_request'+user$);console.log('create_request'+callback);
+			    db.save_obj("person_request",pers_req,function(err,row){
+				callback(err,{"user":user$,"pers_req":row})}); 
+ 			}
+
+		],
+		function (err, results) {
+		next(err,results);
+ 	});
+
+
+
+
+
+}; 
+exports.create_NewUser_pers_request=create_NewUser_pers_request;
+
 
 
 exports.create_request=create_request;

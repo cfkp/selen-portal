@@ -8,7 +8,11 @@
 <h1> <%= rows[i].data.program.institute%> </h1>
 <h1> <%= rows[i].data.program.product%> </h1>
 <h3><%= rows[i].data.program.name%></h3>
-<p><a href="../login?mode=registration&program_id=<%= rows[i]._id%>&<%= formparam%>" target="_blank" class="btn btn-primary" role="button">Оформить заявку</a> 
+<p>
+<% formparam['program_id']=rows[i]._id %>
+<button  class="btn btn-primary" role="button" 
+onclick='new SelenMethod(undefined,"person_request", "create_request",null, <%= JSON.stringify(formparam)%> )'>Оформить заявку</button> 
+
 
 <div class="panel-group" id="acrd<%= rows[i]._id%>">
   <div class="panel panel-default">

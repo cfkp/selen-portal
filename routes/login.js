@@ -121,8 +121,7 @@ router.get('/registration', function (req, res, next) {
 							}
 						},
 			function (err, docs) {
- 		
-		if (err || (!docs)|| (docs.result.n==0)) {
+ 		if (err || (!docs)|| (docs.result.n==0)) {
 		//	res.status(400).json({'msg': 'Ошибка регистрации пользователь не найден'});
 		  res.render('regfinish',{'msg':{'type':'error','msg': 'Ошибка регистрации пользователь не найден'}});
 
@@ -141,5 +140,40 @@ router.get('/registration', function (req, res, next) {
  	
 });
 
+router.get('/confirm_request', function (req, res, next) {
+
+       log.info({req:req},"confirm_request");
+
+	var userID = req.session.user;
+	var meta_class = "person_request";
+
+	/////////////////////////
+	var dbloc = db.get();
+	var new_state="Экспертиза";
+	var obj_id = req.query.confirm;//new ObjectID(req.query.confirm);
+
+	dbloc.collection(meta_class).updateOne({
+						"_id": obj_id
+						}, 
+						{
+						$set: {
+						"state": new_state
+							}
+						},
+			function (err, docs) {
+ 		if (err || (!docs)|| (docs.result.n==0)) {
+		  res.render('regfinish',{'msg':{'type':'error','msg': 'Ошибка подтверждения, заявка не найдена'}});
+
+		} else {
+
+		  res.render('regfinish',{'msg':{'type':'message','msg':  "Спасибо. В ближайшее время с Вами свяжется специалист"}});
+
+		}
+ 
+
+ 	}); 
+	
+ 	
+});
 
 module.exports = router;

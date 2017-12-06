@@ -14,8 +14,14 @@ else{
   };
   */
 window.addEventListener('error', function (e) {
+console.log("Url  ="+document.location);
+console.log("PathName  ="+ window.location.pathname);// Returns path only
+console.log("url  ="+window.location.href);// Returns full URL
+
     var error = e.error;
-if (error.name&&error.name==='SelenError'){messagedlg(error.errobj);}
+if ((error.name&&error.name==='SelenError'|| error instanceof SelenError )
+	&&!(error.errobj.error=='not_authorized' &&window.location.pathname=='/login'))
+	{messagedlg(error.errobj);}
 
  });
 
@@ -35,7 +41,8 @@ if (error.name&&error.name==='SelenError'){messagedlg(error.errobj);}
 	BrutusinForms.bootstrap.addFormatDecorator("date", "date");
  //selen_view=new SelenView($('#test_workspace'),'person_request','vw_persrequests');
 //selen_view = new SelenView($('#test_workspace'),'person_request','vw_expert_persrequests');
-main_menu  = new SelenMenu(undefined,'main_menu');
+if  (window.location.pathname!=='/login'&&window.location.pathname!=='/cfkp_calculate.html'){
+main_menu  = new SelenMenu(undefined,'main_menu'); }
 //selen_view=new SelenView($('#test_workspace'),'users','vw_user_property');
 //   	load_main_menu();
 
