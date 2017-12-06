@@ -15,6 +15,9 @@ var mailer = require('../middleware/sendmail'); //-- Your js file path
 var checkAuth = require('../middleware/checkAuth');
 var ObjectID = require('mongodb').ObjectID;
 
+var pers_req = require('../db/person_request');
+
+
 router.all('/', checkAuth, function (request, response, next) {
 	log.info({req:req},"router.all");
 
@@ -166,7 +169,7 @@ log.debug({req:req},'start');
 });
 
 
-router.post('/callmethod/:meta_class/:meta_method/init',checkAuth, function (req, res, next) {
+router.post('/callmethod/:meta_class/:meta_method/init', function (req, res, next) {
 log.info({req:req},'start');
 	var userID = req.session.user;
 	var meta_class = req.params.meta_class;
@@ -513,6 +516,81 @@ log.info({req:req},'start');
 	});
 
 });
+
+
+router.post('/callmethod/person_request/create_request/execute', function (req, res, next) {
+log.info({req:req},'start');
+ 
+	var userID =  req.session.user ;
+	var meta_class = req.params.meta_class;
+	var meta_method = req.params.meta_method;
+	var meta_action = req.params.meta_action;
+ 	var data = req.body.data;
+ 	if (meta_class=='undefined'||meta_method=='undefined') {
+	return	res.status(500).send({
+				'error': 'no_class',
+				'msg': 'Не определен класс или операция'
+			})
+	
+	};
+
+ 	var sysdate= new Date().toISOString();
+	var obj_id;
+	var institute;
+	obj_id = new ObjectID().toString();
+	/// ищем продукт в каталоге продуктов   	
+        if  (!(data&&data.program_id)) {
+		return	res.status(500).send({
+				'error': 'no_program_id',
+				'msg': 'Не указана програма'
+			})
+	
+	};
+
+
+	async.waterfall(
+		[objlib.getobj.bind(null,'cfkp_product',data.program_id),
+		function  (programm,callback) {
+			if (!programm)
+			{callback({
+				'error': 'no_program_id',
+				'msg': 'Не указана програма c id='+data.program_id})
+				};
+			institute=programm.data.program.institute;
+ 			pers_req.create_NewUser_pers_request(data,callback);
+ 
+ 		},
+		function  (res, callback) {
+//			console.log('res ' +JSON.stringify(res,4,4));   
+
+		 	if (res.user.state='new'&&institute&&institute==='Корпорация МСП'){
+	 			mailer('a.shemardin@selen-it.ru','Заявка на финансирование',null,'registerwithpersreq',res);
+ 			        callback(null,{'msg':{'type':'msg','msg': 'Ваша заявка зарегистрирована, для подтверждения Вам выслано письмо.'}})
+
+			}else if (res.user.state='work'&&institute&&institute==='Корпорация МСП'){
+//	 			mailer('a.shemardin@selen-it.ru','Заявка на финансирование',null,'registerwithpersreq',res);
+ 			        callback(null,{'msg':{'type':'msg','msg': 'Ваша заявка зарегистрирована в вашем Личном кабинете, для работы с ней зайдите в личный кабинет'}})
+			}
+			else if (institute&&(institute==='ФРП'||institute==='МСП Банк'))
+			{ mailer('a.shemardin@selen-it.ru','Заявка на финансирование',null,'no_registerwithpersreq',res);
+
+ 			        callback(null,{'msg':{'type':'msg','msg': 'Ваша заявка зарегистрирована, для подтверждения Вам выслано письмо.'}})
+   			} 
+			else  {
+ 			        callback({'msg':{'type':'error','msg': 'Указана програма c неизвестным институтом'+institute}})
+
+ 			}  
+ 		}
+
+		],
+	        function (err, result) {
+ 			if (err){res.status(500).send(err)}else {
+			res.json(result);		
+			};
+		}
+	);
+});
+
 
 
 router.post('/callmethod/:meta_class/:meta_method/execute',checkAuth, function (req, res, next) {

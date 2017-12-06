@@ -29,14 +29,17 @@ return id_cont;
 class SelenView {
 
   constructor(parentobj,_meta_class,_meta_view) 
-{       this.parent=parentobj;
+{       var obj_container;
+	if (parentobj) {
+	this.parent=parentobj;
 	this.parent_container=this.parent.container;
+	}else {this.parent_container=$('#refview .modal-body')}
 
-	var obj_container = $('<div></div>'); 
+	obj_container = $('<div></div>'); 
 	obj_container.attr('class','sln_container');	 
 	obj_container.attr('id','sln_cnt'+_meta_view);
 	this.parent_container.append(obj_container);
-		
+	 		
 	this.container=obj_container;
 
 	this.container.attr('meta_class',_meta_class);
@@ -286,11 +289,12 @@ onSelectRow (elem,rowid, selected) {
 			this.detail.collection.meta_parent_value=rowid;
 
 			this.detail.meta_readonly="this.header.detail.readonly";
-			var reports = this.detail.container.find("#rep_menu")
+			if (this.methods&&this.methods.container) {
+			var reports = this.methods.container.find("#rep_menu")
 			if (reports) {
 				reports.find( "li a" ).each(function( index ) {
 					$( this ).attr("href",$( this ).attr("hreftempl").replace('<%=meta_parent_value%>',rowid))
-				});	
+				});	                           };
 			} 
 this.detail.Show();
 		//	detail_container.show();

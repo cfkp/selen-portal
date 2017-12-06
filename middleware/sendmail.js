@@ -24,6 +24,8 @@ var ejs = require('ejs')
   , fs = require('fs')
   , str = fs.readFileSync('template/email/'+templateName+'.ejs', 'utf8'); 
 
+data['server']=config.get('server');
+console.log('sendmail data '+JSON.stringify(data));
 var message = ejs.render(str, data);
  }
 

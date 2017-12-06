@@ -1,0 +1,20 @@
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<p>
+Уважаемый  <%=user.fio%>!<br> 
+Для Вас создан Личный кабинет находящийся по адресу: <a href="https://<%=server%>/login">Личный кабинет ЦФКП</a><br><br> 
+Ваш пароль  <%=user.firstpass%><br>
+Перейдите по указанной ссылке для окончания процедуры регистрации. <br>
+<a href="https://<%=server%>/login/registration?confirm=<%=user._id%>">Продолжить регистрацию</a><br>
+
+
+С уважением, администрация портала.
+</p>
+<%= JSON.stringify(user,4,4)%>
+<%= JSON.stringify(pers_req,4,4)%>
+<p></p>
+</body>
+	
+

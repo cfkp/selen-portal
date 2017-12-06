@@ -128,8 +128,6 @@ function init_method(meta_class,meta_method,obj_list,nextfunc) {
 	
 	};
 	/////////////////////////
-	var dbloc = db.get();
- 
 	async.parallel({
 
 		"schema": getMethodSchema.bind(null,meta_class,meta_method) ,

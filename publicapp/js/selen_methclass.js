@@ -2,19 +2,23 @@
  
 class SelenMethod {
 
-  constructor(parentobj,_meta_class,_meta_name,_objectlist) 
-{       this.parent=parentobj;
+  constructor(parentobj,_meta_class,_meta_name,_objectlist, def_data) 
+{       if (parentobj){
+	this.parent=parentobj;
 
 	this.parent_container=this.parent.container;
+
 	var obj_container = $('<div></div>'); 
 	obj_container.attr('class','sln_container');	 
 	obj_container.attr('id','sln_cnt'+_meta_name);
 	this.parent_container.append(obj_container);
 		
-	this.container=obj_container;
+	this.container=obj_container;}
+
 	this.modal_container=$('#method_execute');
         this.meta_class=_meta_class;
         this.meta_name=_meta_name;
+	this.def_data=def_data;
  	this.objectlist={};
 	if (_objectlist) {this.objectlist=_objectlist};
  	this.schema={};
@@ -41,16 +45,20 @@ class SelenMethod {
 	{
 	this.lastresponse= api_load_sync('callmethod/'+this.meta_class+'/'+this.meta_name+'/init', JSON.stringify({objectlist:this.objectlist}));
 	this.schema=this.lastresponse.responseJSON.schema;
+	 
 	this.value=this.lastresponse.responseJSON.value;
+ 	
 	}
-Execute(){
+   Execute(){
+	if (this.bf.validate()) {
 	this.data=this.bf.getData();
  	this.lastresponse=api_load_sync('callmethod/'+this.meta_class+'/'+this.meta_name+'/execute', JSON.stringify({objectlist:this.objectlist,collection:this.collection,data:this.data}));
  	$('#method_execute').modal('hide');
- 	if (this.parent&&this.parent.parent instanceof SelenView ) {
+ 	if (this.lastresponse.responseJSON.msg) {messagedlg(this.lastresponse.responseJSON.msg);};
+	if (this.parent&&this.parent.parent instanceof SelenView ) {
                                            this.parent.parent.refresh();
-};
-
+	};
+	};
 
 }
 
@@ -92,7 +100,9 @@ Show()
 	bfcont.empty();
 	this.bf = BrutusinForms.create(this.schema.data);
 	
- 	this.bf.render(bfcont[0], this.value.data);
+	if (this.value&&this.value.data){ 
+ 		this.bf.render(bfcont[0], this.value.data);}
+	else {this.bf.render(bfcont[0], this.def_data);};
 
  	this.modal_container.find('#method_title').html(this.schema.data.title);	
 	this.modal_container.find('#execute').unbind('click');

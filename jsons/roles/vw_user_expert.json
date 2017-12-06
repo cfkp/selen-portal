@@ -5,7 +5,7 @@
     "meta_class": "users",
     "data": {
         "meta_name": "vw_user_expert",
-        "title": "Эксперты",
+        "title": "Р­РєСЃРїРµСЂС‚С‹",
         "meta_class": "users",
         "colmodel": [
             {
@@ -19,15 +19,15 @@
                 "name": "email"
             },
             {
-                "label": "Фио",
+                "label": "Р¤РёРѕ",
                 "name": "fio"
             },
             {
-                "label": "Телефон",
+                "label": "РўРµР»РµС„РѕРЅ",
                 "name": "tel"
             },
             {
-                "label": "Роль",
+                "label": "Р РѕР»СЊ",
                 "name": "data.role.data.name",
                 "meta_ref": {
                     "meta_class": "roles",

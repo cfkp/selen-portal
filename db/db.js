@@ -1,8 +1,8 @@
 var MongoClient = require('mongodb').MongoClient
 var ObjectID = require('mongodb').ObjectID;
-
+var sess=require('../middleware/session');
  
-var   dbconnection=null ;  // глобальная переменная не обнуляется при запросах  
+var   dbconnection=null ;  // РіР»РѕР±Р°Р»СЊРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ РЅРµ РѕР±РЅСѓР»СЏРµС‚СЃСЏ РїСЂРё Р·Р°РїСЂРѕСЃР°С…  
 
 exports.connect = function(url, done) {
 
@@ -43,7 +43,7 @@ exports.audit=function(userid,meta_class,meta_method,obj_id,data){
   		var row = {"_id":id,
 			"created": sysdate ,
 			"this_meta_class":"audit",
-			"user_createid": userid,
+			"user_createid": sess.CurrentUserId(),
 			"meta_class":meta_class,
 			"meta_method":meta_method,
 			"object_id":obj_id,
@@ -73,7 +73,7 @@ exports.save_obj_hist=function(userid,meta_class,obj){
 		var row = {"_id":id,
 			"created": sysdate ,
 			this_meta_class:"object_history",
-			"user_createid": userid,
+			"user_createid": sess.CurrentUserId(),
 			"meta_class":meta_class,
 			"object_id":obj._id,
 			"object": obj
@@ -85,4 +85,32 @@ exports.save_obj_hist=function(userid,meta_class,obj){
 	};	
 
 };
+
+
+exports.save_obj=function(meta_class,data,callback){
+console.log('save_obj curuser '+sess.CurrentUserId());
+
+	var id = new ObjectID().toString();
+ 	var sysdate=   new Date().toISOString();
+
+ 	if (data){	
+		var row = {"_id":id,
+			"created": sysdate ,
+			this_meta_class:meta_class,
+			"user_createid": sess.CurrentUserId(),
+			"meta_class":meta_class, 
+			"state":"РќРѕРІС‹Р№",
+			"data":data
+		};
+
+		dbconnection.collection(meta_class).save(row, function (err, docs) { 
+
+			callback(err,row)
+
+		});
+	
+	}else callback({'err':'NO_DATA_SAVE','msg':'РќРµС‚ РґР°РЅРЅС‹С… РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ'});	
+
+};
+
   

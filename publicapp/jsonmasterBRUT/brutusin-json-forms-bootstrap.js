@@ -128,6 +128,10 @@ if (("undefined" === typeof $ || "undefined" === typeof $.fn || "undefined" === 
 		if (element.value){
 			fill_ref( schema.meta_ref,input_value,element);
 		};
+		 if (schema.readOnly)
+                        input_value.disabled = true;
+
+
 
 		
     	}}

@@ -148,10 +148,15 @@ makemenu(json, ulclass, root) {
 	if (typeof ulclass === 'undefined') {
 		ulclass = 'nav nav-tabs';
 	}
-	var ul = $('<ul></ul>');
+	var ul;
+	if (json.root_menu == '#method_menu') {ul = $('<div class="btn-group btn-group-justified "></div>');}
+	else {
+	ul = $('<ul></ul>');
+ 	ul.attr('class', ulclass.toString());
+ 	}                             
 	ul.attr('id', json.name);
-	ul.attr('class', ulclass.toString());
-	ul.attr('root_menu', json.root_menu);                             
+	ul.attr('root_menu', json.root_menu);
+
 	root.append(ul);
 	if ((json.root_menu !== '#top_menu') &&(json.root_menu !== '#method_menu')) {
 		ul.hide();
@@ -167,26 +172,28 @@ makemenu(json, ulclass, root) {
 Т3 - "Резюме проекта";
 Т4 - "Приложение 1.2. Анкета проекта субъекта МСП".
 */
-                li = $(' <li class="menu_left dropdown">'+
-				' <a class="dropdown-toggle" data-toggle="dropdown" href="#">'+
-			'	 Отчеты<span ></span>                                                        '+
-			'	 </a>                                                                         '+
- 			'	<ul id="rep_menu" class="dropdown-menu" role="menu">                                        '+
-			'		 <li><a hreftempl="/report/rep1/<%=meta_parent_value%>">Приложение 1.1. Чек-лист</a></li>             '+
- 			'	<li><a hreftempl="/report/rep2/<%=meta_parent_value%>">Приложение 2. Заявка на получение независимой гарантии</a></li>                     '+
-			'		 <li><a hreftempl="/report/rep3/<%=meta_parent_value%>">Резюме проекта</a></li>             '+
-			'	 <li><a hreftempl="/report/rep4/<%=meta_parent_value%>">Приложение 1.2. Анкета проекта субъекта МСП</a></li>                       '+
-			'	 </ul>    '+
-			 '</li>      ');
+ 
+                li = $(' <div class="btn-group">'+
+				'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">'+
+			'Отчеты<span class="caret"></span>'+
+			'</button>'+
+ 			'<ul id="rep_menu" class="dropdown-menu" role="menu">'+
+			'<li><a hreftempl="/report/rep1/<%=meta_parent_value%>">Приложение 1.1. Чек-лист</a></li>'+
+ 			'<li><a hreftempl="/report/rep2/<%=meta_parent_value%>">Приложение 2. Заявка на получение независимой гарантии</a></li>'+
+			'<li><a hreftempl="/report/rep3/<%=meta_parent_value%>">Резюме проекта</a></li>'+
+			'<li><a hreftempl="/report/rep4/<%=meta_parent_value%>">Приложение 1.2. Анкета проекта субъекта МСП</a></li>'+
+			'</ul>'+
+			 '</div>');
 
 		ul.append(li);
 		
 		}
 		else if(array[i].meta_action_type==='method'){
+		var gr= $('<div class="btn-group"></div>');
 		a = $('<button></button>');
 		a.attr('id', 'menu_item_a');
 		a.attr('type', 'button');
-		a.attr('class', 'btn btn-primary');
+		a.attr('class', 'btn btn-default');
 		a.attr('meta_class', array[i].meta_class);
 		a.attr('meta_action_type', array[i].meta_action_type);
 		a.attr('meta_method', array[i].meta_method);
@@ -195,7 +202,8 @@ makemenu(json, ulclass, root) {
 		a.attr('sub_id', array[i].name);
 		a.attr('sub_container_id', array[i].root_menu);
 		a.text(array[i].title);
-		ul.append(a);
+		gr.append(a);
+		ul.append(gr);
 		a.bind('click',cb(this,this.MenuClick) );
   
 		}

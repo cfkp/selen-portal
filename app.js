@@ -38,7 +38,7 @@ app.use(session({
 }));
 
 app.use(require('middleware/sendHttpError'));
-app.use(require('middleware/loadUser'));
+app.use(require('middleware/session').setCurrentUser);
 
 app.use(function(err, req, res, next) {
   if (typeof err == 'number') { // next(404);

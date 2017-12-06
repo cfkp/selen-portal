@@ -51,7 +51,22 @@ $("#show_search").bind('click', function () {
 
 } );
 
-
+var serializeObject = function(form)
+{
+   var o = {};
+   var a = form.serializeArray();
+   $.each(a, function() {
+       if (o[this.name]) {
+           if (!o[this.name].push) {
+               o[this.name] = [o[this.name]];
+           }
+           o[this.name].push(this.value || '');
+       } else {
+           o[this.name] = this.value || '';
+       }
+   });
+   return o;
+};
 
     function insertTemplate(container,data) {
 
@@ -63,8 +78,9 @@ $("#show_search").bind('click', function () {
         messagedlg(undefined, "Не найдено вариантов. Попробуйте изменить условия поиска", "error",function(){$("#show_search").click()}) 
 	}
 	else {
-        var formparam = $("form").serialize();
-        data['formparam']=formparam ;
+        var formparam = serializeObject($("form"));//$("form").serialize();
+formparam['fin_amount']=string2money(formparam['fin_amount'])/1000;
+        data['formparam']=formparam;
         var html = ejs.render(tpl, data);
         $(container).html(html); }
          });
