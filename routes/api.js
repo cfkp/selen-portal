@@ -561,10 +561,10 @@ log.info({req:req},'start');
  
  		},
 		function  (res, callback) {
-//			console.log('res ' +JSON.stringify(res,4,4));   
+			console.log('res ' +JSON.stringify(res,4,4));   
 
 		 	if (res.user.state='new'&&institute&&institute==='Корпорация МСП'){
-	 			mailer(user.email,'Заявка на финансирование',null,'registerwithpersreq',res);
+	 			mailer(res.user.email,'Заявка на финансирование',null,'registerwithpersreq',res);
  			        callback(null,{'msg':{'type':'msg','msg': 'Ваша заявка зарегистрирована, для подтверждения Вам выслано письмо.'}})
 
 			}else if (res.user.state='work'&&institute&&institute==='Корпорация МСП'){
@@ -572,7 +572,7 @@ log.info({req:req},'start');
  			        callback(null,{'msg':{'type':'msg','msg': 'Ваша заявка зарегистрирована в вашем Личном кабинете, для работы с ней зайдите в личный кабинет'}})
 			}
 			else if (institute&&(institute==='ФРП'||institute==='МСП Банк'))
-			{ mailer(user.email,'Заявка на финансирование',null,'no_registerwithpersreq',res);
+			{ mailer(res.user.email,'Заявка на финансирование',null,'no_registerwithpersreq',res);
 
  			        callback(null,{'msg':{'type':'msg','msg': 'Ваша заявка зарегистрирована, для подтверждения Вам выслано письмо.'}})
    			} 

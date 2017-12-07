@@ -141,7 +141,7 @@ var user$;
 
 				User.authorize(3,pers_data.email,pers_data.fio ,null,pers_data.phone ,callback);
 				}
-				else {callback(null,sess.CurrentUserId())};
+				else {callback(null,sess.CurrentUser())};
 				
 			},
 			function (user,callback){
