@@ -5,7 +5,7 @@ var current_user,
 	request ;
 
 module.exports.setCurrentUser = function(req, res, next) {
-console.log('set CurrentUser' );
+//console.log('set CurrentUser' );
     req.user = res.locals.user = null;
     current_user=null;
      if (!req.session.user) return next();
@@ -61,7 +61,7 @@ module.exports.setCurrentUserbyID = function(userid, next) {
 
 
 module.exports.CurrentUser = function() {
-console.log('CurrentUser'+current_user);
+//console.log('CurrentUser'+current_user);
 
    return current_user;
  };

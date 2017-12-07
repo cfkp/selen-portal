@@ -32,8 +32,7 @@ _id:false,
         required: true
     },
     firstpass: {
-        type: String,
-        required: true
+        type: String 
     },
 
     salt: {
