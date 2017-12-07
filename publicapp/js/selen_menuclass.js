@@ -182,6 +182,7 @@ makemenu(json, ulclass, root) {
  			'<li><a hreftempl="/report/rep2/<%=meta_parent_value%>">Приложение 2. Заявка на получение независимой гарантии</a></li>'+
 			'<li><a hreftempl="/report/rep3/<%=meta_parent_value%>">Резюме проекта</a></li>'+
 			'<li><a hreftempl="/report/rep4/<%=meta_parent_value%>">Приложение 1.2. Анкета проекта субъекта МСП</a></li>'+
+			'<li><a id="rep5" hreftempl="/report/rep5/<%=meta_parent_value%>">Отчет по выбранным заявкам</a></li>'+
 			'</ul>'+
 			 '</div>');
 

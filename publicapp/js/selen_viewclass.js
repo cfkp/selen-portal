@@ -197,7 +197,8 @@ h=400;
 	            container.jqGrid("resetSelection");
 	            //return true;
 	        },
-		onSelectRow: cb(this,this.onSelectRow)	});
+		onSelectRow: cb(this,this.onSelectRow),
+		onSelectAll:cb(this,this.onSelectAll)	});
 
 	container.navGrid(this.gridid.gridpager_id_, {
 		search: true, // show search button on the toolbar
@@ -272,7 +273,21 @@ get_selected_rows() {
 	return this.selected_rows;
 }
 
+onSelectAll(elem,id,status){
+ 	if (this.methods&&this.methods.container) {
+	var reports = this.methods.container.find("#rep_menu")
+	if (reports) {
+		reports.find( "#rep5" ).each(function( index ) {
+			if (status ){
+			$( this ).attr("href",$( this ).attr("hreftempl").replace('<%=meta_parent_value%>',id.join()))
+			}	
+			else {
+			$( this ).attr("href", null);
 
+			}
+		});	                           };
+
+}}
 onSelectRow (elem,rowid, selected) {
 	if ((this.header.detail) && (rowid != null)) {
 		if (this.detail) {
