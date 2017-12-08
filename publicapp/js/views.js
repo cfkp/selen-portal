@@ -340,7 +340,8 @@ var refviewmodal = function(meta_class,meta_view,selectFunc) {
 	if (isfrom_modal===true)
 		{  from_method=true; $('#method_execute').modal('hide');};
 
-        modal_view.on('hidden.bs.modal', function (event) { 
+        modal_view.on('hidden.bs.modal', function (event) {
+		view.Destroy(); 
 		if (from_method)  {setTimeout(function(){ $('#method_execute').modal('show'); }, 500);};
 	
 
@@ -356,7 +357,7 @@ var refviewmodal = function(meta_class,meta_view,selectFunc) {
         
 	}else   {
         	modal_view.modal('hide');
-                view.Destroy(); //closegrid(grid_container);
+                 //closegrid(grid_container);
 	//	if (from_method)  {setTimeout(function(){ $('#method_execute').modal('show'); }, 500);};
 		var ui={"item":{"value":null,"id":null,"label":null}};
 		ui.item.value=s;

@@ -1625,11 +1625,12 @@ if (typeof brutusin === "undefined") {
             if (schema.enum) {
                 value = input.options[input.selectedIndex].value;
             } else {
-                value = input.value;
+                value = input.value.trim();
             }
             if (value === "") {
                 return null;
             }
+	   	
             if (schema.type === "integer") {
                 value = parseInt(value);
                 if (!isFinite(value)) {
@@ -1667,7 +1668,7 @@ if (typeof brutusin === "undefined") {
 			value = new Date(input.valueAsDate).toISOString();
                 }
             }
-		 else if (schema.type === "any") {
+		else if (schema.type === "any") {
                 if (value) {
                     eval("value=" + value);
                 }
