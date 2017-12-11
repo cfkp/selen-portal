@@ -52,8 +52,8 @@ class SelenMethod {
    Execute(){
 	if (this.bf.validate()) {
 	this.data=this.bf.getData();
- 	this.lastresponse=api_load_sync('callmethod/'+this.meta_class+'/'+this.meta_name+'/execute', JSON.stringify({objectlist:this.objectlist,collection:this.collection,data:this.data}));
  	$('#method_execute').modal('hide');
+ 	this.lastresponse=api_load_sync('callmethod/'+this.meta_class+'/'+this.meta_name+'/execute', JSON.stringify({objectlist:this.objectlist,collection:this.collection,data:this.data}));
  	if (this.lastresponse.responseJSON.msg) {messagedlg(this.lastresponse.responseJSON.msg);};
 	if (this.parent&&this.parent.parent instanceof SelenView ) {
                                            this.parent.parent.refresh();

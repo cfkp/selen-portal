@@ -9,6 +9,8 @@ var _ = require('lodash');
 var fs = require("fs");
 var db = require('../db/db');
 
+var mailer = require('../middleware/sendmail'); //-- Your js file path
+
 
 
 function getObjectSchema(metaclass,nextfunc){
@@ -154,7 +156,22 @@ function init_method(meta_class,meta_method,obj_list,nextfunc) {
 };
 exports.init_method=init_method;
 
+function sendmail2user(userid,subject,message,templateName,data){
 
+ 	async.waterfall([
+			function (callback) {
+                         getobj('users',userid,callback);
+			}
+ 
+		],
+		function (err, res) {
+ 			console.log('sendmail2user' +' mail data '+JSON.stringify(res,4,4));
+			mailer(res.email,subject,message,templateName,data);
+ 	});
+
+};
+
+exports.sendmail2user=sendmail2user;
 
 ////////////////////////////////////////
 

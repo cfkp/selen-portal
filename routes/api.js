@@ -282,7 +282,6 @@ log.info({req:req},'start');
                         objlib.getobj(meta_class,obj_id,callback);
 			},
 			function (obj,callback) {
-			console.log("callback "+obj);
 			if  (!obj||obj==null ){callback({
 			'error': 'no_object',
 			'msg': 'Не найден документ'
@@ -290,14 +289,15 @@ log.info({req:req},'start');
    				db.update_obj(meta_class,meta_method,obj_id,set$,callback)
  			},
 			function (res,callback){
-				console.log(meta_method +'mail data '+JSON.stringify(res,4,4));
-				//mailer('finance@cfcp.ru','Уведомление',null,'request_notify',{});
-			callback(null,res);
-				}	
+			//	console.log(meta_method +' mail data '+JSON.stringify(res,4,4));
+				//mailer('finance@cfcp.ru','Уведомление',null,'request_notify',res);
+				objlib.sendmail2user(data.expert_user,'Уведомление',null,'request_notify',res)
+				callback(null,res);
+			}	
 
 		],
 		function (err, results) {
-			console.log(meta_method +JSON.stringify(results,4,4));
+		//	console.log(meta_method +JSON.stringify(results,4,4));
 			if (!err){
  				res.json(results);	  
 			}
@@ -364,19 +364,20 @@ log.info({req:req},'start');
 				};
 			return callback(err);
 			}	
-  				db.update_obj(meta_class,meta_method,obj_id,{
-					"state": new_state
-				},callback)
+  			var set$={
+					"state": new_state};
+
+  			db.update_obj(meta_class,meta_method,obj_id,set$,callback)
  			},
 			function (res,callback){
-				console.log(meta_method +'mail data '+JSON.stringify(res,4,4));
-				//mailer('finance@cfcp.ru','Уведомление',null,'request_notify',{});
-			callback(null,doc);
+			//	console.log(meta_method +'mail data '+JSON.stringify(res,4,4));
+			//	mailer('finance@cfcp.ru','Уведомление',null,'request_notify',res);
+			callback(null,res);
 				}	
 
 		],
 		function (err, results) {
-			console.log(meta_method+JSON.stringify(results,4,4));
+			console.log(meta_method +JSON.stringify(results,4,4));
 			if (!err){
  				res.json(results);	  
 			}
@@ -462,14 +463,16 @@ log.info({req:req},'start');
 			'error': 'no_object',
 			'msg': 'Не найден документ'
 				});}
-  				db.update_obj(meta_class,meta_method,obj_id,{
-					"state": new_state
-				},callback)
+
+  			var set$={
+					"state": new_state};
+
+  			db.update_obj(meta_class,meta_method,obj_id,set$,callback)
  			},
 			function (res,callback){
-				console.log(meta_method +' mail data '+JSON.stringify(res,4,4));
- 				//mailer('finance@cfcp.ru','Уведомление',null,'request_notify',{});
-			callback(null,doc);
+				console.log(meta_method +'mail data '+JSON.stringify(res,4,4));
+			 	mailer('finance@cfcp.ru','Уведомление',null,'request_notify',res);
+				callback(null,res);
 				}	
 
 		],
@@ -705,9 +708,12 @@ log.info({req:req},'start');
 //	console.log(docs);
 	
 				if (meta_class=='person_request'){
-					var pers_req = require('../db/person_request');
+					
  					pers_req.load_request_info (obj_id,function(error,body){});	
 					 };
+				if (meta_class=='request_messages'){
+					pers_req.sednotifymessage(req.body.collection.meta_parent_value,row);
+					}
 				var dataReturn = obj_id;
   			}
 
