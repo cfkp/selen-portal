@@ -234,7 +234,7 @@ log.info({req:req},'start');
 	if (req.body.objectlist) {
  		 obj_id = req.body.objectlist[0];
 	};
-       db.audit(userID,meta_class,meta_method,obj_id,{set: set$});
+        db.audit(meta_class,meta_method,obj_id,{set: set$});
 
 	dbloc.collection(meta_class).updateOne({
 		"_id": obj_id
@@ -277,23 +277,34 @@ log.info({req:req},'start');
  		 obj_id = req.body.objectlist[0];
 	};
 
-       db.audit(userID,meta_class,meta_method,obj_id,{set: set$});
+	async.waterfall([
+			function (callback) {
+                        objlib.getobj(meta_class,obj_id,callback);
+			},
+			function (obj,callback) {
+			console.log("callback "+obj);
+			if  (!obj||obj==null ){callback({
+			'error': 'no_object',
+			'msg': 'Не найден документ'
+				});}	
+   				db.update_obj(meta_class,meta_method,obj_id,set$,callback)
+ 			},
+			function (res,callback){
+				console.log(meta_method +'mail data '+JSON.stringify(res,4,4));
+				//mailer('finance@cfcp.ru','Уведомление',null,'request_notify',{});
+			callback(null,res);
+				}	
 
-	dbloc.collection(meta_class).updateOne({
-		"_id": obj_id
-	}, {
-		
-		$set: set$
-		
-	}, function (err, docs) {
-	var dataReturn =obj_id;
+		],
+		function (err, results) {
+			console.log(meta_method +JSON.stringify(results,4,4));
+			if (!err){
+ 				res.json(results);	  
+			}
+			else {res.status(500).send(err);};
+	});
 
- 		if (err || docs.result === undefined) {
- 			log.error({req:req},'Error inserting document', err);
-                      console.log('err '+err);
-                }
- 	res.json(dataReturn);
- 	});
+
 });
 
 router.post('/callmethod/person_request/change_state/execute',checkAuth, function (req, res, next) {
@@ -353,29 +364,25 @@ log.info({req:req},'start');
 				};
 			return callback(err);
 			}	
-	                	db.audit(userID,meta_class,meta_method,obj_id,{
-						set: {
-						"state": new_state
-						}});
-
-				dbloc.collection(meta_class).updateOne({
-					"_id": obj_id	
-					}, {
-						$set: {
-						"state": new_state
-						}},callback);
-			                                 
-			}
+  				db.update_obj(meta_class,meta_method,obj_id,{
+					"state": new_state
+				},callback)
+ 			},
+			function (res,callback){
+				console.log(meta_method +'mail data '+JSON.stringify(res,4,4));
+				//mailer('finance@cfcp.ru','Уведомление',null,'request_notify',{});
+			callback(null,doc);
+				}	
 
 		],
 		function (err, results) {
-		if (!err){
- 		res.json(results);}
-		else {res.status(500).send(err);};
+			console.log(meta_method+JSON.stringify(results,4,4));
+			if (!err){
+ 				res.json(results);	  
+			}
+			else {res.status(500).send(err);};
 	});
-
-
-
+ 
 });
 
 router.post('/callmethod/person_request/load_data_from_ext/execute',checkAuth, function (req, res, next) {
@@ -404,7 +411,7 @@ var pers_req = require('../db/person_request');
 	};
 
 
-        db.audit(userID,meta_class,meta_method,obj_id,{});
+        db.audit(meta_class,meta_method,obj_id,{});
         pers_req.load_request_info (obj_id, function (err, docs) {
  
 		if (err) {
@@ -442,32 +449,40 @@ log.info({req:req},'start');
 	if (req.body.objectlist) {
  		 obj_id = req.body.objectlist[0];//new ObjectID(req.body.objectlist[0]);
 	};
-       db.audit(userID,meta_class,meta_method,obj_id,{set: {"state": new_state	}});
+ 
 
-	dbloc.collection(meta_class).updateOne({
-		"_id": obj_id
-	}, {
-		$set: {
-			"state": new_state
-		}
-	},
-		function (err, docs) {
- 
-		if (err || docs.result === undefined) {
-				log.error({req:req},'Error update document', err);
- 			//res.status(400).json({'msg': 'Error inserting document'});
-		} else {
-			var dataReturn = '';
-			if (docs.ops) {
- 
-				dataReturn = docs.ops[0]._id;
+
+	async.waterfall([
+			function (callback) {
+                        objlib.getobj(meta_class,obj_id,callback);
+			},
+			function (obj,callback) {
+			console.log("callback "+obj);
+			if  (!obj||obj==null ){callback({
+			'error': 'no_object',
+			'msg': 'Не найден документ'
+				});}
+  				db.update_obj(meta_class,meta_method,obj_id,{
+					"state": new_state
+				},callback)
+ 			},
+			function (res,callback){
+				console.log(meta_method +' mail data '+JSON.stringify(res,4,4));
+ 				//mailer('finance@cfcp.ru','Уведомление',null,'request_notify',{});
+			callback(null,doc);
+				}	
+
+		],
+		function (err, results) {
+			console.log(meta_method +JSON.stringify(results,4,4));
+			if (!err){
+ 				res.json(results);	  
 			}
- 			mailer('finance@cfcp.ru','Уведомление',null,'request_notify',{});
-		};
-
-		res.json(dataReturn);
+			else {res.status(500).send(err);};
 	});
 
+
+ 
 });
 
 
@@ -617,7 +632,7 @@ log.info({req:req},'start');
 	};
 	if (meta_method=='edit'&&obj_id) {
  		if (data !== null) {
-		db.audit(userID,meta_class,meta_method,obj_id,data);
+		db.audit(meta_class,meta_method,obj_id,data);
 
 			dbloc.collection(meta_class).updateOne({
 				"_id": obj_id
@@ -639,7 +654,7 @@ log.info({req:req},'start');
 	else if (meta_method=='delete'&&obj_id){
  		if ( data.confirm!== null&&data.confirm==true) {
 
-		db.audit(userID,meta_class,meta_method,obj_id,data);
+		db.audit(meta_class,meta_method,obj_id,data);
 		
 		dbloc.collection(meta_class).remove//updateOne
 				({
@@ -680,7 +695,7 @@ log.info({req:req},'start');
 
 		  row[req.body.collection.meta_parent_field]=req.body.collection.meta_parent_value;
 		}
-		db.audit(userID,meta_class,meta_method,obj_id,row);
+		db.audit(meta_class,meta_method,obj_id,row);
 		dbloc.collection(meta_class).save(row, function (err, docs) {
 
 			if (err || docs.result === undefined) {

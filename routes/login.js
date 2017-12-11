@@ -127,11 +127,17 @@ router.get('/registration', function (req, res, next) {
 
 		} else {
 		req.session.user = obj_id;
-   
-  		pers_req.update_newuser_request(obj_id) ;
+  		sess.setCurrentUserbyID (obj_id,
+		function (err){
+			var user=sess.CurrentUser();
+			mailer(user.email,'Окончание регистрации',null,'end_register',{user:user}); 
+ 	 		pers_req.update_newuser_request(obj_id) ;
+			res.render('regfinish',{'msg':{'type':'message','msg':  "Спасибо за регистрацию.<br> По указанному Вами адресу направлено письмо с временным паролем. <br> В целях безопасности. После входа смените на новый пароль в личном кабинете."}});
+ 
+		}
+		);
  			
-		  res.render('regfinish',{'msg':{'type':'message','msg':  "Спасибо за регистрацию"}});
-
+ 
 		}
  
 

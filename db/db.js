@@ -36,7 +36,7 @@ exports.close = function(done) {
   }
 }
 
-exports.audit=function(userid,meta_class,meta_method,obj_id,data){
+exports.audit=function(meta_class,meta_method,obj_id,data){
  		var id = new ObjectID().toString();
          	var sysdate=   new Date().toISOString();
 
@@ -56,7 +56,7 @@ exports.audit=function(userid,meta_class,meta_method,obj_id,data){
 
 
 };
-
+ 
 
 exports.findone=function(meta_class,search_filter,nextfunc){
   		 dbconnection.collection(meta_class).findOne(
@@ -95,6 +95,7 @@ console.log('save_obj curuser '+sess.CurrentUserId());
 
  	if (data){	
 		var row = {"_id":id,
+			"_v": 0,
 			"created": sysdate ,
 			this_meta_class:meta_class,
 			"user_createid": sess.CurrentUserId(),
@@ -110,6 +111,35 @@ console.log('save_obj curuser '+sess.CurrentUserId());
 		});
 	
 	}else callback({'err':'NO_DATA_SAVE','msg':'Нет данных для сохранения'});	
+
+};
+
+exports.update_obj=function(meta_class,meta_method,obj_id,set$,callback){
+ 
+   	if (set$){	
+		dbconnection.collection(meta_class).findOneAndUpdate({
+		"_id": obj_id+'1111'
+			}, {
+		
+				$set: set$,
+				
+				$inc: {"__v": 1},
+				$currentDate: {"updated": true},
+				$set: {"user_updateid": sess.CurrentUserId()}
+				}	
+		,{"returnNewDocument":true}
+		, function (err, docs) { 
+ 	               	console.log('update doc '+JSON.stringify(docs,4,4))
+		        if (!err&&docs&&docs.value&&docs.ok==1)
+			exports.audit( meta_class,meta_method,obj_id,{
+						set: set$});
+			else 
+                          {err={'err':'ERROR_UPDATE','msg':'ошибка сохранения документа',error_detail:{err:err,doc:docs} }};
+			callback(err,docs);
+
+		});
+	
+	}else callback({'err':'NO_DATA_SAVE','msg':'Нет данных для изменения'});	
 
 };
 

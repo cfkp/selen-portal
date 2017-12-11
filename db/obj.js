@@ -72,15 +72,15 @@ function getMethodSchema(meta_class,meta_method,nextfunc){
 function getobj(metaclass,this_id,nextfunc){
  var search_filter = {};
  search_filter["_id"]= this_id;
- console.log('getobj metaclass '+metaclass);
- console.log('getobj search '+JSON.stringify(search_filter));
+ //console.log('getobj metaclass '+metaclass);
+ //console.log('getobj search '+JSON.stringify(search_filter));
  db.findone(metaclass,search_filter, nextfunc);
 };
 exports.getobj=getobj;
 
 function getobjbyfilter(metaclass,search_filter,nextfunc){
- console.log('getobjbyfilter metaclass '+metaclass);
- console.log('getobjbyfilter search '+JSON.stringify(search_filter));
+// console.log('getobjbyfilter metaclass '+metaclass);
+// console.log('getobjbyfilter search '+JSON.stringify(search_filter));
  db.findone(metaclass,search_filter, nextfunc);
 };
 exports.getobjbyfilter=getobjbyfilter;
@@ -117,10 +117,10 @@ exports.getchildobj =getchildobj;
 
 
 function init_method(meta_class,meta_method,obj_list,nextfunc) {
- console.log('init_method meta_class '+meta_class);
+/* console.log('init_method meta_class '+meta_class);
  console.log('init_method meta_method '+meta_method);
  console.log('init_method obj_list '+obj_list);
-
+*/
  	if (meta_class=='undefined'||meta_method=='undefined') {
 	return	{ 		'error': 'no_class',
 				'msg': 'Не определен класс или операция'
