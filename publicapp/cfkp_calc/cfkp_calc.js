@@ -121,17 +121,12 @@ if (p.goal =='Капитальные вложения и пополнение о
 
 var fin_amont=string2money(p.fin_amount)/1000000;
 var f =
-{
-     'and' : [
+{ 'and' : [
         { 'and' : [ { 'data.program_criteria.min_sum': { 'lte': fin_amont } }, { 'data.program_criteria.max_sum': { 'gte': fin_amont} } ]  }
-       , { 'and' : [ { 'data.program.max_month_limit': { 'gte': Number(p.fin_period)} }    ] }
-      /* , { 'and' : [ { 'data.program_criteria.min_cost_project': { 'lte': Number(p.cost_project) } }    ] }
-       , { 'and' : [ { 'data.program_criteria.min_percent_owner': { 'lte': Number(p.percent_owner) } }    ] }
-       , { 'and' : [ { 'data.program_criteria.msp_nal': { 'eq': p.msp_nal } }    ] } */
-       , { 'or' : [ { 'data.program.product': { 'eq': prod1 } },{ 'data.program.product': { 'eq': prod2 } }] }
-       , { 'or' : [ { 'data.program.goal': { 'eq': goal1 } },{ 'data.program.goal': { 'eq': goal2 } }] }
- 
-    ]         
+       ,{ 'and' : [ { 'data.program.max_month_limit': { 'gte': Number(p.fin_period)} }    ] }
+       ,{ 'or' : [ { 'data.program.product': { 'eq': prod1 } },{ 'data.program.product': { 'eq': prod2 } }] }
+       ,{ 'or' : [ { 'data.program.goal': { 'eq': goal1 } },{ 'data.program.goal': { 'eq': goal2 } }] }
+     ]         
 }
 //f={};  
 return f;

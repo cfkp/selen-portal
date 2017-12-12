@@ -1,0 +1,655 @@
+﻿{
+    "_id": "58d9b8ff548f592b4a520fc6",
+    "meta_name": "enterprise",
+    "meta_table_name": "enterprise",
+    "data": {
+        "title": "Организация",
+        "type": "object",
+        "required": true,
+        "properties": {
+            "enterprise_data": {
+                "$ref": "#/definitions/enterprise",
+                "$id": null
+            },
+            "enterprise_group_company": {
+                "$ref": "#/definitions/group_company",
+                "$id": null
+            },
+            "enterprise_dohod": {
+                "$ref": "#/definitions/dohod",
+                "$id": null
+            },
+            "enterprise_manager": {
+                "$ref": "#/definitions/manager",
+                "$id": null
+            },
+            "enterprise_owners": {
+                "$ref": "#/definitions/enterprise_owners",
+                "$id": null
+            },
+            "group_of_people": {
+                "$ref": "#/definitions/group_of_people",
+                "$id": null
+            }
+        },
+        "definitions": {
+            "enterprise": {
+                "title": "Организация",
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "name": {
+                        "required": true,
+                        "title": "Полное наименование огранизации",
+                        "type": "text"
+                    },
+                    "doc": {
+                        "required": true,
+                        "title": "Документ(ы), подтверждающий(е) полномочия подписанта по заявке",
+                        "type": "text"
+                    },
+                    "inn": {
+                        "required": true,
+                        "title": "ИНН",
+                        "type": "string",
+                        "pattern": "^([0-9]{10}|[0-9]{12})$",
+                        "mask": "9999999999?99"
+                    },
+                    "okpo": {
+                        "required": true,
+                        "title": "ОКПО",
+                        "type": "string",
+                        "pattern": "^([0-9]{10}|[0-9]{8})"
+                    },
+                    "ogrn": {
+                        "required": true,
+                        "title": "ОГРН",
+                        "type": "string",
+                        "pattern": "^([0-9]{15}|[0-9]{13})"
+                    },
+                    "okato": {
+                        "required": true,
+                        "title": "ОКАТО",
+                        "type": "string",
+                        "pattern": "^([0-9]{8}|[0-9]{9}|[0-9]{10}|[0-9]{13})"
+                    },
+                    "status_msp": {
+                        "required": true,
+                        "title": "Статус субъекта МСП",
+                        "description": "Наличие в Едином реестре малого и среднего предпринимательства www.nalog.ru",
+                        "type": "text"
+                    },
+                    "rezident": {
+                        "required": true,
+                        "title": "Регистрация бизнеса на территории РФ",
+                        "type": "boolean"
+                    },
+                    "address_reg": {
+                        "required": true,
+                        "title": "Место регистрации (адрес)",
+                        "type": "text"
+                    },
+                    "date_reg": {
+                        "required": true,
+                        "title": "Дата регистрации",
+                        "type": "date"
+                    },
+                    "address_org": {
+                        "required": true,
+                        "title": "Адрес местонахождения постоянно действующих органов управления, иного органа или лица, которые имеют право действовать от имени клиента",
+                        "type": "text"
+                    },
+                    "cur_staff": {
+                        "required": true,
+                        "title": "Текущая численность сотрудников",
+                        "type": "integer"
+                    },
+                    "goal_staff": {
+                        "required": true,
+                        "title": "Целевая численность сотрудников",
+                        "type": "integer"
+                    },
+                    "activity": {
+                        "required": true,
+                        "title": "Основной вид деятельности",
+                        "type": "text"
+                    },
+                    "history": {
+                        "required": true,
+                        "title": "История развития (кратко/основные вехи)",
+                        "type": "text"
+                    },
+                    "cur_credits": {
+                        "required": true,
+                        "title": "Информация о текущих кредитах (перечень банков / суммы / сроки / % /  обеспечение / прочие важные условия)",
+                        "type": "text"
+                    },
+                    "tax_debt": {
+                        "required": true,
+                        "title": "Наличие неурегулированной просроченной налоговой задолженности с учетом Группы лиц",
+                        "type": "text"
+                    },
+                    "bool_tax_debt": {
+                        "required": true,
+                        "title": "Отсутствие просроченной задолженности по налогам, сборам и т.п.",
+                        "type": "boolean"
+                    },
+                    "bool_bankrupt": {
+                        "required": true,
+                        "title": "Не применяются процедуры несостоятельности (банкротства) к инициатору проекта (связанным компаниям)",
+                        "type": "boolean"
+                    },
+                    "bool_cred": {
+                        "required": true,
+                        "title": "Отсутствие отрицательной кредитной истории в кредитных организациях",
+                        "description": "Отсутствие неурегулированных проблем с кредитными организациями в течении последних 180 календарных дней",
+                        "type": "boolean"
+                    },
+                    "bool_demand": {
+                        "required": true,
+                        "title": "Соответствие требованиям по структуре уставного (складочного) капитала (паевого фонда)",
+                        "type": "boolean"
+                    }
+                }
+            },
+            "group_company": {
+                "title": "Группа компаний",
+                "type": "array",
+                "items": {
+                    "title": "Компания",
+                    "type": "object",
+                    "properties": {
+                        "compaign_name": {
+                            "required": true,
+                            "title": "Название компании",
+                            "type": "string"
+                        },
+                        "compaign_inn": {
+                            "required": true,
+                            "title": "ИНН",
+                            "type": "string"
+                        },
+                        "compaign_ogrn": {
+                            "required": true,
+                            "title": "ОГРН",
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "group_of_people": {
+                "type": "array",
+                "title": "Приложение №2. Структура Группы лиц",
+                "items": {
+                    "type": "object",
+                    "title": "Группа лиц",
+                    "properties": {
+                        "compain_name": {
+                            "type": "string",
+                            "title": "Наименование компании"
+                        },
+                        "participant": {
+                            "type": "string",
+                            "title": "Участники / акционеры"
+                        },
+                        "percent": {
+                            "type": "string",
+                            "title": "Доля (%)"
+                        }
+                    }
+                }
+            },
+            "dohod": {
+                "title": "Выручка по годам",
+                "minItems": 3,
+                "maxItems": 3,
+                "format": "grid",
+                "gridX": "year",
+                "type": "array",
+                "items": {
+                    "title": "",
+                    "type": "object",
+                    "properties": {
+                        "year": {
+                            "required": true,
+                            "title": "Год",
+                            "type": "string",
+                            "enum": [
+                                "2014",
+                                "2015",
+                                "2016"
+                            ]
+                        },
+                        "proceeds_empscount": {
+                            "required": true,
+                            "title": "Численность работников",
+                            "type": "integer"
+                        },
+                        "proceeds_comp": {
+                            "required": true,
+                            "title": "Выручка(по сегментам/компаниям)",
+                            "type": "integer"
+                        },
+                        "proceeds_oper": {
+                            "required": true,
+                            "title": "Операционная прибыль",
+                            "type": "integer"
+                        },
+                        "proceeds_rent": {
+                            "required": true,
+                            "title": "Рентабельность операционной прибыли",
+                            "type": "integer"
+                        },
+                        "proceeds_clear": {
+                            "required": true,
+                            "title": "Чистая прибыль",
+                            "type": "integer"
+                        },
+                        "proceeds_money": {
+                            "required": true,
+                            "title": "Денежные средства и эквивалент",
+                            "type": "integer"
+                        }
+                    }
+                }
+            },
+            "manager": {
+                "title": "Менеджеры",
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "title": "Сотрудник",
+                    "properties": {
+                        "high_manager": {
+                            "required": true,
+                            "type": "string",
+                            "title": "ФИО"
+                        },
+                        "position": {
+                            "required": true,
+                            "type": "string",
+                            "title": "Должность"
+                        },
+                        "sign": {
+                            "required": true,
+                            "type": "boolean",
+                            "title": "Право подписи"
+                        },
+                        "email": {
+                            "required": true,
+                            "title": "E-Mail",
+                            "type": "email"
+                        },
+                        "phone": {
+                            "type": "string",
+                            "title": "Телефон"
+                        },
+                        "contact": {
+                            "required": true,
+                            "type": "boolean",
+                            "title": "Контактное лицо"
+                        },
+                        "short_resume": {
+                            "required": true,
+                            "type": "text",
+                            "title": "Краткое резюме"
+                        }
+                    }
+                }
+            },
+            "address": {
+                "title": "Адреса",
+                "type": "array",
+                "required": true,
+                "items": {
+                    "title": "Адрес",
+                    "type": "object",
+                    "properties": {
+                        "addr_type_loc": {
+                            "required": true,
+                            "title": "Тип адреса",
+                            "type": "string",
+                            "enum": [
+                                "Регистрация",
+                                "Фактическое"
+                            ]
+                        },
+                        "region_loc": {
+                            "required": false,
+                            "title": "Область",
+                            "type": "string"
+                        },
+                        "district_loc": {
+                            "required": false,
+                            "title": "Район",
+                            "type": "string"
+                        },
+                        "town_loc": {
+                            "required": true,
+                            "title": "Населенный пункт",
+                            "type": "string"
+                        },
+                        "street_loc": {
+                            "required": true,
+                            "title": "Улица",
+                            "type": "string"
+                        },
+                        "home_loc": {
+                            "required": true,
+                            "title": "Дом",
+                            "type": "string"
+                        },
+                        "building_loc": {
+                            "required": false,
+                            "title": "Корпус",
+                            "type": "string"
+                        },
+                        "apartment_loc": {
+                            "required": false,
+                            "title": "Квартира",
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "rezident": {
+                "title": "Гражданство",
+                "oneOf": [
+                    {
+                        "rezident": {
+                            "title": "Гражданин РФ",
+                            "type": "object",
+                            "required": true,
+                            "properties": {
+                                "passport": {
+                                    "title": "Гражданин РФ",
+                                    "type": "object",
+                                    "required": true,
+                                    "properties": {
+                                        "doc_type": {
+                                            "required": true,
+                                            "title": "Вид документа, удостоверяющего личность (паспорт)",
+                                            "type": "string"
+                                        },
+                                        "seria": {
+                                            "required": false,
+                                            "title": "Серия (при наличии)",
+                                            "type": "string"
+                                        },
+                                        "num_doc": {
+                                            "required": true,
+                                            "title": "Номер",
+                                            "type": "string"
+                                        },
+                                        "begin_date": {
+                                            "required": true,
+                                            "title": "Дата выдачи",
+                                            "type": "string"
+                                        },
+                                        "dep_name": {
+                                            "required": true,
+                                            "title": "Наименование органа, выдавшего документ",
+                                            "type": "string"
+                                        },
+                                        "dep_code": {
+                                            "required": true,
+                                            "title": "Код подразделения (при наличии)",
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "address": {
+                                    "$ref": "#/definitions/address",
+                                    "$id": null
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "notrezident": {
+                            "title": "Иностранные граждане/лица без гражданства",
+                            "type": "object",
+                            "required": true,
+                            "properties": {
+                                "passport": {
+                                    "title": "Основной документ - иностранные граждане/лица без гражданства",
+                                    "type": "object",
+                                    "required": true,
+                                    "properties": {
+                                        "doc_type": {
+                                            "required": true,
+                                            "title": "Вид документа, удостоверяющего личность",
+                                            "type": "string"
+                                        },
+                                        "num_doc": {
+                                            "required": true,
+                                            "title": "Номер документа",
+                                            "type": "string"
+                                        },
+                                        "begin_date": {
+                                            "required": true,
+                                            "title": "Дата выдачи",
+                                            "type": "date"
+                                        },
+                                        "dep_name": {
+                                            "required": true,
+                                            "title": "Кем выдан",
+                                            "type": "string"
+                                        },
+                                        "end_date": {
+                                            "required": false,
+                                            "title": "Срок дейстия (при наличии)",
+                                            "type": "date"
+                                        }
+                                    }
+                                },
+                                "migrant": {
+                                    "title": "Миграционная карта - иностранные граждане, лица без гражданства",
+                                    "type": "object",
+                                    "required": true,
+                                    "properties": {
+                                        "card_num": {
+                                            "required": true,
+                                            "title": "Номер карты",
+                                            "type": "string"
+                                        },
+                                        "begin_date": {
+                                            "required": false,
+                                            "title": "Дата начала срока пребывания",
+                                            "type": "date"
+                                        },
+                                        "end_date": {
+                                            "required": false,
+                                            "title": "Дата окончания срока пребывания",
+                                            "type": "date"
+                                        }
+                                    }
+                                },
+                                "visa": {
+                                    "title": "Подтверждение права пребывания - иностранные граждане, лица без гражданства",
+                                    "type": "object",
+                                    "required": true,
+                                    "properties": {
+                                        "doc_type": {
+                                            "required": false,
+                                            "title": "Наименование документа, подтверждающего право пребывания в Российской Федерации",
+                                            "type": "string"
+                                        },
+                                        "seria": {
+                                            "required": false,
+                                            "title": "Серия (если имеется)",
+                                            "type": "string"
+                                        },
+                                        "doc_num": {
+                                            "required": false,
+                                            "title": "Номер",
+                                            "type": "string"
+                                        },
+                                        "begin_date": {
+                                            "required": false,
+                                            "title": "Дата начала срока действия права пребывания (проживания)",
+                                            "type": "date"
+                                        },
+                                        "end_date": {
+                                            "required": false,
+                                            "title": "Дата окончания срока действия права пребывания (проживания)",
+                                            "type": "date"
+                                        }
+                                    }
+                                },
+                                "address": {
+                                    "title": "Место жительства иностранного гражданина или лица без гражданства",
+                                    "type": "object",
+                                    "required": true,
+                                    "properties": {
+                                        "country": {
+                                            "required": false,
+                                            "title": "Страна",
+                                            "type": "string"
+                                        },
+                                        "town_loc": {
+                                            "required": true,
+                                            "title": "Населенный пункт",
+                                            "type": "string"
+                                        },
+                                        "street_loc": {
+                                            "required": true,
+                                            "title": "Улица",
+                                            "type": "string"
+                                        },
+                                        "home_loc": {
+                                            "required": true,
+                                            "title": "Дом",
+                                            "type": "string"
+                                        },
+                                        "building_loc": {
+                                            "required": false,
+                                            "title": "Корпус",
+                                            "type": "string"
+                                        },
+                                        "apartment_loc": {
+                                            "required": false,
+                                            "title": "Квартира",
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "enterprise_owners": {
+                "title": "Структура владения",
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                    "title": "Владелец",
+                    "type": "object",
+                    "properties": {
+                        "owner": {
+                            "title": "Владелец",
+                            "oneOf": [
+                                {
+                                    "urlico": {
+                                        "type": "object",
+                                        "title": "Юридическое лицо",
+                                        "properties": {
+                                            "name": {
+                                                "required": true,
+                                                "title": "Название компании",
+                                                "type": "string"
+                                            },
+                                            "own_inn": {
+                                                "required": true,
+                                                "title": "ИНН",
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "phislico": {
+                                        "type": "object",
+                                        "title": "Физическое лицо (не бенифициар)",
+                                        "description": "Меньше или равно 25% владения",
+                                        "properties": {
+                                            "fio": {
+                                                "required": true,
+                                                "title": "ФИО",
+                                                "type": "string"
+                                            },
+                                            "own_inn": {
+                                                "required": true,
+                                                "title": "ИНН",
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "beneficiar": {
+                                        "title": "Физическое лицо (бенифициар)",
+                                        "description": "Больше 25% владения",
+                                        "type": "object",
+                                        "properties": {
+                                            "fio": {
+                                                "required": true,
+                                                "type": "string",
+                                                "title": "ФИО"
+                                            },
+                                            "inn": {
+                                                "required": true,
+                                                "title": "ИНН",
+                                                "type": "string"
+                                            },
+                                            "birthday": {
+                                                "required": true,
+                                                "title": "Дата рождения",
+                                                "type": "string"
+                                            },
+                                            "birthloc": {
+                                                "required": true,
+                                                "title": "Место рождения",
+                                                "type": "string"
+                                            },
+                                            "rezident": {
+                                                "$ref": "#/definitions/rezident",
+                                                "$id": null
+                                            },
+                                            "official": {
+                                                "required": false,
+                                                "title": "Должностное лицо",
+                                                "oneOf": [
+                                                    {
+                                                        "nochin": {
+                                                            "title": "Не Является ли должностным лицом"
+                                                        }
+                                                    },
+                                                    {
+                                                        "chin": {
+                                                            "required": false,
+                                                            "title": "Должность, организация, страна, степень родства и ФИО РПДЛ/ИПДЛ/МПДЛ",
+                                                            "type": "text"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        "own_percent": {
+                            "required": true,
+                            "title": "Процент владения",
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "this_meta_class": "meta_class"
+}
