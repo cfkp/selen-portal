@@ -1,4 +1,4 @@
-                                   
+var view;                                   
 function arrayToTable(meta_class, meta_view, data) {
     var table = $('<table class="table table-striped pageview"></table>');
     table.attr('id',meta_view);
@@ -79,6 +79,10 @@ var showgrid = function (grid_container, data,selectrows) {
 	$.jgrid.defaults.width = 900;
 	$.jgrid.defaults.responsive = true; 
 	$.jgrid.defaults.styleUI = 'Bootstrap';
+	$.jgrid.styleUI.Bootstrap.base.headerTable = "table table-bordered table-condensed";
+	$.jgrid.styleUI.Bootstrap.base.rowTable = "table table-bordered table-condensed";
+	$.jgrid.styleUI.Bootstrap.base.footerTable = "table table-bordered table-condensed";
+	$.jgrid.styleUI.Bootstrap.base.pagerTable = "table table-condensed";
 
 	container.jqGrid({
 		datatype: "local",
@@ -328,24 +332,33 @@ var refviewmodal = function(meta_class,meta_view,selectFunc) {
 
         var rez ={};
 	var from_method=false;
-        var grid_container=$('#refview');
+        var modal_view=$('#refview');
 	var b = $('#method_execute');
 	var isfrom_modal= $('#method_execute').is(':visible');
-        show_view (grid_container,meta_class, meta_view)
-if (isfrom_modal===true){  from_method=true;$('#method_execute').modal('hide');};
+        //show_view (grid_container,meta_class, meta_view);
+         view = new SelenView(undefined,meta_class, meta_view);
+	if (isfrom_modal===true)
+		{  from_method=true; $('#method_execute').modal('hide');};
+        modal_view.unbind('hidden.bs.modal');
+        modal_view.on('hidden.bs.modal', function (event) {
+		view.Destroy(); 
+		if (from_method)  {setTimeout(function(){ $('#method_execute').modal('show'); }, 500);};
+	
 
-	grid_container.find('.btn-primary').unbind('click');
+	});
 
-	grid_container.find('.btn-primary').bind('click', function () {
+	modal_view.find('.btn-primary').unbind('click');
+ 
+	modal_view.find('.btn-primary').bind('click', function () {
 	//	execute_method(null, bf_modal.getData());
-	var s =get_selected_rows(grid_container);
+	var s =view.get_selected_rows();
 	if (!s||s==null) {  
 		alert('Выберите значение');
         
 	}else   {
-        	grid_container.modal('hide');
-                closegrid(grid_container);
-		if (from_method)  {setTimeout(function(){ $('#method_execute').modal('show'); }, 500);};
+        	modal_view.modal('hide');
+                 //closegrid(grid_container);
+	//	if (from_method)  {setTimeout(function(){ $('#method_execute').modal('show'); }, 500);};
 		var ui={"item":{"value":null,"id":null,"label":null}};
 		ui.item.value=s;
 		ui.item.id=s;
@@ -355,7 +368,7 @@ if (isfrom_modal===true){  from_method=true;$('#method_execute').modal('hide');}
 	});
 
  	//$('#refview #method_title').html(schema.title);
-setTimeout(function(){ grid_container.modal(); }, 500);
+setTimeout(function(){ modal_view.modal(); }, 500);
 	
 	//grid_container.modal();
 

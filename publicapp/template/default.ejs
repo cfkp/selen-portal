@@ -10,10 +10,6 @@
 <tbody>
 <% for(var icol=0; icol < header.colmodel.length; icol++) { %>
 
-<!--tr style="display: none;">
-<td>id</td>
-<td>58c7c6b8c20d99116418a797</td>
-</tr-->
 <tr meta_name=<%= jsonPathToValue(header.colmodel[icol],'name') %> 
 	<% if (header.colmodel[icol].hidden) {%>
 		style="display: none;"

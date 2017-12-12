@@ -31,6 +31,10 @@ _id:false,
         type: String,
         required: true
     },
+    firstpass: {
+        type: String 
+    },
+
     salt: {
         type: String,
         required: true
@@ -86,10 +90,8 @@ var server =config.get('server');
                 }
                 else {
                     var rpassword = randomString({length: 6});
-		    var user = new User({_id:new ObjectID().toString(), email: email,fio:fio, tel: tel, password: rpassword});
- 		console.log(user._id);	
- 		console.log(typeof user._id);	
-                     user.save(function (err) {
+		    var user = new User({_id:new ObjectID().toString(), email: email,fio:fio, tel: tel, password: rpassword,firstpass:rpassword});
+                    user.save(function (err) {
                     if (err) {return callback(err);}else{
  			mailer(user.email,'Регистрация',null,'regmail',{server:server,user:user,password:rpassword});
 
@@ -98,6 +100,30 @@ var server =config.get('server');
             }}
         ], callback);
     }
+    if (isNew=='3') {
+        console.log("user auth isnew=3");
+
+        async.waterfall([
+            function (callback) {
+                User.findOne({email: email}, callback);
+            },
+            function (user, callback) {
+                if (user) {
+                    callback(null, user);
+                }
+                else {
+                    var rpassword = randomString({length: 6});
+		    var user = new User({_id:new ObjectID().toString(), email: email,fio:fio, tel: tel, password: rpassword,firstpass:rpassword});
+ 		console.log(user._id);	
+                    user.save(function (err) {
+                    if (err) {return callback(err);}else{
+ // 			mailer(user.email,'Регистрация',null,'regmail',{server:server,user:user,password:rpassword});
+                    callback(null, user); } 
+                });
+            }}
+        ], callback);
+    }
+
     else if (isNew=='0') {
 
         console.log("user auth isnew=0");

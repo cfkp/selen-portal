@@ -7,6 +7,7 @@ var User = require('models/user').User;
 var HttpError = require('error').HttpError;
 var AuthError = require('models/user').AuthError;
 var mailer = require('../middleware/sendmail'); //-- Your js file path
+var sess = require('../middleware/session'); //-- Your js file path
 
 var async = require('async');
 
@@ -121,18 +122,23 @@ router.get('/registration', function (req, res, next) {
 							}
 						},
 			function (err, docs) {
- 		
-		if (err || (!docs)|| (docs.result.n==0)) {
+ 		if (err || (!docs)|| (docs.result.n==0)) {
 		//	res.status(400).json({'msg': 'Ошибка регистрации пользователь не найден'});
 		  res.render('regfinish',{'msg':{'type':'error','msg': 'Ошибка регистрации пользователь не найден'}});
 
 		} else {
 		req.session.user = obj_id;
-   
-  		pers_req.update_newuser_request(obj_id) ;
+  		sess.setCurrentUserbyID (obj_id,
+		function (err){
+			var user=sess.CurrentUser();
+			mailer(user.email,'Окончание регистрации',null,'end_register',{user:user}); 
+ 	 		pers_req.update_newuser_request(obj_id) ;
+			res.render('regfinish',{'msg':{'type':'message','msg':  "Спасибо за регистрацию.<br> По указанному Вами адресу направлено письмо с временным паролем. <br> В целях безопасности. После входа смените на новый пароль в личном кабинете."}});
+ 
+		}
+		);
  			
-		  res.render('regfinish',{'msg':{'type':'message','msg':  "Спасибо за регистрацию"}});
-
+ 
 		}
  
 
@@ -141,5 +147,40 @@ router.get('/registration', function (req, res, next) {
  	
 });
 
+router.get('/confirm_request', function (req, res, next) {
+
+       log.info({req:req},"confirm_request");
+
+	var userID = req.session.user;
+	var meta_class = "person_request";
+
+	/////////////////////////
+	var dbloc = db.get();
+	var new_state="Экспертиза";
+	var obj_id = req.query.confirm;//new ObjectID(req.query.confirm);
+
+	dbloc.collection(meta_class).updateOne({
+						"_id": obj_id
+						}, 
+						{
+						$set: {
+						"state": new_state
+							}
+						},
+			function (err, docs) {
+ 		if (err || (!docs)|| (docs.result.n==0)) {
+		  res.render('regfinish',{'msg':{'type':'error','msg': 'Ошибка подтверждения, заявка не найдена'}});
+
+		} else {
+
+		  res.render('regfinish',{'msg':{'type':'message','msg':  "Спасибо. В ближайшее время с Вами свяжется специалист"}});
+
+		}
+ 
+
+ 	}); 
+	
+ 	
+});
 
 module.exports = router;

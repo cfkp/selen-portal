@@ -118,7 +118,7 @@ if (("undefined" === typeof $ || "undefined" === typeof $.fn || "undefined" === 
 	var clearRefButton = document.createElement("button");
                 clearRefButton.className = " glyphicon glyphicon-trash btn btn-primary  btn-xs";
 
-                clearRefButton .onclick = function () {
+                clearRefButton.onclick = function () {
                       	$(element.parentNode).find('input').val(null);     
  			$(element).change();
        		 
@@ -128,6 +128,12 @@ if (("undefined" === typeof $ || "undefined" === typeof $.fn || "undefined" === 
 		if (element.value){
 			fill_ref( schema.meta_ref,input_value,element);
 		};
+		 if (schema.readOnly)
+                        {input_value.disabled = true;
+			clearRefButton.disabled=true;
+			searchButton.disabled=true;}
+
+
 
 		
     	}}

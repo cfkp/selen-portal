@@ -1,0 +1,1054 @@
+{
+    "_id": "5913816b1e79274ee23acd3c",
+    "meta_name": "project",
+    "meta_table_name": "project",
+    "pers_request": {
+        "title":"имя коллекции",
+	"$ref": "person_request",
+        "$id": null
+    },
+    "data": {
+        "title": "Проект",
+        "type": "object",
+        "required": true,
+        "properties": {
+            "info": {
+                "title": "Данные по проекту",
+                "$ref": "#/definitions/project_info_type",
+                "$id": null
+            },
+            "sum": {
+                "title": "Сумма проекта",
+                "$ref": "#/definitions/project_sum",
+                "$id": null
+            },
+            "invest_struct": {
+                "title": "Структура финансирования проекта",
+                "$ref": "#/definitions/project_invest_struct",
+                "$id": null
+            },
+            "product": {
+                "title": "Продукт",
+                "$ref": "#/definitions/project_product",
+                "$id": null
+            },
+            "tech": {
+                "title": "Технология и инфраструктура",
+                "$ref": "#/definitions/project_tech",
+                "$id": null
+            },
+            "market": {
+                "title": "Рынок",
+                "$ref": "#/definitions/project_market",
+                "$id": null
+            },
+            "indicators": {
+                "title": "Финансовые и инвестиционные показатели проектной компании / проекта",
+                "$ref": "#/definitions/project_indicators",
+                "$id": null
+            },
+            "other": {
+                "title": "Прочее",
+                "$ref": "#/definitions/project_other",
+                "$id": null
+            },
+            "credit": {
+                "title": "Кредит",
+                "$ref": "#/definitions/credit_info",
+                "$id": null
+            },
+            "prognosis": {
+                "title": "Прогнозные финансовые показатели ",
+                "$ref": "#/definitions/prognosis",
+                "$id": null
+            },
+            "app1": {
+                "title": "Приложение 1",
+                "$ref": "#/definitions/app1",
+                "$id": null
+            },
+            "app3": {
+                "title": "Реализация продукции по проекту",
+                "$ref": "#/definitions/app3",
+                "$id": null
+            }
+        },
+        "definitions": {
+            "project_info_type": {
+                "title": "Данные по проекту",
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "project_name": {
+                        "required": true,
+                        "title": "Наименование проекта",
+                        "type": "string",
+                        "format": "text",
+                        "description": "Введите наименование проекта например: возведение моста в коровнике "
+                    },
+                    "project_status_MSP": {
+                        "required": true,
+                        "title": "Статус субъекта МСП",
+                        "type": "boolean",
+                        "description": "Наличие в Едином реестре малого и среднего предпринимательства www.nalog.ru"
+                    },
+                    "project_vid": {
+                        "required": true,
+                        "title": "Направление проекта",
+                        "description": "К какому направлению из нижеперечисленных относится Ваш проект?",
+                        "type": "string",
+                        "enum": [
+                            "Сельское хозяйство (в т.ч производство с/х продукции)",
+                            "Обрабатывающее производство  (в т.ч. производство пищевых продуктов)",
+                            "Производство и распределение электроэнергии, газа и воды",
+                            "Строительство",
+                            "Транспорт и связь",
+                            "Производство и реализация импортозамещающей продукции",
+                            "Приоритетные направления развития науки, технологий и техники в Российской Федерации и направления развития критических технологий Российской Федерации в соответствии с Указом Президента Российской Федерации от 07.07.2011 № 899",
+			"Туристическая деятельность", 
+			"Деятельность в области здравоохранения",
+			"Сбор, обработка и утилизация отходов во вторичное сырье"
+                        ]
+                    },
+                    "support": {
+                        "required": true,
+                        "title": "Гос. Поддержка проекта",
+                        "description": "Поддержка проекта со стороны региона, профильных федеральных органов исполнительной власти (Минсельхоз, Минпромторг, Минэнерго, Минкомсвязь и т.д.)",
+                        "type": "boolean"
+                    },
+                    "perfletters": {
+                        "required": true,
+                        "title": "Преференциальные/комфортные письма",
+                        "description": "Преференциальные/комфортные письма в рамках проекта от органов управления субъекта РФ,  ФОИВов, иных органов государственной власти",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "other_support": {
+                        "required": true,
+                        "title": "Прочиe виды поддержки",
+                        "description": "Оказание прочих видов поддержки проекта со стороны субъекта РФ, ФОИВа,  иных субъектов инфраструктуры поддержки  МСП (субсидирование, гарантийная поддержка, концессия и т.д.)",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "project_resume": {
+                        "required": true,
+                        "title": "Краткое описание проекта",
+                        "description": "Краткое описание проекта, текущий статус реализации проекта, информация об инициаторах проекта",
+                        "type": "boolean"
+                    },
+                    "rationale": {
+                        "required": true,
+                        "title": "Экономическое обоснование проекта",
+                        "description": "Экономическое обоснование проекта, описание финансовой модели и результата проекта",
+                        "type": "boolean"
+                    },
+                    "sales_analysis": {
+                        "required": true,
+                        "title": "Анализ сбыта, данные о покупателях/маркетинговое исследование рынка",
+                        "type": "boolean"
+                    },
+                    "suppliers": {
+                        "required": true,
+                        "title": "Данные о поставщиках/подрядчиках",
+                        "type": "boolean"
+                    },
+                    "stages": {
+                        "required": true,
+                        "title": "Этапы реализации",
+                        "type": "text"
+                    },
+                    "estimate": {
+                        "required": true,
+                        "title": "Смета проекта",
+                        "type": "boolean"
+                    },
+                    "sources_and_structure": {
+                        "required": true,
+                        "title": "Источники и структура финансирования каждого этапа (собственные средства, заемные средства и т.д.)",
+                        "type": "boolean"
+                    },
+                    "professional_experience": {
+                        "required": true,
+                        "title": "Данные о наличии профессионального опыта менеджеров/бенефициаров в сфере реализуемого проекта",
+                        "type": "boolean"
+                    },
+                    "SWOT": {
+                        "required": true,
+                        "title": "Конкурентный/SWOT –анализ",
+                        "type": "boolean"
+                    },
+                    "percentage_of_participation": {
+                        "required": true,
+                        "title": "Доля собственного участия в проекте %",
+                        "type": "integer"
+                    },
+                    "source_doc": {
+                        "required": true,
+                        "title": "Наличие исходно-разрешительной документации по строительству сооружений в рамках реализуемого проекта",
+                        "type": "boolean"
+                    },
+                    "tech_expertise": {
+                        "required": true,
+                        "title": "Наличие технологической и технической экспертизы проекта, подтверждающая инвестиционный бюджет проекта и целесообразность его реализации",
+                        "type": "boolean"
+                    },
+                    "information": {
+                        "required": true,
+                        "title": "Наличие информации о текущей деятельности инициатора проекта, связанных компаний/группы компаний инициатора проекта (при наличии группы)",
+                        "type": "boolean"
+                    },
+                    "project_type": {
+                        "required": true,
+                        "title": "Вид проекта",
+                        "type": "string",
+                        "enum": [
+                            "новое производство",
+                            "расширение существующего производства"
+                        ]
+                    },
+                    "project_goal": {
+                        "required": true,
+                        "title": "Цель реализации проекта / целевые проектные показатели",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "project_plan": {
+                        "required": true,
+                        "title": "Сроки / график реализации",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "project_keys": {
+                        "required": true,
+                        "title": "Ключевые экономические показатели проекта / конкурентные преимущества",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "project_status": {
+                        "required": true,
+                        "title": "Текущий статус проработки проекта",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "project_corp_support": {
+                        "required": true,
+                        "title": "Требуемый вид поддержки от Корпорации",
+                        "type": "string",
+                        "format": "text",
+                        "enum": [
+                            "Гарантийная поддержка",
+                            "Программа 6,5 %",
+                            "Гарантийная поддержка и Программа 6,5%"
+                        ]
+                    }
+                }
+            },
+            "project_sum": {
+                "title": "Сумма проекта",
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "sum_total": {
+                        "required": true,
+                        "title": "Общая сумма проекта (тыс. руб)",
+                        "type": "integer"
+                    },
+                    "sum_min": {
+                        "required": true,
+                        "title": "Общая сумма проекта, не менее(тыс. руб)",
+                        "description": "Укажите минимально возможную сумму для запуска проекта",
+                        "type": "integer"
+                    },
+                    "sum_max": {
+                        "required": true,
+                        "title": "Общая сумма проекта, не более(тыс. руб)",
+                        "description": "Укажите максимальную сумму для запуска проекта",
+                        "type": "integer"
+                    },
+                    "sum_doc": {
+                        "required": true,
+                        "title": "Проектная и разрешительная документация",
+                        "type": "integer"
+                    },
+                    "sum_equipment": {
+                        "required": true,
+                        "title": "Оборудование",
+                        "type": "integer"
+                    },
+                    "sum_CMP": {
+                        "required": true,
+                        "title": "СМР",
+                        "type": "integer"
+                    },
+                    "sum_working_capital": {
+                        "required": true,
+                        "title": "Оборотные средства",
+                        "type": "integer"
+                    },
+                    "sum_nds": {
+                        "required": true,
+                        "title": "НДС",
+                        "type": "integer"
+                    }
+                }
+            },
+            "project_invest_struct": {
+                "title": "Структура финансирования проекта",
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "invest_sum": {
+                        "required": true,
+                        "title": "Сумма финансирования тыс. руб.",
+                        "type": "integer"
+                    },
+                    "invest_struct": {
+                        "required": true,
+                        "title": "Структура финансирования тыс. руб.",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "invest_own_percent": {
+                        "required": true,
+                        "title": "Собственные средства %",
+                        "type": "string"
+                    },
+                    "invest_debt_percent": {
+                        "required": true,
+                        "title": "Долговое финансирование %",
+                        "type": "string"
+                    }
+                }
+            },
+            "project_product": {
+                "title": "Продукт",
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "product_name": {
+                        "required": true,
+                        "title": "Наименование / технические и экономические характеристики",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "product_unique": {
+                        "required": true,
+                        "title": "Уникальный / типовой продукт",
+                        "type": "string",
+                        "enum": [
+                            "Уникальный",
+                            "Типовой продукт"
+                        ]
+                    },
+                    "product_analog": {
+                        "required": true,
+                        "title": "Перечень аналогов на целевом рынке / конкурентные преимущества / основные конкуренты",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "product_struct": {
+                        "required": true,
+                        "title": "Структура себестоимости / ключевые факторы, влияющие на себестоимость",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "product_import": {
+                        "required": true,
+                        "title": "Доля импорта в себестоимости, %",
+                        "type": "string",
+                        "format": "text"
+                    }
+                }
+            },
+            "project_tech": {
+                "title": "Технология и инфраструктура",
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "tech_new": {
+                        "required": true,
+                        "description": "Степень новизны и сложности используемой технологии (типовая распространенная на рынке или уникальная технология)",
+                        "title": "Степень новизны технологии",
+                        "type": "string",
+                        "enum": [
+                            "Типовая технология",
+                            "Уникальная технология"
+                        ]
+                    },
+                    "tech_exp": {
+                        "required": true,
+                        "title": "Наличие технологической экспертизы",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "tech_loc_address": {
+                        "required": true,
+                        "title": "Местонахождение (адрес)",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "tech_loc_status": {
+                        "required": true,
+                        "title": "Юридический статус",
+                        "type": "string",
+                        "enum": [
+                            "аренда",
+                            "собственность"
+                        ]
+                    },
+                    "inf_current": {
+                        "required": true,
+                        "description": "Имеющаяся инфраструктура (ТУ): дороги, вода, газ, электричество, прочее",
+                        "title": "Имеющаяся инфраструктура (ТУ):",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "inf_future": {
+                        "required": true,
+                        "description": "Необходимая инфраструктура (ТУ) / сроки получения (от чего зависит): дороги, вода, газ, электричество, прочее",
+                        "title": "Необходимая инфраструктура (ТУ)",
+                        "type": "string",
+                        "format": "text"
+                    }
+                }
+            },
+            "project_market": {
+                "title": "Рынок",
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "market_info": {
+                        "required": true,
+                        "title": "Источник информации о рынке",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "market_goal": {
+                        "required": true,
+                        "title": "Целевой рынок: локальный / экспорт (регионы / емкость / ключевые игроки / прочее)",
+                        "type": "string",
+                        "enum": [
+                            "локальный",
+                            "экспорт"
+                        ]
+                    },
+                    "market_emkost": {
+                        "required": true,
+                        "title": "Емкость, тыс. руб.",
+                        "type": "integer"
+                    },
+                    "market_key": {
+                        "required": true,
+                        "title": "Ключевые игроки, доля ",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "market_percent": {
+                        "required": true,
+                        "title": "Доля проекта в целевом рыночном сегменте, % ",
+                        "type": "integer"
+                    },
+                    "market_project": {
+                        "required": true,
+                        "title": "Наличие маркетингового исследования",
+                        "type": "boolean"
+                    },
+                    "market_list": {
+                        "required": true,
+                        "title": "Список покупателей/ предварительные договора / комфортные письма / коммерческие предложения с указанием объемов и цены",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "market_plan": {
+                        "required": true,
+                        "title": "Планируемый график реализации",
+                        "type": "string",
+                        "format": "text"
+                    }
+                }
+            },
+            "project_indicators": {
+                "title": "Финансовые и инвестиционные показатели проектной компании / проекта",
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "indic_receipt": {
+                        "required": true,
+                        "title": "Выручка",
+                        "type": "string"
+                    },
+                    "indic_ebitda": {
+                        "required": true,
+                        "title": "EBITDA",
+                        "type": "string"
+                    },
+                    "indic_clear": {
+                        "required": true,
+                        "title": "Чистая прибыль",
+                        "type": "string"
+                    },
+                    "indic_nrv": {
+                        "required": true,
+                        "title": "NRV",
+                        "type": "string"
+                    },
+                    "indic_irr": {
+                        "required": true,
+                        "title": "IRR",
+                        "type": "string"
+                    },
+                    "indic_other": {
+                        "required": true,
+                        "title": "Прочие",
+                        "type": "string",
+                        "format": "text"
+                    }
+                }
+            },
+            "prognosis": {
+                "title": "Прогнозные финансовые показатели ",
+                "minItems": 6,
+                "maxItems": 6,
+                "format": "grid",
+                "gridX": "year",
+                "type": "array",
+                "items": {
+                    "title": "",
+                    "type": "object",
+                    "properties": {
+                        "year": {
+                            "required": true,
+                            "title": "Год",
+                            "type": "string",
+                            "enum": [
+                                "2016",
+                                "2017",
+                                "2018",
+                                "2019",
+                                "2020",
+                                "2021"
+                            ]
+                        },
+                        "prognosis_EBITDA": {
+                            "required": true,
+                            "title": "EBITDA",
+                            "type": "integer"
+                        },
+                        "prognosis_rent_EBITDA": {
+                            "required": true,
+                            "title": "Рентабельность по EBITDA",
+                            "type": "integer"
+                        },
+                        "prognosis_clear": {
+                            "required": true,
+                            "title": "Чистая прибыль",
+                            "type": "integer"
+                        },
+                        "prognosis_money": {
+                            "required": true,
+                            "title": "Денежные средства и эквивалент",
+                            "type": "integer"
+                        },
+                        "prognosis_op_money": {
+                            "required": true,
+                            "title": "Операционный денежный поток",
+                            "type": "integer"
+                        },
+                        "prognosis_invest": {
+                            "required": true,
+                            "title": "Инвестиции",
+                            "type": "integer"
+                        },
+                        "prognosis_post_invest": {
+                            "required": true,
+                            "title": "Денежный поток после инвестиционной деятельности (до финансирования)",
+                            "type": "integer"
+                        },
+                        "prognosis_post_finans": {
+                            "required": true,
+                            "title": "Чистый денежный поток после финансирования",
+                            "type": "integer"
+                        }
+                    }
+                }
+            },
+            "project_other": {
+                "title": "Прочее",
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "other_raw": {
+                        "required": true,
+                        "title": "(Поставщик сырья)Список / предварительные договора / комфортные письма / коммерческие предложения с указанием объемов и цены",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "other_equipment": {
+                        "required": true,
+                        "title": "(Поставщик/и оборудования)Список / предварительные договора / комфортные письма / коммерческие предложения с указанием цены",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "other_CMP": {
+                        "required": true,
+                        "title": "(СМР / генподрядчик)Наименование / опыт реализации подобных проектов",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "other_doc": {
+                        "required": true,
+                        "title": "(Проектно-разрешительная документация и экспертиза)Статус (наличие / в процессе / сроки подготовки)",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "other_autor": {
+                        "required": true,
+                        "title": "(Проектно-разрешительная документация и экспертиза)Автор (наименование и опыт реализации подобных проектов)",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "other_building": {
+                        "required": true,
+                        "title": "(Разрешение на строительство)Дата получения",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "other_ec_risk": {
+                        "required": true,
+                        "title": "Экологические аспекты / риски",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "other_ec_need": {
+                        "required": true,
+                        "title": "Необходимость / наличие экологической экспертизы",
+                        "type": "string",
+                        "format": "text"
+                    },
+                    "other_staff_count": {
+                        "required": true,
+                        "title": "Количество планируемых к поддержанию, созданию и модернизации высокопроизводительных рабочих мест",
+                        "type": "integer"
+                    },
+                    "other_staff_text": {
+                        "required": true,
+                        "title": "Количество планируемых к поддержанию, созданию и модернизации высокопроизводительных рабочих мест(ссылка на бизнес-план)",
+                        "type": "string",
+                        "format": "text"
+                    }
+                }
+            },
+            "credit_info": {
+                "title": "Кредит",
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "cred_ent": {
+                        "required": true,
+                        "title": "Заемщик",
+                        "type": "string",
+                        "enum": [
+                            "Инициатор проекта",
+                            "Проектная организация"
+                        ]
+                    },
+                    "bank_name": {
+                        "required": true,
+                        "title": "Наименование кредитующего банка",
+                        "type": "string"
+                    },
+                    "contact_bank": {
+                        "required": false,
+                        "describe": "Контактное лицо (ФИО, должность, контактный телефон, адрес электронной почты) (заполняется  в случае заявки на контргарантию/синдицированную/согарантию)",
+                        "title": "Контактное лицо в банке",
+                        "type": "text"
+                    },
+                    "status_bank": {
+                        "required": false,
+                        "title": "Статус заявки в банке",
+                        "type": "string"
+                    },
+                    "sum": {
+                        "required": true,
+                        "title": "Сумма кредита",
+                        "type": "integer"
+                    },
+                    "term": {
+                        "required": true,
+                        "title": "Срок",
+                        "type": "string"
+                    },
+                    "percent": {
+                        "required": true,
+                        "title": "Процентная ставка",
+                        "type": "string"
+                    },
+                    "goal_bool": {
+                        "required": true,
+                        "title": "Цель кредита попадает под категории",
+                        "describe": "Цель кредита – приобретение/строительство основных средств, финансирование текущих затрат по проекту, пополнение оборотных средств",
+                        "type": "boolean"
+                    },
+                    "goal": {
+                        "required": true,
+                        "title": "Цель кредита(описание)",
+                        "type": "text"
+                    },
+                    "region_rf": {
+                        "required": true,
+                        "title": "Регион субьект РФ",
+                        "type": "string"
+                    },
+                    "who_init": {
+                        "title": "Инициатор",
+                        "required": true,
+                        "oneOf": [
+                            {
+                                "direct": {
+                                    "title": "Прямое обращение инициатора"
+                                }
+                            },
+                            {
+                                "subjectrf": {
+                                    "title": "Субъект РФ",
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "required": true,
+                                            "type": "string",
+                                            "title": "Наименование"
+                                        },
+                                        "inn": {
+                                            "required": true,
+                                            "title": "ИНН",
+                                            "type": "integer",
+                                            "pattern": "\\b\\d{12}\\b"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "unions": {
+                                    "title": "Объединения",
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "required": true,
+                                            "type": "string",
+                                            "title": "Наименование"
+                                        },
+                                        "inn": {
+                                            "required": true,
+                                            "title": "ИНН",
+                                            "type": "integer",
+                                            "pattern": "\\b\\d{12}\\b"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "garant_vid": {
+                        "required": true,
+                        "title": "Гарантия МСП - вид",
+                        "type": "string",
+                        "enum": [
+                            "прямая гарантия для инвестиций",
+                            "прямая гарантия для застройщиков",
+                            "прямая гарантия для обеспечения гарантии исполнения контракта",
+                            "прямая гарантия для обеспечения кредита на исполнение контракта",
+                            "прямая гарантия для обеспечения кредитов предприятиям, зарегистрированным в Республике Крым и/или городе федерального значения Севастополь",
+                            "прямая гарантия для обеспечения финансирования индустриальных парков",
+                            "прямая гарантия для обеспечения выданных кредитов",
+                            "прямая гарантия для обеспечения реструктурируемых /рефинансируемых кредитов",
+                            "прямая гарантия для обеспечения кредитов для неторгового сектора с целью пополнения оборотных средств",
+                            "контргарантия",
+                            "синдицированная гарантия",
+                            "прямая гарантия, выдаваемая совместно с поручительством РГО (согарантия)"
+                        ]
+                    },
+                    "garant_sum": {
+                        "required": true,
+                        "title": "Гарантия МСП - сумма",
+                        "type": "integer"
+                    },
+                    "garant_other": {
+                        "required": true,
+                        "title": "Гарантия МСП - прочее",
+                        "type": "text"
+                    },
+                    "garant_term": {
+                        "required": true,
+                        "title": "Срок независимой гарантии",
+                        "type": "string"
+                    },
+                    "pay_period": {
+                        "required": true,
+                        "title": "Желаемая переодичность уплаты Корпорации вознаграждения",
+                        "type": "string",
+                        "enum": [
+                            "единовременно",
+                            "ежегодно",
+                            "1 раз в полгода",
+                            "ежеквартально"
+                        ]
+                    },
+                    "garant_date": {
+                        "required": true,
+                        "title": "Планируемая дата заключения кредитной документации с гарантией Корпорации",
+                        "type": "string"
+                    },
+                    "provision": {
+                        "required": true,
+                        "title": "Предлагаемое обеспечение",
+                        "type": "string",
+                        "enum": [
+                            "Залоги",
+                            "Поручительства",
+                            "Прочие"
+                        ]
+                    },
+                    "provision_struct": {
+                        "required": true,
+                        "title": "Структура предоставляемого обеспечения (залоги и поручительство). По продуктам с участием РГО указать сумму и срок поручительства РГО",
+                        "type": "text"
+                    },
+                    "regres_struct": {
+                        "required": false,
+                        "title": "Структура предоставляемого обеспечения регрессных требований Корпорации (последующие залоги и (или) поручительства)",
+                        "type": "text"
+                    },
+                    "reg_garant": {
+                        "required": false,
+                        "title": "Региональная гарантийная организация, участвующая в проекте (наименование, если применимо) (заполняется  в случае заявки на контргарантию/синдицированную гарантию/согарантию)",
+                        "type": "text"
+                    },
+                    "contact_garant": {
+                        "required": false,
+                        "title": "Контактное лицо в Региональной гарантийной организации (ФИО, должность, контактный телефон, адрес электронной почты) (заполняется  в случае заявки на контргарантию/синдицированную/согарантию)",
+                        "type": "object",
+                        "properties": {
+                            "fio": {
+                                "required": true,
+                                "title": "ФИО",
+                                "type": "string"
+                            },
+                            "email": {
+                                "required": true,
+                                "title": "E-Mail",
+                                "type": "email"
+                            },
+                            "position": {
+                                "required": true,
+                                "title": "Должность",
+                                "type": "string"
+                            },
+                            "telephone": {
+                                "required": true,
+                                "title": "Контактный телефон",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "app1_row": {
+                "type": "object",
+                "title": "Показатели приложения 1",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Наименование"
+                    },
+                    "terms": {
+                        "type": "string",
+                        "title": "Сроки реализации"
+                    },
+                    "contracts": {
+                        "type": "string",
+                        "title": "Заключенные договоры, платежные поручения/другие комментарии"
+                    },
+                    "sum_total": {
+                        "type": "integer",
+                        "title": "Сумма всего, тыс. руб."
+                    },
+                    "sum_own": {
+                        "type": "integer",
+                        "title": "Собственные средства, тыс. руб."
+                    },
+                    "sum_creditor": {
+                        "type": "integer",
+                        "title": "Средства кредитора, тыс. руб."
+                    },
+                    "sum_rest_own": {
+                        "type": "integer",
+                        "title": "Остаток к финансированию, за счет собственных средств, тыс. руб."
+                    },
+                    "sum_rest_creditor": {
+                        "type": "integer",
+                        "title": "Остаток к финансированию, за счет кредитора, тыс. руб."
+                    }
+                }
+            },
+            "app1": {
+                "title": "Приложение 1",
+                "type": "object",
+                "format": "grid",
+                "header": "#/definitions/app1_row",
+                "required": true,
+                "properties": {
+                    "land_relation": {
+                        "type": "object",
+                        "title": "1.ЗЕМЕЛЬНЫЕ ОТНОШЕНИЯ",
+                        "properties": {
+                            "land": {
+                                "title": "Земельный участок",
+                                "$ref": "#/definitions/app1_row",
+                                "$id": null
+                            }
+                        }
+                    },
+                    "design_permitting_doc": {
+                        "type": "object",
+                        "title": "2.ПРОЕКТНО-РАЗРЕШИТЕЛЬНАЯ ДОКУМЕНТАЦИЯ",
+                        "properties": {
+                            "project_doc": {
+                                "title": "2.1.Заключение договоров на разработку проектной документации",
+                                "$ref": "#/definitions/app1_row",
+                                "$id": null
+                            },
+                            "project_exp": {
+                                "title": "2.2.Экспертиза проекта",
+                                "$ref": "#/definitions/app1_row",
+                                "$id": null
+                            },
+                            "project_permitt": {
+                                "title": "2.3.Разрешение на строительство",
+                                "$ref": "#/definitions/app1_row",
+                                "$id": null
+                            }
+                        }
+                    },
+                    "infrastructure": {
+                        "type": "object",
+                        "title": "3.ИНФРАСТРУКТУРА",
+                        "properties": {
+                            "сonclusion_dog": {
+                                "title": "3.1.Заключение договоров",
+                                "$ref": "#/definitions/app1_row",
+                                "$id": null
+                            },
+                            "сonclusion_inf": {
+                                "title": "3.2.Возведение инфраструктуры",
+                                "$ref": "#/definitions/app1_row",
+                                "$id": null
+                            }
+                        }
+                    },
+                    "cmp": {
+                        "type": "object",
+                        "title": "4.СМР",
+                        "properties": {
+                            "сonclusion_gen": {
+                                "title": "4.1.Заключение договора генерального подряда",
+                                "$ref": "#/definitions/app1_row",
+                                "$id": null
+                            },
+                            "сonclusion_build": {
+                                "title": "4.2.Проведение строительно-монтажных работ по основным объектам (в разрезе каждого объекта)",
+                                "$ref": "#/definitions/app1_row",
+                                "$id": null
+                            }
+                        }
+                    },
+                    "main_equipment": {
+                        "type": "object",
+                        "title": "5.ОСНОВНОЕ ОБОРУДОВАНИЕ",
+                        "properties": {
+                            "equipment": {
+                                "title": "5.1.Приобретение оборудования/технологии (с указанием размещения оборудования)",
+                                "$ref": "#/definitions/app1_row",
+                                "$id": null
+                            },
+                            "installation": {
+                                "title": "5.2.Пусконаладочные работы и шеф-монтаж",
+                                "$ref": "#/definitions/app1_row",
+                                "$id": null
+                            }
+                        }
+                    },
+                    "add_equipment": {
+                        "type": "object",
+                        "title": "6.ВСПОМОГАТЕЛЬНОЕ ОБОРУДОВАНИЕ",
+                        "properties": {
+                            "equipment": {
+                                "title": "6.1.Приобретение оборудования/технологии (с указанием размещения оборудования)",
+                                "$ref": "#/definitions/app1_row",
+                                "$id": null
+                            },
+                            "installation": {
+                                "title": "6.2.Пусконаладочные работы и шеф-монтаж",
+                                "$ref": "#/definitions/app1_row",
+                                "$id": null
+                            }
+                        }
+                    },
+                    "raw_materials": {
+                        "type": "array",
+                        "title": "7.СЫРЬЕ И МАТЕРИАЛЫ",
+                        "items": {
+                            "title": "Договоры с поставщиками сырья",
+                            "$ref": "#/definitions/app1_row",
+                            "$id": null
+                        }
+                    }
+                }
+            },
+            "app3": {
+                "title": "Реализация продукции по проекту",
+                "minItems": 4,
+                "maxItems": 4,
+                "format": "grid",
+                "gridX": "year",
+                "type": "array",
+                "items": {
+                    "title": "",
+                    "type": "object",
+                    "properties": {
+                        "year": {
+                            "required": true,
+                            "title": "Год",
+                            "type": "string",
+                            "enum": [
+                                "В натуральном выражении, едениц в год",
+                                "В денежном выражении, млн. в год",
+                                "Источники информации и (или) подтверждающие документы"
+                            ]
+                        },
+                        "app3_market_volume": {
+                            "required": true,
+                            "title": "ОБЩАЯ ЕМКОСТЬ РЫНКА ПРОДУКЦИИ",
+                            "type": "string"
+                        },
+                        "app3_product_volume": {
+                            "required": true,
+                            "title": "ТЕКУЩИЙ ОБЪЕМ ВСЕГО РЫНКА ПРОИЗВОДИМОЙ ПРОДУКЦИИ",
+                            "type": "string"
+                        },
+                        "app3_potential_volume": {
+                            "required": true,
+                            "title": "ПОТЕНЦИАЛ РЫНКА ПРОДУКЦИИ",
+                            "type": "string"
+                        },
+                        "app3_plan_volume": {
+                            "required": true,
+                            "title": "ПЛАНИРУЕМЫЙ ОБЪЕМ ПРОИЗВОДСТВА ПРОДУКЦИИ В РАМКАХ ПРОЕКТА",
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "this_meta_class": "meta_class"
+}

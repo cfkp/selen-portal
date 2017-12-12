@@ -29,14 +29,17 @@ return id_cont;
 class SelenView {
 
   constructor(parentobj,_meta_class,_meta_view) 
-{       this.parent=parentobj;
+{       var obj_container;
+	if (parentobj) {
+	this.parent=parentobj;
 	this.parent_container=this.parent.container;
+	}else {this.parent_container=$('#refview .modal-body')}
 
-	var obj_container = $('<div></div>'); 
+	obj_container = $('<div></div>'); 
 	obj_container.attr('class','sln_container');	 
 	obj_container.attr('id','sln_cnt'+_meta_view);
 	this.parent_container.append(obj_container);
-		
+	 		
 	this.container=obj_container;
 
 	this.container.attr('meta_class',_meta_class);
@@ -194,7 +197,8 @@ h=400;
 	            container.jqGrid("resetSelection");
 	            //return true;
 	        },
-		onSelectRow: cb(this,this.onSelectRow)	});
+		onSelectRow: cb(this,this.onSelectRow),
+		onSelectAll:cb(this,this.onSelectAll)	});
 
 	container.navGrid(this.gridid.gridpager_id_, {
 		search: true, // show search button on the toolbar
@@ -269,7 +273,21 @@ get_selected_rows() {
 	return this.selected_rows;
 }
 
+onSelectAll(elem,id,status){
+ 	if (this.methods&&this.methods.container) {
+	var reports = this.methods.container.find("#rep_menu")
+	if (reports) {
+		reports.find( "#rep5" ).each(function( index ) {
+			if (status ){
+			$( this ).attr("href",$( this ).attr("hreftempl").replace('<%=meta_parent_value%>',id.join()))
+			}	
+			else {
+			$( this ).attr("href", null);
 
+			}
+		});	                           };
+
+}}
 onSelectRow (elem,rowid, selected) {
 	if ((this.header.detail) && (rowid != null)) {
 		if (this.detail) {
@@ -286,11 +304,12 @@ onSelectRow (elem,rowid, selected) {
 			this.detail.collection.meta_parent_value=rowid;
 
 			this.detail.meta_readonly="this.header.detail.readonly";
-			var reports = this.detail.container.find("#rep_menu")
+			if (this.methods&&this.methods.container) {
+			var reports = this.methods.container.find("#rep_menu")
 			if (reports) {
 				reports.find( "li a" ).each(function( index ) {
 					$( this ).attr("href",$( this ).attr("hreftempl").replace('<%=meta_parent_value%>',rowid))
-				});	
+				});	                           };
 			} 
 this.detail.Show();
 		//	detail_container.show();

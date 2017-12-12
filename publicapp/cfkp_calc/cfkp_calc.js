@@ -51,7 +51,22 @@ $("#show_search").bind('click', function () {
 
 } );
 
-
+var serializeObject = function(form)
+{
+   var o = {};
+   var a = form.serializeArray();
+   $.each(a, function() {
+       if (o[this.name]) {
+           if (!o[this.name].push) {
+               o[this.name] = [o[this.name]];
+           }
+           o[this.name].push(this.value || '');
+       } else {
+           o[this.name] = this.value || '';
+       }
+   });
+   return o;
+};
 
     function insertTemplate(container,data) {
 
@@ -99,8 +114,11 @@ function get_filter(p ){
 "goal":"Инвестиции в развитие"}
 */
 if (p.msp_nal=='on'){p.msp_nal=true} else {p.msp_nal=false};
-var prod1,prod2;
+var prod1,prod2,goal1,goal2;
 if (p.product =='Кредит/Займ') {prod1='Кредит';prod2='Займ';} else {prod1=p.product;prod2=p.product;};
+if (p.goal =='Капитальные вложения и пополнение оборотных средств') 
+	{goal1='Пополнение оборотных средств';goal2='Капитальные вложения';} else {goal1=p.goal;goal2=p.goal;};
+
 var fin_amont=string2money(p.fin_amount)/1000000;
 var f =
 {
@@ -111,7 +129,8 @@ var f =
        , { 'and' : [ { 'data.program_criteria.min_percent_owner': { 'lte': Number(p.percent_owner) } }    ] }
        , { 'and' : [ { 'data.program_criteria.msp_nal': { 'eq': p.msp_nal } }    ] } */
        , { 'or' : [ { 'data.program.product': { 'eq': prod1 } },{ 'data.program.product': { 'eq': prod2 } }] }
-       , { 'and' : [ { 'data.program.goal':  p.goal  }] }
+       , { 'or' : [ { 'data.program.goal': { 'eq': goal1 } },{ 'data.program.goal': { 'eq': goal2 } }] }
+ 
     ]         
 }
 //f={};  
