@@ -42,17 +42,21 @@ function getMethodSchema(meta_class,meta_method,nextfunc){
 		},
 
 	function(schema_method,callback)
-		{   if (schema_method){callback(null,schema_method)
-			}else if(!schema_method&&(meta_method=='new'||meta_method=='edit')) {	
+		{   if (schema_method)
+			{callback(null,schema_method)
+			}
+			else if(!schema_method&&(meta_method=='new'||meta_method=='edit')) {	
 				getObjectSchema(meta_class,callback);
-			}else if(!schema_method&&meta_method=='delete'){
+			}
+			else if(!schema_method&&meta_method=='delete'){
 ///можно поставить рекурсию но пока не будем		getMethodSchema('default','delete',nextfunc)	
 				search_filter={
 					'meta_class': 'default',
 					'meta_name': 'delete'
 				};
 				db.findone("meta_method",search_filter,callback);
- 			}else{
+ 			}
+			else{
 
  			   callback ({
 				'error': 'no_schema',
