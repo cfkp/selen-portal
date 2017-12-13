@@ -78,9 +78,8 @@ var serializeObject = function(form)
         messagedlg(undefined, "Не найдено вариантов. Попробуйте изменить условия поиска", "error",function(){$("#show_search").click()}) 
 	}
 	else {
-        var formparam = serializeObject($("form"));//$("form").serialize();
-formparam['fin_amount']=string2money(formparam['fin_amount'])/1000;
-        data['formparam']=formparam;
+        var formparam = $("form").serialize();
+        data['formparam']=formparam ;
         var html = ejs.render(tpl, data);
         $(container).html(html); }
          });
@@ -115,20 +114,19 @@ function get_filter(p ){
 "goal":"Инвестиции в развитие"}
 */
 if (p.msp_nal=='on'){p.msp_nal=true} else {p.msp_nal=false};
-var prod1,prod2;
+var prod1,prod2,goal1,goal2;
 if (p.product =='Кредит/Займ') {prod1='Кредит';prod2='Займ';} else {prod1=p.product;prod2=p.product;};
+if (p.goal =='Капитальные вложения и пополнение оборотных средств') 
+	{goal1='Пополнение оборотных средств';goal2='Капитальные вложения';} else {goal1=p.goal;goal2=p.goal;};
+
 var fin_amont=string2money(p.fin_amount)/1000000;
 var f =
-{
-     'and' : [
+{ 'and' : [
         { 'and' : [ { 'data.program_criteria.min_sum': { 'lte': fin_amont } }, { 'data.program_criteria.max_sum': { 'gte': fin_amont} } ]  }
-       , { 'and' : [ { 'data.program.max_month_limit': { 'gte': Number(p.fin_period)} }    ] }
-      /* , { 'and' : [ { 'data.program_criteria.min_cost_project': { 'lte': Number(p.cost_project) } }    ] }
-       , { 'and' : [ { 'data.program_criteria.min_percent_owner': { 'lte': Number(p.percent_owner) } }    ] }
-       , { 'and' : [ { 'data.program_criteria.msp_nal': { 'eq': p.msp_nal } }    ] } */
-       , { 'or' : [ { 'data.program.product': { 'eq': prod1 } },{ 'data.program.product': { 'eq': prod2 } }] }
-       , { 'and' : [ { 'data.program.goal':  p.goal  }] }
-    ]         
+       ,{ 'and' : [ { 'data.program.max_month_limit': { 'gte': Number(p.fin_period)} }    ] }
+       ,{ 'or' : [ { 'data.program.product': { 'eq': prod1 } },{ 'data.program.product': { 'eq': prod2 } }] }
+       ,{ 'or' : [ { 'data.program.goal': { 'eq': goal1 } },{ 'data.program.goal': { 'eq': goal2 } }] }
+     ]         
 }
 //f={};  
 return f;
