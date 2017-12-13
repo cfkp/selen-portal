@@ -45,7 +45,7 @@ function getMethodSchema(meta_class,meta_method,nextfunc){
 		{   if (schema_method){callback(null,schema_method)
 			}else if(!schema_method&&(meta_method=='new'||meta_method=='edit')) {	
 				getObjectSchema(meta_class,callback);
-			}else if(!doc&&meta_method=='delete'){
+			}else if(!schema_method&&meta_method=='delete'){
 ///можно поставить рекурсию но пока не будем		getMethodSchema('default','delete',nextfunc)	
 				search_filter={
 					'meta_class': 'default',
