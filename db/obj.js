@@ -10,7 +10,59 @@ var fs = require("fs");
 var db = require('../db/db');
 
 var mailer = require('../middleware/sendmail'); //-- Your js file path
+var sess = require('../middleware/session');
 
+function jsonPathToValue(jsonData, path) {
+    if (!(jsonData instanceof Object) || typeof (path) === "undefined") {
+        throw "Not valid argument:jsonData:" + jsonData + ", path:" + path;
+    }
+    path = path.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
+    path = path.replace(/\//g, '.');
+     path = path.replace(/^\#/, ''); // strip a leading #
+    path = path.replace(/^\$/, ''); // strip a leading $
+    path = path.replace(/^\./, ''); // strip a leading dot
+//console.log('jsonPathToValue ' + JSON.stringify(jsonData,4,4));
+//console.log('jsonPathToValue ' +   path);
+     var pathArray = path.split('.');
+    for (var i = 0, n = pathArray.length; i < n; ++i) {
+        var key = pathArray[i];
+        if (key in jsonData) {
+            if (jsonData[key] !== null) {
+                jsonData = jsonData[key];
+            } else {
+                return null;
+            }
+       } else {
+            return null;//key;
+        }
+    }
+    return jsonData;
+};  
+
+
+function set_defaults(schema,sysdefs) {
+ 
+	 for (var f in schema)   
+		{ 
+		if (schema[f]!=undefined&&schema[f] instanceof Object)
+		{
+		set_defaults (schema[f],sysdefs) ;
+		}
+		else if (typeof schema[f]=='string') { 
+/*console.log(f);
+console.log(schema[f]);*/
+			var val =  schema[f];
+			if (f=='default'&&val.match(/^\$.*$/) /*'$user.email'&&sysdefs&&sysdefs.email*/){
+//console.log('set def '+val);
+				try{	  
+                        	  schema[f]=jsonPathToValue(sysdefs,val  );}
+				catch (e){schema[f]=null;}
+	
+//console.log('new  '+schema[f]);
+			};
+ 		};
+ 	};                      
+};
 
 
 function getObjectSchema(metaclass,nextfunc){
@@ -153,6 +205,12 @@ function init_method(meta_class,meta_method,obj_list,nextfunc) {
 				'msg': 'Не выбраны документы'
 			})
 		} else {
+console.log('default session  '+JSON.stringify(sess.CurrentUser(),4,4));
+			try{
+			set_defaults(results.schema,{user:sess.CurrentUser()});
+			}
+			catch(e){};
+ 			console.log('after set def '+JSON.stringify(results,4,4));
 			nextfunc(null,results);
 		}
 	});
