@@ -5,7 +5,6 @@ var ObjectID = require('mongodb').ObjectID;
 var User = require('models/user').User;
 var objlib=require('../db/obj');
 
-var mailer=require('middleware/mailer');
 
 var config = require('config');
 var sess=require('middleware/session');
