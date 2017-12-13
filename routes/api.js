@@ -24,6 +24,9 @@ router.all('/', checkAuth, function (request, response, next) {
 	next();
 });
 
+
+
+
 router.post('/loadclass/:meta_class/:parent_name/:parent_id',checkAuth, function (req, res, next) {
 log.info({req:req},'start');
 

@@ -10,7 +10,29 @@ var fs = require("fs");
 var db = require('../db/db');
 
 var mailer = require('../middleware/sendmail'); //-- Your js file path
+var sess = require('../middleware/session');
 
+function set_defaults(schema,sysdefs) {
+ 
+	 for (var f in schema)   
+		{ 
+		if (schema[f]!=undefined&&schema[f] instanceof Object)
+		{
+		set_defaults (schema[f],sysdefs) ;
+		}
+		else if (typeof schema[f]=='string') { 
+console.log(f);
+console.log(schema[f]);
+			if (f=='default'/*&&schema[f]=='$user.email'/*&&sysdefs&&sysdefs.email*/){
+console.log('set def '+sysdefs.email);
+				
+                        	  schema[f]=sysdefs.email;
+	
+console.log('new  '+schema[f]);
+			};
+ 		};
+ 	};                      
+};
 
 
 function getObjectSchema(metaclass,nextfunc){
@@ -149,6 +171,10 @@ function init_method(meta_class,meta_method,obj_list,nextfunc) {
 				'msg': 'Не выбраны документы'
 			})
 		} else {
+console.log('default session  '+JSON.stringify(sess.CurrentUser(),4,4));
+			set_defaults(results.schema,sess.CurrentUser())
+
+ 			console.log('after set def '+JSON.stringify(results,4,4));
 			nextfunc(null,results);
 		}
 	});
