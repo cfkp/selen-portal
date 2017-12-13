@@ -185,7 +185,7 @@ function sednotifymessage(pers_req_id,mess_row){
 
  		//	console.log('sednotifymessage' +' mail res '+JSON.stringify(res,4,4));
  		//	console.log('sednotifymessage' +' mail row '+JSON.stringify(mess_row,4,4));
-			if (res&&res.user_expert&&res.user_expert==sess.CurrentUserId()){
+			if (res&&res.user_createid!==sess.CurrentUserId()){
 				objlib.sendmail2user(/*res.user_createid*/res.user_expert,'Уведомление о сообщении',null,'message_notify',
 					{person_request:res,person_message:mess_row});
 			}
@@ -193,12 +193,12 @@ function sednotifymessage(pers_req_id,mess_row){
 			{	objlib.sendmail2user(res.user_expert,'Уведомление о сообщении',null,'message_notify',
 					{person_request:res,person_message:mess_row});
 			}
-			else {
+			/*else {
 				 mailer('finance@cfcp.ru','Уведомление о сообщении',null,'message_notify',
 					{person_request:res,person_message:mess_row});
 			 
 
-			}
+			}*/
 //			mailer(res.email,subject,message,templateName,data);
  	});
 
