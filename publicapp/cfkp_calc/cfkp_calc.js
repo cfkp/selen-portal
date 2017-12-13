@@ -78,7 +78,10 @@ var serializeObject = function(form)
         messagedlg(undefined, "Не найдено вариантов. Попробуйте изменить условия поиска", "error",function(){$("#show_search").click()}) 
 	}
 	else {
-        var formparam = $("form").serialize();
+//        var formparam = $("form").serialize();
+        var formparam = serializeObject($("form"));//$("form").serialize();
+	formparam['fin_amount']=string2money(formparam['fin_amount'])/1000;
+ 
         data['formparam']=formparam ;
         var html = ejs.render(tpl, data);
         $(container).html(html); }
