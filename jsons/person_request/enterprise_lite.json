@@ -1,0 +1,113 @@
+﻿{
+    "_id": "58d9b8ff548f592b4a520fc6",
+    "meta_name": "enterprise",
+    "meta_table_name": "enterprise",
+    "data": {
+        "title": "Организация",
+        "type": "object",
+        "required": true,
+        "properties": {
+            "enterprise_data": {
+                "title": "Организация",
+                "$ref": "#/definitions/enterprise",
+                "$id": null
+            },
+            "enterprise_contacts": {
+                "title": "Контактные лица",
+                "$ref": "#/definitions/contacts",
+                "$id": null
+            }
+        },
+        "definitions": {
+            "enterprise": {
+                "title": "Организация",
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "name": {
+                        "required": true,
+                        "title": "Полное наименование огранизации",
+                        "type": "text"
+                    },
+                    "inn": {
+                        "required": true,
+                        "title": "ИНН",
+                        "type": "string",
+                        "pattern": "^([0-9]{10}|[0-9]{12})$",
+                        "mask": "9999999999?99"
+                    }
+                }
+            },
+            "manager": {
+                "title": "Менеджеры",
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "title": "Сотрудник",
+                    "properties": {
+                        "high_manager": {
+                            "required": true,
+                            "type": "string",
+                            "title": "ФИО"
+                        },
+                        "position": {
+                            "required": true,
+                            "type": "string",
+                            "title": "Должность"
+                        },
+                        "sign": {
+                            "required": true,
+                            "type": "boolean",
+                            "title": "Право подписи"
+                        },
+                        "email": {
+                            "required": true,
+                            "title": "E-Mail",
+                            "type": "email"
+                        },
+                        "phone": {
+                            "type": "string",
+                            "title": "Телефон"
+                        },
+                        "contact": {
+                            "required": true,
+                            "type": "boolean",
+                            "title": "Контактное лицо"
+                        },
+                        "short_resume": {
+                            "required": true,
+                            "type": "text",
+                            "title": "Краткое резюме"
+                        }
+                    }
+                }
+            },
+            "contacts": {
+                "title": "Контактные лица",
+                "describe": "Контактные лица принципала/заемщика/и т.д.",
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "title": "Сотрудник",
+                    "properties": {
+                        "fio": {
+                            "required": true,
+                            "type": "string",
+                            "title": "ФИО"
+                        },
+                        "email": {
+                            "required": true,
+                            "title": "E-Mail",
+                            "type": "email"
+                        },
+                        "phone": {
+                            "type": "string",
+                            "title": "Телефон"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "this_meta_class": "meta_class"
+}
