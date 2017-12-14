@@ -219,14 +219,14 @@ log.info({req:req},'start');
 	var data = req.body.data;
 	var new_state;
 	var set$={};
-	if (!data.confirm)   {
+/*	if (!data.confirm)   {
  		res.status(500).send({
 			'error': 'no_new_state',
 			'msg': 'Действие не подтверждено'
 		});
 		return;
 	};
-	
+*/	
 	set$.state='В работе';
 	
 		set$.user_expert=userID;
