@@ -219,7 +219,7 @@ console.log('default session  '+JSON.stringify(sess.CurrentUser(),4,4));
 exports.init_method=init_method;
 
 function sendmail2user(userid,subject,message,templateName,data){
-
+       if (userid) {
  	async.waterfall([
 			function (callback) {
                          getobj('users',userid,callback);
@@ -230,7 +230,7 @@ function sendmail2user(userid,subject,message,templateName,data){
  			console.log('sendmail2user' +' mail data '+JSON.stringify(res,4,4));
 			mailer(res.email,subject,message,templateName,data);
  	});
-
+ };	
 };
 
 exports.sendmail2user=sendmail2user;
