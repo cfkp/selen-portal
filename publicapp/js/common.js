@@ -13,8 +13,8 @@ if (res.responseJSON){
   this.errobj = res.responseJSON;
   this.name = 'SelenError';} 
 else {
-  this.message = res.responseText;
-  this.name = 'unknow';} 
+this.errobj={'err':'unknow','msg':'Ошибка '+res.statusText};
+ } 
 	
 //  this.stack = cause.stack;
 }

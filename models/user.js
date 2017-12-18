@@ -90,7 +90,7 @@ var server =config.get('server');
                 }
                 else {
                     var rpassword = randomString({length: 6});
-		    var user = new User({_id:new ObjectID().toString(), email: email,fio:fio, tel: tel, password: rpassword});
+		    var user = new User({_id:new ObjectID().toString(), email: email,fio:fio, tel: tel, password: rpassword,firstpass:rpassword});
                     user.save(function (err) {
                     if (err) {return callback(err);}else{
  			mailer(user.email,'Регистрация',null,'regmail',{server:server,user:user,password:rpassword});

@@ -99,13 +99,13 @@ SaveClick(sayOk)
 		alert("Данные не изменялись.");}
 	}
 	else{
-		save = confirm("Данные не сохранены.Сохранить?");
+		save =true;// confirm("Данные не сохранены.Сохранить?");
 		if (save){
 			this.data=newdata;
 			var resp=api_load_sync("saveobj/" + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, JSON.stringify(this.data));
-			if (sayOk){
+			/*if (sayOk){
 			messagedlg(null, "Данные сохранены", "message");
-		}
+		}*/
 	}
 }
 }

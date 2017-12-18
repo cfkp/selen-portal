@@ -3,6 +3,7 @@ var async = require('async');
 var https = require('http');
 var ObjectID = require('mongodb').ObjectID;
 var User = require('models/user').User;
+var objlib=require('../db/obj');
 
 
 var config = require('config');
@@ -170,6 +171,40 @@ var user$;
 
 }; 
 exports.create_NewUser_pers_request=create_NewUser_pers_request;
+
+
+function sednotifymessage(pers_req_id,mess_row){
+
+ 	async.waterfall([
+			function (callback) {
+                         objlib.getobj('person_request',pers_req_id,callback);
+			}
+ 
+		],
+		function (err, res) {
+
+ 		//	console.log('sednotifymessage' +' mail res '+JSON.stringify(res,4,4));
+ 		//	console.log('sednotifymessage' +' mail row '+JSON.stringify(mess_row,4,4));
+			if (res&&res.user_createid!==sess.CurrentUserId()&&res.user_expert){
+				objlib.sendmail2user(/*res.user_createid*/res.user_expert,'Уведомление о сообщении',null,'message_notify',
+					{person_request:res,person_message:mess_row});
+			}
+			else if (res&&res.user_expert&&res.user_createid==sess.CurrentUserId())
+			{	objlib.sendmail2user(res.user_expert,'Уведомление о сообщении',null,'message_notify',
+					{person_request:res,person_message:mess_row});
+			}
+			/*else {
+				 mailer('finance@cfcp.ru','Уведомление о сообщении',null,'message_notify',
+					{person_request:res,person_message:mess_row});
+			 
+
+			}*/
+//			mailer(res.email,subject,message,templateName,data);
+ 	});
+
+};
+
+exports.sednotifymessage=sednotifymessage;
 
 
 

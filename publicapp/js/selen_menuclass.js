@@ -172,8 +172,21 @@ makemenu(json, ulclass, root) {
 Т3 - "Резюме проекта";
 Т4 - "Приложение 1.2. Анкета проекта субъекта МСП".
 */
- 
                 li = $(' <div class="btn-group">'+
+				'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">'+
+			'Шаблоны<span class="caret"></span>'+
+			'</button>'+
+ 			'<ul id="rep_menu" class="dropdown-menu" role="menu">'+
+			'<li><a hreftempl="/report/rep1/<%=meta_parent_value%>">Приложение 1.1. Чек-лист</a></li>'+
+ 			'<li><a hreftempl="/report/rep2/<%=meta_parent_value%>">Приложение 2. Заявка на получение независимой гарантии</a></li>'+
+			'<li><a hreftempl="/report/rep3/<%=meta_parent_value%>">Резюме проекта</a></li>'+
+			'<li><a hreftempl="/report/rep4/<%=meta_parent_value%>">Приложение 1.2. Анкета проекта субъекта МСП</a></li>'+
+			'<li><a id="rep5" hreftempl="/report/rep5/<%=meta_parent_value%>">Отчет по выбранным заявкам</a></li>'+
+			'</ul>'+
+			 '</div>');
+
+ 
+/*                li = $(' <div class="btn-group">'+
 				'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">'+
 			'Отчеты<span class="caret"></span>'+
 			'</button>'+
@@ -185,7 +198,7 @@ makemenu(json, ulclass, root) {
 			'<li><a id="rep5" hreftempl="/report/rep5/<%=meta_parent_value%>">Отчет по выбранным заявкам</a></li>'+
 			'</ul>'+
 			 '</div>');
-
+*/
 		ul.append(li);
 		
 		}

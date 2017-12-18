@@ -1,4 +1,4 @@
-                                   
+var view;                                   
 function arrayToTable(meta_class, meta_view, data) {
     var table = $('<table class="table table-striped pageview"></table>');
     table.attr('id',meta_view);
@@ -336,10 +336,10 @@ var refviewmodal = function(meta_class,meta_view,selectFunc) {
 	var b = $('#method_execute');
 	var isfrom_modal= $('#method_execute').is(':visible');
         //show_view (grid_container,meta_class, meta_view);
-       var view = new SelenView(undefined,meta_class, meta_view);
+         view = new SelenView(undefined,meta_class, meta_view);
 	if (isfrom_modal===true)
 		{  from_method=true; $('#method_execute').modal('hide');};
-
+        modal_view.unbind('hidden.bs.modal');
         modal_view.on('hidden.bs.modal', function (event) {
 		view.Destroy(); 
 		if (from_method)  {setTimeout(function(){ $('#method_execute').modal('show'); }, 500);};

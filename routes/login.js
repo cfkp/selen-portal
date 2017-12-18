@@ -7,6 +7,7 @@ var User = require('models/user').User;
 var HttpError = require('error').HttpError;
 var AuthError = require('models/user').AuthError;
 var mailer = require('../middleware/sendmail'); //-- Your js file path
+var sess = require('../middleware/session'); //-- Your js file path
 
 var async = require('async');
 
@@ -83,7 +84,7 @@ log.info({req:req},"authorize");
 
 		res.status(200).send({
 				'type': 'Сообщение',
-				'msg': 'По указанному Вами адресу направлено письмо с временным паролем. <br> В целях безопасности. После входа смените на новый пароль в личном кабинете.'
+				'msg': 'По указанному Вами адресу направлено письмо с временным паролем.  В целях безопасности. После входа смените на новый пароль в личном кабинете.'
 			});
 
 		}
@@ -127,11 +128,17 @@ router.get('/registration', function (req, res, next) {
 
 		} else {
 		req.session.user = obj_id;
-   
-  		pers_req.update_newuser_request(obj_id) ;
+  		sess.setCurrentUserbyID (obj_id,
+		function (err){
+			var user=sess.CurrentUser();
+			mailer(user.email,'Окончание регистрации',null,'end_register',{user:user}); 
+ 	 		pers_req.update_newuser_request(obj_id) ;
+			res.render('regfinish',{'msg':{'type':'message','msg':  "Спасибо за регистрацию. По указанному Вами адресу направлено письмо с временным паролем.  В целях безопасности. После входа смените на новый пароль в личном кабинете."}});
+ 
+		}
+		);
  			
-		  res.render('regfinish',{'msg':{'type':'message','msg':  "Спасибо за регистрацию"}});
-
+ 
 		}
  
 
