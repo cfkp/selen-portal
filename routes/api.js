@@ -182,11 +182,11 @@ log.info({req:req},'start');
 	async.waterfall(
 		[objlib.init_method.bind(null,meta_class,meta_method,req.body.objectlist),
 		function (meth,callback) {  
-			console.log('after init '+JSON.stringify (meth));
+//			console.log('after init '+JSON.stringify (meth));
  			if (meth.value
 				&&meth.value.state
 				&&meth.value.state !== "Новый"
-				&&meth.schema.meta_name=='edit'
+				&&(meth.schema.meta_name=='edit'||meth.schema.meta_name=='delete')
 				&&meth.schema.meta_class=='person_request') {
 				callback({'error': 'no_edit_right',
 					'msg': 'Документ не в состоянии "Новый"'
@@ -222,14 +222,14 @@ log.info({req:req},'start');
 	var data = req.body.data;
 	var new_state;
 	var set$={};
-	if (!data.confirm)   {
+/*	if (!data.confirm)   {
  		res.status(500).send({
 			'error': 'no_new_state',
 			'msg': 'Действие не подтверждено'
 		});
 		return;
 	};
-	
+*/	
 	set$.state='В работе';
 	
 		set$.user_expert=userID;

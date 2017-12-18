@@ -94,17 +94,21 @@ function getMethodSchema(meta_class,meta_method,nextfunc){
 		},
 
 	function(schema_method,callback)
-		{   if (schema_method){callback(null,schema_method)
-			}else if(!schema_method&&(meta_method=='new'||meta_method=='edit')) {	
+		{   if (schema_method)
+			{callback(null,schema_method)
+			}
+			else if(!schema_method&&(meta_method=='new'||meta_method=='edit')) {	
 				getObjectSchema(meta_class,callback);
-			}else if(!doc&&meta_method=='delete'){
+			}
+			else if(!schema_method&&meta_method=='delete'){
 ///можно поставить рекурсию но пока не будем		getMethodSchema('default','delete',nextfunc)	
 				search_filter={
 					'meta_class': 'default',
 					'meta_name': 'delete'
 				};
 				db.findone("meta_method",search_filter,callback);
- 			}else{
+ 			}
+			else{
 
  			   callback ({
 				'error': 'no_schema',
@@ -215,7 +219,7 @@ console.log('default session  '+JSON.stringify(sess.CurrentUser(),4,4));
 exports.init_method=init_method;
 
 function sendmail2user(userid,subject,message,templateName,data){
-
+       if (userid) {
  	async.waterfall([
 			function (callback) {
                          getobj('users',userid,callback);
@@ -226,7 +230,7 @@ function sendmail2user(userid,subject,message,templateName,data){
  			console.log('sendmail2user' +' mail data '+JSON.stringify(res,4,4));
 			mailer(res.email,subject,message,templateName,data);
  	});
-
+ };	
 };
 
 exports.sendmail2user=sendmail2user;

@@ -12,7 +12,7 @@
         <span class="message message--bot">
 	<% } else{ %>
       <div class="message__item message__item--user">
- 	<% if (irow==0) {%>
+ 	<% if (irow==rows.length-1) {%>
  	 <div class="selectelem" meta_id=<%=rows[irow]._id%> ></div>
 	 <% } %>
 		
