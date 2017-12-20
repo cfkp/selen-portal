@@ -128,3 +128,18 @@ input[type="file"] {
 form.brutusin-form td {
     white-space: normal;
 }
+
+
+.loader
+   {
+       position: absolute;
+       z-index: 800;
+       background-image: url('/images/loader.gif');
+       background-repeat: no-repeat;
+       background-position: center center;
+       width: 100%;
+       height: 100%;
+       opacity: 0.6;
+       background-color: #CCCCCC;
+       display: none;
+   } 

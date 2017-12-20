@@ -194,7 +194,11 @@ log.info({req:req},'start');
 										}
  			else {
 			callback(null,meth);
-			}}
+			}},
+		function(meth,callback){
+setTimeout(  function (){
+callback(null,meth)},10000)
+  }
 		],
 	        function (err, result) {
 

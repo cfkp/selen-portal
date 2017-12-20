@@ -24,6 +24,19 @@ if ((error.name&&error.name==='SelenError'|| error instanceof SelenError )
 	{messagedlg(error.errobj);}
 
  });
+$(document).ajaxStart(function(){$('#loading').show();	});
+$(document).ajaxStop(function(){$('#loading').hide();	});
+ 
+	/*$(document).bind('ajaxStart',function (){
+		
+	//	$('div#istoeprogress:first').addClass('active progress-bar-striped');
+		$('#loading').show();	
+	    }).bind('ajaxStop',function (){
+		$('#loading').hide();	
+	    	//$('div#istoeprogress:first').removeClass('active progress-bar-striped');
+		});
+	*/
+
 
 	BrutusinForms = brutusin["json-forms"];
 	BrutusinForms.bootstrap.addFormatDecorator("file", "file", "glyphicon-search",
