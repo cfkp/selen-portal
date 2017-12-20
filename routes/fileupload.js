@@ -11,7 +11,8 @@ var fs = require("fs");
 var db = require('../db/db');
 var checkAuth = require('../middleware/checkAuth');
 var log = require('libs/log')(module);
- 
+var ObjectID = require('mongodb').ObjectID;
+    
 router.get('/down/:file(*)', function(req, res, next){
 
  log.info({req:req},'start');
@@ -33,6 +34,7 @@ router.post('/up', function(req, res){
  log.info({req:req},'start');
  var userid= req.session.user;
  var result={};
+var fileid=new ObjectID().toString();
   // create an incoming form object
  var form = new formidable.IncomingForm();
 
@@ -44,8 +46,9 @@ router.post('/up', function(req, res){
 //console.log('uploadDir'+form.uploadDir); 
   // every time a file has been uploaded successfully,
   // rename it to it's orignal name
+
   form.on('file', function(field, file) {
-  	result.serverfilename= userid+'$'+file.name;
+  	result.serverfilename= userid+'_'+fileid+'$'+file.name;
   	fs.rename(file.path, path.join(form.uploadDir, result.serverfilename));
   
 	log.info({req:req},{uploadDir:form.uploadDir,serverfilename:result.serverfilename,file_name:file.name});
