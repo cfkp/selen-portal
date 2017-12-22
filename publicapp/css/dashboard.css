@@ -133,7 +133,7 @@ form.brutusin-form td {
 .loader
    {
        position: absolute;
-       z-index: 800;
+       z-index: 9999;
        background-image: url('/images/loader.gif');
        background-repeat: no-repeat;
        background-position: center center;

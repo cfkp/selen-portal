@@ -7,25 +7,25 @@ function cb(object, fnc)
     }
 }
 
-
-function SelenError(res) { 
-if (res.responseJSON){
-  this.errobj = res.responseJSON;
-  this.name = 'SelenError';} 
-else {
-this.errobj={'err':'unknow','msg':'Ошибка '+res.statusText};
+class SelenError{
+	constructor (res) { 
+		if (res.responseJSON){
+		  this.errobj = res.responseJSON;
+		  this.name = 'SelenError';} 
+		else {
+		this.errobj={'err':'unknow','msg':'Ошибка '+res.statusText};
  } 
 	
 //  this.stack = cause.stack;
 }
-
+}
 function api_load_sync(url, requestdata) {
 var result=$.ajax({
 		url: "../api/" + url,
 		type: "POST",
 		data: requestdata,
 		contentType: "application/json",
-		dataType: "json",
+		dataType: "json" ,
 	            async: false });
  	if(result.status!=200){
 		throw new SelenError(result)//new IstoeServiceException(this.lastResult.status,xml+" "+this.lastResult.statusText,this.lastResult.responseText);
@@ -50,6 +50,33 @@ var result=$.ajax({
 	return  result;
 
 };
+
+function defSelenErrorhandler(err)
+	{ $('#loading').hide();
+		throw new SelenError(err); 
+ 	}
+
+function api_load_async(url, requestdata, responsefunc, errorhandler) {
+if (!errorhandler) {errorhandler=defSelenErrorhandler};
+if (requestdata&&typeof requestdata=='object') {requestdata=JSON.stringify(requestdata)}; 
+$('#loading').show();	
+
+	$.ajax({
+		url: "../api/" + url,
+		type: "POST",
+		data: requestdata,
+		contentType: "application/json",
+		dataType: "json",
+ 		statusCode: {
+			200:  responsefunc,
+			403: errorhandler,
+			500:  errorhandler
+		} ,
+		complete:function(){$('#loading').hide();}
+	});
+
+};
+
 
 
 function selen_call(url, requestdata, responsefunc, errorhandler) {

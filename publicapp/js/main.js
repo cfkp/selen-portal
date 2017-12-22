@@ -14,20 +14,23 @@ else{
   };
   */
 window.addEventListener('error', function (e) {
-console.log("Url  ="+document.location);
+/*console.log("Url  ="+document.location);
 console.log("PathName  ="+ window.location.pathname);// Returns path only
 console.log("url  ="+window.location.href);// Returns full URL
-
+*/
     var error = e.error;
+$('#loading').hide(); 
 if ((error.name&&error.name==='SelenError'|| error instanceof SelenError )
 	&&!(error.errobj.error=='not_authorized' &&window.location.pathname=='/login'))
 	{messagedlg(error.errobj);}
 
  });
+
+/* // какойто косяк при взрыве exception теряется тригер сделано через процедуру
 $(document).ajaxStart(function(){$('#loading').show();	});
-$(document).ajaxStop(function(){$('#loading').hide();	});
- 
-	/*$(document).bind('ajaxStart',function (){
+$(document).ajaxStop(function(){$('#loading').hide(); 	});
+        */
+/*	$(document).bind('ajaxStart',function (){
 		
 	//	$('div#istoeprogress:first').addClass('active progress-bar-striped');
 		$('#loading').show();	
@@ -35,7 +38,7 @@ $(document).ajaxStop(function(){$('#loading').hide();	});
 		$('#loading').hide();	
 	    	//$('div#istoeprogress:first').removeClass('active progress-bar-striped');
 		});
-	*/
+*/
 
 
 	BrutusinForms = brutusin["json-forms"];

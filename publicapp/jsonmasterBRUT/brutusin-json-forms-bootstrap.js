@@ -338,54 +338,34 @@ if (element.tagName) {
 
     BrutusinForms.onValidationSuccess = function (element) {
         element.parentNode.className = element.parentNode.className.replace(" has-error", "");
+	$(element.parentNode).find('.alert').remove();	
     }
     BrutusinForms.onValidationError = function (element, message) {
 
-        setTimeout(function () {
-            var dataToggle = element.getAttribute("data-toggle");
-            var dataTrigger = element.getAttribute("data-trigger");
-            var dataContent = element.getAttribute("data-content");
-            var title = element.title;
-            element.setAttribute("data-toggle", "popover");
-            element.setAttribute("data-trigger", "manual");
-            if ("undefined" === typeof markdown) {
-                element.setAttribute("data-content", message);
-            } else {
-                element.setAttribute("data-content", markdown.toHTML(message));
-            }
+		var parent=element.parentNode;
+        	var divalert =$(parent).find('.alert');
+		if (divalert.length==0){                
+			divalert = document.createElement("div");
+                        divalert.setAttribute("class", "alert alert-danger");
+			divalert.appendChild(document.createTextNode(message));
 
-            element.title = BrutusinForms.messages["validationError"];
+                         parent.appendChild(divalert);
+			$(divalert).hide();
+			}
+		else {  divalert.text(message);
+			}
+            element.title = BrutusinForms.messages["validationError"]+' '+message;
             if (!element.parentNode.className.includes("has-error")) {
                 element.parentNode.className += " has-error";
-            }
-            element.focus();
-            $(element).popover({
-                placement: 'top',
-                container: 'body',
-                html: true
-            });
-            $(element).popover("show");
-            var onblur = element.onblur;
-            element.onblur = function (e) {
-                if (dataToggle) {
-                    $(element).popover('hide');
-                    element.setAttribute("data-toggle", dataToggle);
-                    element.setAttribute("data-trigger", dataTrigger);
-                    element.setAttribute("data-content", dataContent);
-                } else {
-                    $(element).popover('destroy');
-                    element.removeAttribute("data-toggle");
-                    element.removeAttribute("data-trigger");
-                    element.removeAttribute("data-content");
-                }
-
-                element.onblur = onblur;
-                element.title = title;
-                if (onblur) {
-                    onblur();
-                }
-            }
-        },
-                200);
+             }
+		
+		element.onfocus=function (e){
+				 $(parent).find('.alert').show();
+			};		
+		element.onblur=function (e){
+				 $(parent.parentNode).find('.alert').hide();
+  			};		
+        
+                
     }
 }());

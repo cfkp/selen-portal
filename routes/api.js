@@ -197,7 +197,7 @@ log.info({req:req},'start');
 			}},
 		function(meth,callback){
 setTimeout(  function (){
-callback(null,meth)},10000)
+callback(null,meth)},1000)
   }
 		],
 	        function (err, result) {
@@ -404,6 +404,7 @@ log.info({req:req},'start');
 	var dbloc = db.get();
 	var data = req.body.data;
 var pers_req = require('../db/person_request');
+	setTimeout(  function (){
 
  	if (!data.confirm)   {
  		res.status(500).send({
@@ -417,8 +418,11 @@ var pers_req = require('../db/person_request');
 	if (req.body.objectlist) {
  		 obj_id = req.body.objectlist[0];//new ObjectID(req.body.objectlist[0]);
 	};
+	res.json(obj_id);
+},1000)
+  
 
-
+/*	
         db.audit(meta_class,meta_method,obj_id,{});
         pers_req.load_request_info (obj_id, function (err, docs) {
  
@@ -428,7 +432,7 @@ var pers_req = require('../db/person_request');
 
  		};
 
- 	});
+ 	});       */
 
 });
 

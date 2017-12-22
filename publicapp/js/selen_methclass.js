@@ -27,7 +27,7 @@ class SelenMethod {
 	this.data={};
 	this.bf=null;
   	this.Init();
-	this.Show();
+//	this.Show();
 }
    Destroy()
 	{
@@ -43,24 +43,66 @@ class SelenMethod {
 
    Init()
 	{
-	this.lastresponse= api_load_sync('callmethod/'+this.meta_class+'/'+this.meta_name+'/init', JSON.stringify({objectlist:this.objectlist}));
+
+	api_load_async('callmethod/'+this.meta_class+'/'+this.meta_name+'/init', 
+		{objectlist:this.objectlist},cb(this,this.AfterInit)
+		)
+/*	this.lastresponse= api_load_sync('callmethod/'+this.meta_class+'/'+this.meta_name+'/init', JSON.stringify({objectlist:this.objectlist}));
 	this.schema=this.lastresponse.responseJSON.schema;
 	 
 	this.value=this.lastresponse.responseJSON.value;
- 	
+*/ 	
 	}
+AfterInit(ajaxobj,response){
+				this.lastresponse=response;
+				this.schema=this.lastresponse.schema;
+	 
+				this.value=this.lastresponse.value;
+	                        this.Show();
+
+};	
+
+ Errorhandler(element ,err)
+	{ $('#loading').hide();
+		var alertcont=this.modal_container.find('#executealert');
+		if (alertcont&&err.responseJSON&&err.responseJSON.msg){
+		alertcont.text(err.responseJSON.msg);
+this.modal_container.find('#execute').prop('disabled', false);	
+                    alertcont.show();
+			//throw undefined;
+		}else{
+		throw new SelenError(err); }
+ 	}
+
+
    Execute(){
 	if (this.bf.validate()) {
 	this.data=this.bf.getData();
- 	$('#method_execute').modal('hide');
- 	this.lastresponse=api_load_sync('callmethod/'+this.meta_class+'/'+this.meta_name+'/execute', JSON.stringify({objectlist:this.objectlist,collection:this.collection,data:this.data}));
+	this.modal_container.find('#execute').prop('disabled', true);
+	api_load_async('callmethod/'+this.meta_class+'/'+this.meta_name+'/execute',  
+		{objectlist:this.objectlist,collection:this.collection,data:this.data}
+		,cb(this,this.AfterExecute)
+		,cb(this,this.Errorhandler)
+ 	);
+
+/* 	this.lastresponse=api_load_sync('callmethod/'+this.meta_class+'/'+this.meta_name+'/execute', JSON.stringify({objectlist:this.objectlist,collection:this.collection,data:this.data}));
  	if (this.lastresponse.responseJSON.msg) {messagedlg(this.lastresponse.responseJSON.msg);};
 	if (this.parent&&this.parent.parent instanceof SelenView ) {
                                            this.parent.parent.refresh();
+	};*/
 	};
-	};
+ }
 
-}
+AfterExecute(ajaxobj,response){
+ 	this.lastresponse=response;
+ 	if (this.lastresponse.msg) {messagedlg(this.lastresponse.msg);};
+	if (this.parent&&this.parent.parent instanceof SelenView ) {
+                                           this.parent.parent.refresh();
+	};
+ 	$('#method_execute').modal('hide');
+
+};	
+
 
 Show()
 {
@@ -106,6 +148,8 @@ Show()
 
  	this.modal_container.find('#method_title').html(this.schema.data.title);	
 	this.modal_container.find('#execute').unbind('click');
+	this.modal_container.find('#execute').prop('disabled', false);
+        this.modal_container.find('#executealert').hide();
 
 	this.modal_container.find('#execute').bind('click', cb(this, this.Execute));
 

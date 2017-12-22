@@ -355,20 +355,6 @@ if (typeof brutusin === "undefined") {
                 }
             };
 
-            input.onchange = function () {
-                var value;
-                try {
-                    value = getValue(s, input);
-                } catch (error) {
-                    value = null;
-                }
-                if (parentObject) {
-                    parentObject[propertyProvider.getValue()] = value;
-                } else {
-                    data = value;
-                }
-                onDependencyChanged(schemaId, input);
-            };
 
             if (s.description) {
                 input.title = s.description;
@@ -387,10 +373,28 @@ if (typeof brutusin === "undefined") {
 //        if (s.maximum) {
 //            input.max = s.maximum;
 //        }
-            input.onchange();
             input.id = getInputId();
             inputCounter++;
             appendChild(container, input, s);
+            input.onchange = function () {
+                var value;
+                try {
+                    value = getValue(s, input);
+                } catch (error) {
+                    value = null;
+                }
+                if (parentObject) {
+                    parentObject[propertyProvider.getValue()] = value;
+                } else {
+                    data = value;
+                }
+		
+                onDependencyChanged(schemaId, input);
+validate(input);
+            };
+
+            input.onchange();
+
             return parentObject;
         };
 
