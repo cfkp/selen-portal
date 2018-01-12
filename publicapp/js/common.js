@@ -8,16 +8,25 @@ function cb(object, fnc)
 }
 
 class SelenError{
-	constructor (res) { 
-		if (res.responseJSON){
+	constructor (res,msg) { 
+		this.name = 'SelenError';
+		if (res&&res.responseJSON){
 		  this.errobj = res.responseJSON;
-		  this.name = 'SelenError';} 
+		} 
+		else if(res&&!res.responseJSON){
+		 
+			this.errobj={'err':'unknow','msg':'Ошибка '+res.statusText}
+		}
+		else if(msg){
+		 
+			this.errobj={'err':'user','msg':msg} }
 		else {
-		this.errobj={'err':'unknow','msg':'Ошибка '+res.statusText};
- } 
-	
-//  this.stack = cause.stack;
-}
+			this.errobj={'err':'unknow','msg':'Ошибка '+res.statusText}
+
+		};
+ 	
+  //	this.stack = cause.stack;
+	}
 }
 function api_load_sync(url, requestdata) {
 var result=$.ajax({

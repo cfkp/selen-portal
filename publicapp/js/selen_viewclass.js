@@ -178,7 +178,7 @@ h=400;
 	$.jgrid.styleUI.Bootstrap.base.pagerTable = "table table-condensed";
 
 	container.jqGrid({
-		datatype: "local",
+ 		datatype: "local",
 		data: this.rows,
 		height: h,
 		colModel: this.header.colmodel,
@@ -274,7 +274,7 @@ get_selected_rows() {
 }
 
 onSelectAll(elem,id,status){
- 	if (this.methods&&this.methods.container) {
+/* 	if (this.methods&&this.methods.container) {
 	var reports = this.methods.container.find("#rep_menu")
 	if (reports) {
 		reports.find( "#rep5" ).each(function( index ) {
@@ -287,7 +287,7 @@ onSelectAll(elem,id,status){
 			}
 		});	                           };
 
-}}
+}*/}
 onSelectRow (elem,rowid, selected) {
 	if ((this.header.detail) && (rowid != null)) {
 		if (this.detail) {
@@ -304,13 +304,13 @@ onSelectRow (elem,rowid, selected) {
 			this.detail.collection.meta_parent_value=rowid;
 
 			this.detail.meta_readonly="this.header.detail.readonly";
-			if (this.methods&&this.methods.container) {
+			/*if (this.methods&&this.methods.container) {
 			var reports = this.methods.container.find("#rep_menu")
 			if (reports) {
 				reports.find( "li a" ).each(function( index ) {
 					$( this ).attr("href",$( this ).attr("hreftempl").replace('<%=meta_parent_value%>',rowid))
 				});	                           };
-			} 
+			}*/ 
 this.detail.Show();
 		//	detail_container.show();
 		//	detail_container.find("[root_menu='#detail_tabs']").show();	

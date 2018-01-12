@@ -658,20 +658,20 @@
                         "type": "string"
                     },
                     "contact_bank": {
-                        "required": false,
                         "describe": "Контактное лицо (ФИО, должность, контактный телефон, адрес электронной почты) (заполняется  в случае заявки на контргарантию/синдицированную/согарантию)",
                         "title": "Контактное лицо в банке",
                         "type": "text"
                     },
+ 
                     "status_bank": {
                         "required": false,
-                        "title": "Статус заявки в банке",
+                        "title": "Статус кредитной заявки в банке",
                         "type": "string"
                     },
                     "sum": {
                         "required": true,
-                        "title": "Сумма кредита",
-                        "type": "integer"
+                        "title": "Сумма кредита (тыс. руб.)",
+                        "type": "currency"
                     },
                     "term": {
                         "required": true,
@@ -721,8 +721,8 @@
                                         "inn": {
                                             "required": true,
                                             "title": "ИНН",
-                                            "type": "integer",
-                                            "pattern": "\\b\\d{12}\\b"
+                                            "type": "string",
+                                            "mask": "9999999999?99"
                                         }
                                     }
                                 }
@@ -740,9 +740,9 @@
                                         "inn": {
                                             "required": true,
                                             "title": "ИНН",
-                                            "type": "integer",
-                                            "pattern": "\\b\\d{12}\\b"
-                                        }
+                                             "type": "string",
+                                            "mask": "9999999999?99"
+                                       }
                                     }
                                 }
                             }
@@ -767,10 +767,11 @@
                             "прямая гарантия, выдаваемая совместно с поручительством РГО (согарантия)"
                         ]
                     },
+
                     "garant_sum": {
                         "required": true,
-                        "title": "Гарантия МСП - сумма",
-                        "type": "integer"
+                        "title": "Гарантия МСП - сумма (тыс.руб.)",
+                        "type": "currency"
                     },
                     "garant_other": {
                         "required": true,

@@ -66,9 +66,9 @@ AfterInit(ajaxobj,response){
 	{ $('#loading').hide();
 		var alertcont=this.modal_container.find('#executealert');
 		if (alertcont&&err.responseJSON&&err.responseJSON.msg){
-		alertcont.text(err.responseJSON.msg);
-this.modal_container.find('#execute').prop('disabled', false);	
-                    alertcont.show();
+			alertcont.text(err.responseJSON.msg);
+			this.modal_container.find('#execute').prop('disabled', false);	
+                    	alertcont.show();
 			//throw undefined;
 		}else{
 		throw new SelenError(err); }

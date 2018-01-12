@@ -92,8 +92,25 @@ MenuClick(clickedElem)
 		var sub_id = obj.attr("sub_container_id")+' #' + obj.attr("sub_id");
 		$(sub_id).show();
 
- 		set_def_active(obj.attr("sub_id"));
+ 		this.set_def_active(obj.attr("sub_id"));
 		                                       
+
+ 	};
+ 	if (obj.attr("hreftempl")) {
+		if (this.parent){
+		
+ 		    if (obj.attr("hreftempl").indexOf('<%=objectlist%>')>=0){
+			var objlist=this.parent.get_selected_rows();
+			if (objlist.length>0) { 
+			obj.attr("href",obj.attr("hreftempl").replace('<%=objectlist%>',objlist.join()))}
+			else { throw new SelenError(null,'Не выбраны документы')}
+			}
+                	 else {
+ 				obj.attr("href",obj.attr("hreftempl"));}		                                       
+
+
+		}else {
+ 		obj.attr("href",obj.attr("hreftempl"));}		                                       
 
  	};
 	if (obj.attr("meta_action_type")) {
@@ -153,56 +170,19 @@ makemenu(json, ulclass, root) {
 	else {
 	ul = $('<ul></ul>');
  	ul.attr('class', ulclass.toString());
+
  	}                             
 	ul.attr('id', json.name);
 	ul.attr('root_menu', json.root_menu);
 
 	root.append(ul);
-	if ((json.root_menu !== '#top_menu') &&(json.root_menu !== '#method_menu')) {
+	if (json.root_menu&&(json.root_menu !== '#top_menu') &&(json.root_menu !== '#method_menu')) {
 		ul.hide();
 	};
 	var array = json.items;
 	for (var i = 0; i < array.length; i++) {
-		var li,
-		a;
-		if (array[i].class==='dropdown') {
-
-/*T1 - "Приложение 1.1. Чек-лист";
-Т2 - "Приложение 2. Заявка на получение независимой гарантии";
-Т3 - "Резюме проекта";
-Т4 - "Приложение 1.2. Анкета проекта субъекта МСП".
-*/
-                li = $(' <div class="btn-group">'+
-				'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">'+
-			'Шаблоны<span class="caret"></span>'+
-			'</button>'+
- 			'<ul id="rep_menu" class="dropdown-menu" role="menu">'+
-			'<li><a hreftempl="/report/rep1/<%=meta_parent_value%>">Приложение 1.1. Чек-лист</a></li>'+
- 			'<li><a hreftempl="/report/rep2/<%=meta_parent_value%>">Приложение 2. Заявка на получение независимой гарантии</a></li>'+
-			'<li><a hreftempl="/report/rep3/<%=meta_parent_value%>">Резюме проекта</a></li>'+
-			'<li><a hreftempl="/report/rep4/<%=meta_parent_value%>">Приложение 1.2. Анкета проекта субъекта МСП</a></li>'+
-			'<li><a id="rep5" hreftempl="/report/rep5/<%=meta_parent_value%>">Отчет по выбранным заявкам</a></li>'+
-			'</ul>'+
-			 '</div>');
-
- 
-/*                li = $(' <div class="btn-group">'+
-				'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">'+
-			'Отчеты<span class="caret"></span>'+
-			'</button>'+
- 			'<ul id="rep_menu" class="dropdown-menu" role="menu">'+
-			'<li><a hreftempl="/report/rep1/<%=meta_parent_value%>">Приложение 1.1. Чек-лист</a></li>'+
- 			'<li><a hreftempl="/report/rep2/<%=meta_parent_value%>">Приложение 2. Заявка на получение независимой гарантии</a></li>'+
-			'<li><a hreftempl="/report/rep3/<%=meta_parent_value%>">Резюме проекта</a></li>'+
-			'<li><a hreftempl="/report/rep4/<%=meta_parent_value%>">Приложение 1.2. Анкета проекта субъекта МСП</a></li>'+
-			'<li><a id="rep5" hreftempl="/report/rep5/<%=meta_parent_value%>">Отчет по выбранным заявкам</a></li>'+
-			'</ul>'+
-			 '</div>');
-*/
-		ul.append(li);
-		
-		}
-		else if(array[i].meta_action_type==='method'){
+		var li,	a;
+ 		if(array[i].meta_action_type==='method'||(!array[i].root_menu&&array[i].items&&array[i].items.length>0)){
 		var gr= $('<div class="btn-group"></div>');
 		a = $('<button></button>');
 		a.attr('id', 'menu_item_a');
@@ -212,20 +192,32 @@ makemenu(json, ulclass, root) {
 		a.attr('meta_action_type', array[i].meta_action_type);
 		a.attr('meta_method', array[i].meta_method);
 		a.attr('meta_view', array[i].meta_view);
-		a.attr('href', array[i].href);
+		//a.attr('href', array[i].href);
+		a.attr('hreftempl', array[i].href);
 		a.attr('sub_id', array[i].name);
 		a.attr('sub_container_id', array[i].root_menu);
 		a.text(array[i].title);
 		gr.append(a);
 		ul.append(gr);
-		a.bind('click',cb(this,this.MenuClick) );
-  
+		root=gr;                  
+			if (array[i].items){
+			ulclass="dropdown-menu";
+			a.attr('class','btn btn-default dropdown-toggle');
+			a.attr('data-toggle','dropdown');
+			a.append($('<span class="caret"></span>'));
+			}else {		a.bind('click',cb(this,this.MenuClick) );
+			}
 		}
 		else
 		{
 		li = $('<li></li>');
 		li.attr('id', 'menu_item');
-li.attr('data-toggle',"tab");
+		if (ulclass!="dropdown-menu"){
+		li.attr('data-toggle',"tab"); 
+		root=undefined;
+		ulclass=undefined;
+
+		};
 		if (array[i].active === true) {
 			li.attr('class', 'active');
 			li.attr('active_def', true);
@@ -238,7 +230,9 @@ li.attr('data-toggle',"tab");
 		a.attr('meta_action_type', array[i].meta_action_type);
 		a.attr('meta_method', array[i].meta_method);
 		a.attr('meta_view', array[i].meta_view);
-		a.attr('href', array[i].href);
+		//a.attr('href', array[i].href);
+		a.attr('hreftempl', array[i].href);
+		a.attr('target', array[i].target);
 		a.attr('sub_id', array[i].name);
 		a.attr('sub_container_id', array[i].root_menu);
 		a.text(array[i].title);
@@ -246,7 +240,7 @@ li.attr('data-toggle',"tab");
 		a.bind('click',cb(this,this.MenuClick) );
 		}
 		if (typeof array[i].items !== 'undefined') {
-			this.makemenu(array[i]);
+			this.makemenu(array[i],ulclass,root);
 		}
 	}
 	return root;
