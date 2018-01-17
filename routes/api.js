@@ -196,9 +196,10 @@ log.info({req:req},'start');
 			callback(null,meth);
 			}},
 		function(meth,callback){
-setTimeout(  function (){
-callback(null,meth)},1000)
-  }
+			//setTimeout(  function (){
+				callback(null,meth)
+			//},1000)
+  			}
 		],
 	        function (err, result) {
 
@@ -340,6 +341,8 @@ log.info({req:req},'start');
  		 obj_id =  req.body.objectlist[0];
 	};
 
+
+  var user_mess;
 	async.waterfall([
 			function (callback) {
                         objlib.getobj(meta_class,obj_id,callback);
@@ -350,19 +353,20 @@ log.info({req:req},'start');
 			'error': 'no_object',
 			'msg': 'Не найден документ'
 				});}	
+
 			if (new_state_act==='Выполнено'){
 				if (obj.state==='В работе'){new_state="На проверку"}
 				else if (obj.state==='На проверку'){new_state="На рассмотрение"}
 				else if (obj.state==='На рассмотрение'){new_state="Одобрено КМСП"}
 				;
-
+                         user_mess='Заявка обработана. И переведена в следующий статус:"'+new_state +'". С комментарием: '+  data.comment;
 			}
 			else if(new_state_act==='Вернуть'){
 				if (obj.state==='В работе'){}
 				else if (obj.state==='На проверку'){new_state="В работе"}
 				else if (obj.state==='На рассмотрение'){new_state="Отказано КМСП"}
 				;
-
+                        user_mess='Заявка возвращена. И переведена в  статус :"'+new_state +'". С причиной: '+  data.comment ;
 			}
 			
 			if (!new_state) {var err={
@@ -371,15 +375,22 @@ log.info({req:req},'start');
 				};
 			return callback(err);
 			}	
-  			var set$={
-					"state": new_state};
+			
+			var set$={
+					"state": new_state,"comment":data.comment};
 
   			db.update_obj(meta_class,meta_method,obj_id,set$,callback)
  			},
 			function (res,callback){
 			//	console.log(meta_method +'mail data '+JSON.stringify(res,4,4));
 			//	mailer('finance@cfcp.ru','Уведомление',null,'request_notify',res);
-			callback(null,res);
+			        if (user_mess){
+				  db.save_obj("request_messages",
+				{"meta_parent_field":"pers_request_id","meta_parent_value":obj_id},
+				{"message": user_mess },function(err,row){
+				callback(err,res)}); 
+				 };
+		//	callback(null,res);
 				}	
 
 		],
@@ -404,7 +415,6 @@ log.info({req:req},'start');
 	var dbloc = db.get();
 	var data = req.body.data;
 var pers_req = require('../db/person_request');
-	setTimeout(  function (){
 
  	if (!data.confirm)   {
  		res.status(500).send({
@@ -419,8 +429,7 @@ var pers_req = require('../db/person_request');
  		 obj_id = req.body.objectlist[0];//new ObjectID(req.body.objectlist[0]);
 	};
 	res.json(obj_id);
-},1000)
-  
+   
 
 /*	
         db.audit(meta_class,meta_method,obj_id,{});
@@ -692,7 +701,7 @@ log.info({req:req},'start');
 			}); return;
 	
 		};
-	}
+	}                                         
 	else if (meta_method=='new'){
  		 obj_id = new ObjectID().toString();
 		
@@ -723,7 +732,7 @@ log.info({req:req},'start');
  					pers_req.load_request_info (obj_id,function(error,body){});	
 					 };
 				if (meta_class=='request_messages'){
-					pers_req.sednotifymessage(req.body.collection.meta_parent_value,row);
+					pers_req.sendnotifymessage(req.body.collection.meta_parent_value,row);
 					}
 				var dataReturn = obj_id;
   			}

@@ -292,7 +292,7 @@ if (typeof brutusin === "undefined") {
             }
 	    if (s.mask){input.setAttribute("data-mask",  s.mask);input.setAttribute("data-placeholder"," ");};
 	    if (s.type==='currency'){ 
-		$(input).maskMoney({symbol:'', allowZero:false,precision:0, allowNegative:true, defaultZero:false});
+		$(input).maskMoney({symbol:'', allowZero:false,precision:2, allowNegative:false, defaultZero:false});
 		};			
             input.schema = schemaId;
             input.setAttribute("autocorrect", "off");

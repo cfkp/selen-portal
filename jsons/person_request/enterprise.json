@@ -1,9 +1,9 @@
 ﻿{
-    "_id": "59784ac448491c032d7f2a5b",
-    "meta_name": "project_ent",
-    "meta_table_name": "project_ent",
+    "_id": "58d9b8ff548f592b4a520fc6",
+    "meta_name": "enterprise",
+    "meta_table_name": "enterprise",
     "data": {
-        "title": "Проектная Организация",
+        "title": "Организация",
         "type": "object",
         "required": true,
         "properties": {
@@ -17,14 +17,13 @@
                 "$ref": "#/definitions/contacts",
                 "$id": null
             },
-
             "enterprise_group_company": {
-                "title": "Группа компаний",
+                "title": "Группа компаний (добавьте компании, входящие в группу)",
                 "$ref": "#/definitions/group_company",
                 "$id": null
             },
             "enterprise_dohod": {
-                "title": "Выручка по годам",
+                "title": "Финансовые показатели компании по годам",
                 "$ref": "#/definitions/dohod",
                 "$id": null
             },
@@ -36,6 +35,11 @@
             "enterprise_owners": {
                 "title": "Структура владения",
                 "$ref": "#/definitions/enterprise_owners",
+                "$id": null
+            },
+            "group_of_people": {
+                "title": "Приложение №2. Структура Группы лиц",
+                "$ref": "#/definitions/group_of_people",
                 "$id": null
             }
         },
@@ -61,6 +65,11 @@
                         "type": "string",
                         "pattern": "^([0-9]{10}|[0-9]{12})$",
                         "mask": "9999999999?99"
+                    },
+                    "rf_region": {
+                        "required": false,
+                        "title": "Регион РФ",
+                        "type": "string"
                     },
                     "okpo": {
                         "required": true,
@@ -108,12 +117,12 @@
                     },
                     "cur_staff": {
                         "required": true,
-                        "title": "Текущая численность сотрудников",
+                        "title": "Текущая численность сотрудников (ед.)",
                         "type": "integer"
                     },
                     "goal_staff": {
                         "required": true,
-                        "title": "Целевая численность сотрудников",
+                        "title": "Целевая численность сотрудников (ед.)",
                         "type": "integer"
                     },
                     "activity": {
@@ -229,27 +238,27 @@
                         },
                         "proceeds_empscount": {
                             "required": true,
-                            "title": "Численность работников",
+                            "title": "Численность работников (ед.)",
                             "type": "integer"
                         },
                         "proceeds_comp": {
                             "required": true,
-                            "title": "Выручка(по сегментам/компаниям)",
-                            "type": "integer"
+                            "title": "Выручка(по сегментам/компаниям) (тыс. руб.)",
+                            "type": "currency"
                         },
                         "proceeds_oper": {
                             "required": true,
-                            "title": "Операционная прибыль",
-                            "type": "integer"
+                            "title": "Операционная прибыль (тыс. руб.)",
+                            "type": "currency"
                         },
                         "proceeds_rent": {
                             "required": true,
-                            "title": "Рентабельность операционной прибыли",
-                            "type": "integer"
+                            "title": "Рентабельность операционной прибыли (%)",
+                            "type": "currency"
                         },
                         "proceeds_clear": {
                             "required": true,
-                            "title": "Чистая прибыль",
+                            "title": "Чистая прибыль(тыс. руб.)",
                             "type": "integer"
                         },
                         "proceeds_money": {
@@ -433,8 +442,7 @@
                                     }
                                 },
                                 "address": {
-                                      "title": "Адрес",
-              
+                                    "title": "Адрес",
                                     "$ref": "#/definitions/address",
                                     "$id": null
                                 }
@@ -604,7 +612,7 @@
                                             }
                                         }
                                     }
-                                            },
+                                },
                                 {
                                     "phislico": {
                                         "type": "object",
@@ -651,7 +659,7 @@
                                                 "type": "string"
                                             },
                                             "rezident": {
-                                                  "title": "Гражданство",
+                                                "title": "Гражданство",
                                                 "$ref": "#/definitions/rezident",
                                                 "$id": null
                                             },

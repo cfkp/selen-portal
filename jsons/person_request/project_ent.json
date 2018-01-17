@@ -8,22 +8,32 @@
         "required": true,
         "properties": {
             "enterprise_data": {
+                "title": "Организация",
                 "$ref": "#/definitions/enterprise",
                 "$id": null
             },
+            "enterprise_contacts": {
+                "title": "Контакты потенциального заемщика/принципала/инвестора проекта",
+                "$ref": "#/definitions/contacts",
+                "$id": null
+            },
             "enterprise_group_company": {
+                "title": "Группа компаний (добавьте компании, входящие в группу)",
                 "$ref": "#/definitions/group_company",
                 "$id": null
             },
             "enterprise_dohod": {
+                "title": "Финансовые показатели компании по годам",
                 "$ref": "#/definitions/dohod",
                 "$id": null
             },
             "enterprise_manager": {
+                "title": "Менеджеры",
                 "$ref": "#/definitions/manager",
                 "$id": null
             },
             "enterprise_owners": {
+                "title": "Структура владения",
                 "$ref": "#/definitions/enterprise_owners",
                 "$id": null
             }
@@ -47,34 +57,62 @@
                     "inn": {
                         "required": true,
                         "title": "ИНН",
-                        "type": "integer",
-                        "pattern": "^([0-9]{10}|[0-9]{12})$"
+                        "type": "string",
+                        "pattern": "^([0-9]{10}|[0-9]{12})$",
+                        "mask": "9999999999?99"
                     },
                     "okpo": {
                         "required": true,
                         "title": "ОКПО",
-                        "type": "integer",
+                        "type": "string",
                         "pattern": "^([0-9]{10}|[0-9]{8})"
                     },
                     "ogrn": {
                         "required": true,
                         "title": "ОГРН",
-                        "type": "integer",
+                        "type": "string",
                         "pattern": "^([0-9]{15}|[0-9]{13})"
+                    },
+                    "okato": {
+                        "required": true,
+                        "title": "ОКАТО",
+                        "type": "string",
+                        "pattern": "^([0-9]{8}|[0-9]{9}|[0-9]{10}|[0-9]{13})"
+                    },
+                    "status_msp": {
+                        "required": true,
+                        "title": "Статус субъекта МСП",
+                        "description": "Наличие в Едином реестре малого и среднего предпринимательства www.nalog.ru",
+                        "type": "text"
                     },
                     "rezident": {
                         "required": true,
                         "title": "Регистрация бизнеса на территории РФ",
                         "type": "boolean"
                     },
+                    "address_reg": {
+                        "required": true,
+                        "title": "Место регистрации (адрес)",
+                        "type": "text"
+                    },
+                    "date_reg": {
+                        "required": true,
+                        "title": "Дата регистрации",
+                        "type": "date"
+                    },
+                    "address_org": {
+                        "required": true,
+                        "title": "Адрес местонахождения постоянно действующих органов управления, иного органа или лица, которые имеют право действовать от имени клиента",
+                        "type": "text"
+                    },
                     "cur_staff": {
                         "required": true,
-                        "title": "Текущая численность сотрудников",
+                        "title": "Текущая численность сотрудников (ед.)",
                         "type": "integer"
                     },
                     "goal_staff": {
                         "required": true,
-                        "title": "Целевая численность сотрудников",
+                        "title": "Целевая численность сотрудников (ед.)",
                         "type": "integer"
                     },
                     "activity": {
@@ -145,6 +183,28 @@
                     }
                 }
             },
+            "group_of_people": {
+                "type": "array",
+                "title": "Приложение №2. Структура Группы лиц",
+                "items": {
+                    "type": "object",
+                    "title": "Группа лиц",
+                    "properties": {
+                        "compain_name": {
+                            "type": "string",
+                            "title": "Наименование компании"
+                        },
+                        "participant": {
+                            "type": "string",
+                            "title": "Участники / акционеры"
+                        },
+                        "percent": {
+                            "type": "string",
+                            "title": "Доля (%)"
+                        }
+                    }
+                }
+            },
             "dohod": {
                 "title": "Выручка по годам",
                 "minItems": 3,
@@ -168,27 +228,28 @@
                         },
                         "proceeds_empscount": {
                             "required": true,
-                            "title": "Численность работников",
+                            "title": "Численность работников (ед.)",
                             "type": "integer"
                         },
                         "proceeds_comp": {
                             "required": true,
-                            "title": "Выручка(по сегментам/компаниям)",
-                            "type": "integer"
+                            "title": "Выручка(по сегментам/компаниям) (тыс. руб.)",
+                            "type": "currency"
                         },
                         "proceeds_oper": {
                             "required": true,
-                            "title": "Операционная прибыль",
-                            "type": "integer"
+                            "title": "Операционная прибыль (тыс. руб.)",
+                            "type": "currency"
                         },
                         "proceeds_rent": {
                             "required": true,
-                            "title": "Рентабельность операционной прибыли",
-                            "type": "integer"
+                            "title": "Рентабельность операционной прибыли (%)",
+                            "type": "currency"
+				
                         },
                         "proceeds_clear": {
                             "required": true,
-                            "title": "Чистая прибыль",
+                            "title": "Чистая прибыль(тыс. руб.)",
                             "type": "integer"
                         },
                         "proceeds_money": {
@@ -202,6 +263,7 @@
             "manager": {
                 "title": "Менеджеры",
                 "type": "array",
+                "minItems": 1,
                 "items": {
                     "type": "object",
                     "title": "Сотрудник",
@@ -239,6 +301,32 @@
                             "required": true,
                             "type": "text",
                             "title": "Краткое резюме"
+                        }
+                    }
+                }
+            },
+            "contacts": {
+                "title": "Контактные лица",
+                "describe": "Контакты потенциального заемщика/принципала/инвестора проекта",
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                    "type": "object",
+                    "title": "Сотрудник",
+                    "properties": {
+                        "fio": {
+                            "required": true,
+                            "type": "string",
+                            "title": "ФИО"
+                        },
+                        "email": {
+                            "required": true,
+                            "title": "E-Mail",
+                            "type": "email"
+                        },
+                        "phone": {
+                            "type": "string",
+                            "title": "Телефон"
                         }
                     }
                 }
@@ -345,6 +433,7 @@
                                     }
                                 },
                                 "address": {
+                                    "title": "Адрес",
                                     "$ref": "#/definitions/address",
                                     "$id": null
                                 }
@@ -511,15 +600,24 @@
                                                 "required": true,
                                                 "title": "ИНН",
                                                 "type": "string"
-                                            },
-                                            "own_ogrn": {
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "phislico": {
+                                        "type": "object",
+                                        "title": "Физическое лицо (не бенифициар)",
+                                        "description": "Меньше или равно 25% владения",
+                                        "properties": {
+                                            "fio": {
                                                 "required": true,
-                                                "title": "ОГРН",
+                                                "title": "ФИО",
                                                 "type": "string"
                                             },
-                                            "benif": {
-                                                "required": false,
-                                                "title": "Бенифициар",
+                                            "own_inn": {
+                                                "required": true,
+                                                "title": "ИНН",
                                                 "type": "string"
                                             }
                                         }
@@ -527,7 +625,8 @@
                                 },
                                 {
                                     "beneficiar": {
-                                        "title": "Бенифициар",
+                                        "title": "Физическое лицо (бенифициар)",
+                                        "description": "Больше 25% владения",
                                         "type": "object",
                                         "properties": {
                                             "fio": {
@@ -551,6 +650,7 @@
                                                 "type": "string"
                                             },
                                             "rezident": {
+                                                "title": "Гражданство",
                                                 "$ref": "#/definitions/rezident",
                                                 "$id": null
                                             },

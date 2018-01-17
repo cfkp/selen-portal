@@ -185,6 +185,7 @@ h=400;
 		viewrecords: true, // show the current page, data rang and total records on the toolbar
 		caption: this.header.title,
 		multiselect: true,
+		multiboxonly: true,
 		pager: this.gridid.gridpager_id_,
 		loadonce: true, 
 	        rowNum: 30,
@@ -194,7 +195,7 @@ h=400;
    
 		shrinkToFit:false,
 		beforeSelectRow: function (rowId, e) {
-	            container.jqGrid("resetSelection");
+	            //container.jqGrid("resetSelection");
 	            //return true;
 	        },
 		onSelectRow: cb(this,this.onSelectRow),
@@ -262,11 +263,11 @@ get_selected_rows() {
 	}
 	else{           
  		let selrows;
-		selrows = $(this.gridid.grid_id_).jqGrid('getGridParam', 'selrow');
-		if (selrows){	
-		if (selrows&&typeof selrows=='array') {
-		s=selrows;		
-		} else {s.push(selrows)};
+		selrows = $(this.gridid.grid_id_).jqGrid('getGridParam', 'selarrrow');
+		if (selrows){
+	 	//if (selrows&&typeof selrows=='array') {
+			s=selrows;		
+	//	} else {s.push(selrows)};
 		} 
 	};	 
 	this.selected_rows=s;
@@ -293,8 +294,9 @@ onSelectRow (elem,rowid, selected) {
 		if (this.detail) {
 		this.detail.Destroy();
 		this.detail=null;
-		};					
- 		if (selected) {
+		};	
+		var s=this.get_selected_rows();				
+ 		if (selected&&s.length==1) {
 			this.detail=new SelenMenu(this,this.header.detail.menu);
 			this.detail.container.attr("meta_parent_field", "pers_request_id");
 			this.detail.container.attr("meta_parent_value", rowid);
@@ -311,7 +313,7 @@ onSelectRow (elem,rowid, selected) {
 					$( this ).attr("href",$( this ).attr("hreftempl").replace('<%=meta_parent_value%>',rowid))
 				});	                           };
 			}*/ 
-this.detail.Show();
+			this.detail.Show();
 		//	detail_container.show();
 		//	detail_container.find("[root_menu='#detail_tabs']").show();	
 		//	detail_container.find('.active a').click();

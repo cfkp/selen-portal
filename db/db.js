@@ -87,7 +87,7 @@ exports.save_obj_hist=function(userid,meta_class,obj){
 };
 
 
-exports.save_obj=function(meta_class,data,callback){
+exports.save_obj=function(meta_class,collection,data,callback){
 console.log('save_obj curuser '+sess.CurrentUserId());
 
 	var id = new ObjectID().toString();
@@ -103,6 +103,10 @@ console.log('save_obj curuser '+sess.CurrentUserId());
 			"state":"Новый",
 			"data":data
 		};
+		if ( collection&& collection.meta_parent_field){
+ 		  row[collection.meta_parent_field]=collection.meta_parent_value;
+		}
+
 
 		dbconnection.collection(meta_class).save(row, function (err, docs) { 
 
@@ -117,7 +121,7 @@ console.log('save_obj curuser '+sess.CurrentUserId());
 exports.update_obj=function(meta_class,meta_method,obj_id,set$,callback){
 console.log('update_obj '+obj_id+' set '+JSON.stringify(set$)); 
    	if (set$){	
-		set$["user_updateid"]=sess.CurrentUserId();
+	//	set$["user_updateid"]=sess.CurrentUserId();
 		dbconnection.collection(meta_class).findOneAndUpdate({
 		"_id": obj_id
 			}, {

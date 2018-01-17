@@ -463,6 +463,97 @@ var aggreg=get_aggregate_params(filter,model.data.colmodel);
 
 });
 
+router.post('/audit/vw_collection_audit_change_state', function (req, res, next) {
+log.debug({req:req},'start');
+         userID = req.session.user;
+ console.log('/audit/vw_collection_audit_change_state');
+	var meta_class = 'audit';
+	var meta_view ='vw_collection_audit_change_state';
+	var user_filter;
+	var collection;
+	if (req.body) {user_filter=req.body.filter;collection=req.body.collection};
+	 
+	
+ 	/////////////////////////
+	var dbloc = db.get();
+   	var collectname= "meta_view";
+	var fil= {"meta_name": meta_view};
+
+	if (typeof meta_class === 'undefined' ||!meta_class||meta_class===null||meta_class==='undefined') { 
+		res.json({'error': 'class_undefined','msg': 'Неопределен класс'});
+		return;
+	}	
+	if (typeof meta_view === 'undefined' ||!meta_view||meta_view===null||meta_view==='undefined') {
+		collectname="meta_class";
+ 		fil={"meta_name": meta_class};
+	};
+
+	async.waterfall([
+			function (callback) {
+ 				dbloc.collection(collectname).findOne(fil, callback);
+			},
+			function (model, callback) {
+ 				var filter = {};
+				filter['and']=[];
+				filter['and'].push({"deleted":{ $exists: false}});
+ 				var vfilter ;
+				var selcols={};
+ 				if (collectname=="meta_view"&& model!==null) {
+				
+					selcols=get_col_list(model.data.colmodel) ;
+ 					
+					if (model.data.filter) {
+						vfilter = model.data.filter
+					};
+				};
+ 
+				if (collectname=='meta_class') 
+					{model['data']= get_gridcols_from_class(model)};	
+
+				if (user_filter)
+					{  
+					 filter['and'].push(user_filter);
+					}
+				if (vfilter) {
+					 filter['and'].push(vfilter);
+				}
+
+				if (collection&&collection.meta_parent_field){
+				var collectfilt={};
+				collectfilt['object_id']=collection.meta_parent_value; 
+					 filter['and'].push(collectfilt);
+					  
+				}
+//console.log('filt1')
+//				console.log(JSON.stringify(filter))
+//console.log('filt2')
+
+ 				filter=get_filter(filter,null);
+//				console.log(JSON.stringify(filter))
+
+  
+var aggreg=get_aggregate_params(filter,model.data.colmodel);
+
+//console.log('view aggreg');
+//console.log(JSON.stringify(aggreg,4,4));
+  			dbloc.collection(meta_class).aggregate(aggreg).toArray(function (err, rows) {
+						var result = {};
+						result.header = model.data;
+						result.rows = rows;
+						callback(null, result);
+					});    
+
+
+				
+			}
+		], function (err, results) {
+ 		if (err)
+			return next(err);
+		res.json(results);
+	});
+
+});
+
 
 
 

@@ -156,7 +156,7 @@ var user$;
 			},
 			function (callback) {   
 	console.log('create_request'+user$);console.log('create_request'+callback);
-			    db.save_obj("person_request",pers_req,function(err,row){
+			    db.save_obj("person_request",undefined,pers_req,function(err,row){
 				callback(err,{"user":user$,"pers_req":row})}); 
  			}
 
@@ -173,7 +173,7 @@ var user$;
 exports.create_NewUser_pers_request=create_NewUser_pers_request;
 
 
-function sednotifymessage(pers_req_id,mess_row){
+function sendnotifymessage(pers_req_id,mess_row){
 
  	async.waterfall([
 			function (callback) {
@@ -204,7 +204,7 @@ function sednotifymessage(pers_req_id,mess_row){
 
 };
 
-exports.sednotifymessage=sednotifymessage;
+exports.sendnotifymessage=sendnotifymessage;
 
 
 
