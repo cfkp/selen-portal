@@ -1153,7 +1153,11 @@ validate(input);
         };
 
         obj.validate = function () {
-            return validate(container);
+        var res;		
+	    res= validate(container);
+		
+          var elem= $(container).find('.has-error .form-control:first') ;
+		elem.focus();
         };
 
         obj.getData = function () {
