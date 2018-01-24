@@ -1,4 +1,23 @@
 'use strict';
+
+
+function callmeth_in_window(meta_class, meta_meth,def_data){
+
+     window.method_call={};
+	window.method_call.meta_class=meta_class;
+        window.method_call.meta_meth=meta_meth;
+	window.method_call.def_data=def_data;
+                                                         
+// var win = window.open('/dummy.html','', '');
+ var win = window.open('/callmethod.html','', '');
+ 	
+/*win.onload =function(){
+	new SelenMethod(undefined,meta_class, meta_meth,null, def_data );
+};
+*/
+ 
+
+};
  
 class SelenMethod {
 
@@ -58,7 +77,11 @@ AfterInit(ajaxobj,response){
 				this.schema=this.lastresponse.schema;
 	 
 				this.value=this.lastresponse.value;
-	                        this.Show();
+/*if (!this.parent) {
+this.createwindow();
+} else {
+*/	                        this.Show();
+//}
 
 };	
 
@@ -99,7 +122,13 @@ AfterExecute(ajaxobj,response){
 	if (this.parent&&this.parent.parent instanceof SelenView ) {
                                            this.parent.parent.refresh();
 	};
- 	$('#method_execute').modal('hide');
+   	$('#method_execute').modal('hide');
+ 
+	if (window.opener){
+		 
+                 window.close();  
+ 		};	
+
 
 };	
 
@@ -137,7 +166,6 @@ Show()
 
 	var bfcont=div_data;
 */
-
 	var bfcont=this.modal_container.find("#data_container");
 	bfcont.empty();
 	this.bf = BrutusinForms.create(this.schema.data);
@@ -152,8 +180,12 @@ Show()
         this.modal_container.find('#executealert').hide();
 
 	this.modal_container.find('#execute').bind('click', cb(this, this.Execute));
-
-	this.modal_container.modal();
+	if (window.opener){
+		this.modal_container.find('#cancel').unbind('click');
+                this.modal_container.find('#cancel').bind('click',function(){window.close()});  
+ 		};	
+ 	this.modal_container.modal();
+ 	 
 
   }
 
@@ -167,6 +199,8 @@ CheckClick()
 		};
 	 
 }
+
+
 
 };
 

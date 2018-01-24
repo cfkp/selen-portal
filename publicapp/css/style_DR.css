@@ -86,3 +86,16 @@ font-size: 16px;
 color:#080808;
 }
 
+.btn-primary {
+     border-radius: 0;
+	background: #59ACE9;
+border-width: inherit;
+  /*  color: #fff;    */
+    font-size: 15px;
+    font-weight: bold;
+   /* margin: 0 auto;  */
+    padding: 10px 20px;
+    text-decoration: none;
+    text-transform: uppercase;    
+
+}

@@ -11,7 +11,7 @@
 <p>
 <% formparam['program_id']=rows[i]._id %>
 <button  class="btn btn-primary" role="button" 
-onclick='new SelenMethod(undefined,"person_request", "create_request",null, <%= JSON.stringify(formparam)%> )'>Оформить заявку</button> 
+onclick='callmeth_in_window("person_request", "create_request", <%= JSON.stringify(formparam)%> )'>Оформить заявку</button> 
 
 
 <div class="panel-group" id="acrd<%= rows[i]._id%>">

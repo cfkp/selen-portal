@@ -1,11 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
+
 <head>
  <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
 
- <link rel="stylesheet" href="../jquery/ui/jquery-ui.css">
+<title>Калькулятор продуктов</title>
+<link rel="stylesheet" href="../jquery/ui/jquery-ui.css">
 
 <link rel="stylesheet" href="../bootstrap/css/bootstrap.css"/>
 <link rel="stylesheet" href="../bootstrap/css/bootstrap-theme.css"/>
@@ -71,12 +73,12 @@
 
 <script src="../js/main.js"></script>
 
+<!--link rel="stylesheet" href='../css/cfkp_calc/style_DR.css'/>
+
+<script src="../cfkp_calc/cfkp_calc.js"></script-->
 
 </head>
-
-<body>
-<img id="loading" class='loader'  />
-
+<body> 
 <!--------------------Error modal--------------------------------------------------->
 <div class="modal fade" id="messagedlg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-content">
@@ -88,7 +90,7 @@
         <p id="msg"></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
         <!--button type="button" class="btn btn-primary">Сохранить изменения</button-->
       </div>
     </div><!-- /.modal-content -->
@@ -98,7 +100,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <!--button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="false">&times;</span></button-->
         <h4 class="modal-title" id="method_title">Modal title</h4>
       </div>
       <div class="modal-body">
@@ -107,7 +109,7 @@
       <div class="modal-footer">
 	<div id= "executealert" class="alert alert-danger" ></div>
         <button type="button" class="btn btn-primary" id='execute' >Сохранить</button>
-        <button type="button" class="btn btn-primary" id='cancel' data-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-default" id='cancel' data-dismiss="modal">Отмена</button>
       </div>
     </div>
   </div>
@@ -124,40 +126,15 @@
       <div class="modal-body"></div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" >Выбрать</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
       </div>
     </div>
   </div>
 </div>
+<!------------------------------------------------------------------------->
 
 
-<div class="col-xs-12">
-<%-partial('partials/topNavigation')%>
-</div>
-<div class="container-fluid">
-<div class="row-fluid">
-	<!--div class="col-sm-3 col-md-2 sidebar">
-	<%-partial('partials/leftMenu')%>
-	</div-->
-
-<div class="col-sm-12 c1ol-sm-offset-3 col-md-12 c1ol-md-offset-2 main " >
-<!--div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="width: fit-content;"-->
-<div id= "sub_menu">
-<ul id ="left_menu" class="nav nav-tabs">
-</ul>
-
-	<div id="main_workspace">
- 
-</div>
-
-</div>
-
-</div>
-
-</div>
+   
 
 </body>
-
 </html>
-
-

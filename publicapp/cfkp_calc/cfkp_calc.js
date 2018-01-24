@@ -80,7 +80,7 @@ var serializeObject = function(form)
 	else {
 //        var formparam = $("form").serialize();
         var formparam = serializeObject($("form"));//$("form").serialize();
-	formparam['fin_amount']=string2money(formparam['fin_amount'])/1000;
+	formparam['fin_amount']=Math.round(string2money(formparam['fin_amount'])/1000);
  
         data['formparam']=formparam ;
         var html = ejs.render(tpl, data);

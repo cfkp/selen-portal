@@ -114,9 +114,9 @@ CheckClick()
 {
 	if (this.bf.validate()) {
 	messagedlg(null, "Ошибок нет", "message");
-		} else {
+		} /*else {
 	messagedlg(null, "Найдены ошибки", "error");
-		};
+		}*/;
 	 
 }
 

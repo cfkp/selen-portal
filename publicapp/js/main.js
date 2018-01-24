@@ -1,6 +1,7 @@
  var bf;
 var BrutusinForms;
 var selen_obj={};
+var selen_meth={};
 var selen_view={};
 var main_menu={};
 
@@ -57,7 +58,11 @@ $(document).ajaxStop(function(){$('#loading').hide(); 	});
 	BrutusinForms.bootstrap.addFormatDecorator("date", "date");
  //selen_view=new SelenView($('#test_workspace'),'person_request','vw_persrequests');
 //selen_view = new SelenView($('#test_workspace'),'person_request','vw_expert_persrequests');
-if  (window.location.pathname!=='/login'&&window.location.pathname!=='/cfkp_calculate.html'){
+if (window.opener){
+selen_meth=	new SelenMethod(undefined,window.opener.method_call.meta_class, window.opener.method_call.meta_meth,null, window.opener.method_call.def_data );
+
+ }
+if  (window.location.pathname!=='/login'&&window.location.pathname!=='/cfkp_calculate.html'&&!window.opener/*&&window.location.pathname!=='/dummy.html'*/){
 main_menu  = new SelenMenu(undefined,'main_menu'); }
 //selen_view=new SelenView($('#test_workspace'),'users','vw_user_property');
 //   	load_main_menu();
