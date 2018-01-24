@@ -268,8 +268,9 @@ if (typeof brutusin === "undefined") {
 			value=new Date(value);//.toISOString();
                 } else if (s.format === "time") {
                     input.type = "time";
-                } else if (s.format === "email") {
+                } else if (s.format === "email"||s.type === "email") {
                     input.type = "email";
+		    s.validator="email";		
                 } else if (s.format === "password") {
                     input.type = "password";
 
@@ -330,6 +331,13 @@ if (typeof brutusin === "undefined") {
                                 return BrutusinForms.messages["maxLength"].format(s.maxLength);
                             }
                         }
+                        if (s.validator) {
+			 let errmsg=validator(s.validator,value);	
+                            if (errmsg!==null) {
+                                return errmsg;
+                            }
+                        }
+
                     }
                     if (value !== null && !isNaN(value)) {
                         if (s.multipleOf && value % s.multipleOf !== 0) {

@@ -314,8 +314,8 @@
       }
     }
     if (!allow && lastMatch + 1 < this.partialPosition) {
-      this.$element.val("")
-      this.clearBuffer(0, len)
+    //  this.$element.val("")
+     // this.clearBuffer(0, len)
     } else if (allow || lastMatch + 1 >= this.partialPosition) {
       this.writeBuffer()
       if (!allow) this.$element.val(this.$element.val().substring(0, lastMatch + 1))
