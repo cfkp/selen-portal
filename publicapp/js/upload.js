@@ -1,3 +1,4 @@
+var maxSizeMB=2;
 $(document).ready(function(){
 
 $('.upload-btn').on('click', function (){
@@ -19,7 +20,9 @@ function uploadfile(obj){
     // loop through all the selected files and add them to the formData object
     for (var i = 0; i < files.length; i++) {
       var file = files[i];
-
+      if(file.size > maxSizeMB * 1024 * 1024){
+    throw new SelenError(null,'Размер файла должен быть менее '+maxSizeMB+'Мб. Воспользуйтесь архиватором.');
+     }
       // add the files to formData object for the data payload
       formData.append('uploads[]', file, file.name);
     }
