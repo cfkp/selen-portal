@@ -18,13 +18,9 @@
                 "$id": null
             },
             "enterprise_group_company": {
-                "title": "Группа компаний (добавьте компании, входящие в группу)",
+                "title": "Группа компаний (добавьте компании, входящие в группу помимо компании Инициатора и Проектной компании)",
+                "description": "Группа компаний (добавьте компании, входящие в группу помимо компании Инициатора и Проектной компании)",
                 "$ref": "#/definitions/group_company",
-                "$id": null
-            },
-            "enterprise_dohod": {
-                "title": "Финансовые показатели компании по годам",
-                "$ref": "#/definitions/dohod",
                 "$id": null
             },
             "enterprise_manager": {
@@ -35,11 +31,6 @@
             "enterprise_owners": {
                 "title": "Структура владения",
                 "$ref": "#/definitions/enterprise_owners",
-                "$id": null
-            },
-            "group_of_people": {
-                "title": "Приложение №2. Структура Группы лиц",
-                "$ref": "#/definitions/group_of_people",
                 "$id": null
             }
         },
@@ -63,7 +54,7 @@
                         "required": true,
                         "title": "ИНН",
                         "type": "string",
-                        "pattern": "^([0-9]{10}|[0-9]{12})$",
+                        "validator": "inn",
                         "mask": "9999999999?99"
                     },
                     "rf_region": {
@@ -71,23 +62,11 @@
                         "title": "Регион РФ",
                         "type": "string"
                     },
-                    "okpo": {
-                        "required": true,
-                        "title": "ОКПО",
-                        "type": "string",
-                        "pattern": "^([0-9]{10}|[0-9]{8})"
-                    },
                     "ogrn": {
                         "required": true,
                         "title": "ОГРН",
                         "type": "string",
                         "pattern": "^([0-9]{15}|[0-9]{13})"
-                    },
-                    "okato": {
-                        "required": true,
-                        "title": "ОКАТО",
-                        "type": "string",
-                        "pattern": "^([0-9]{8}|[0-9]{9}|[0-9]{10}|[0-9]{13})"
                     },
                     "status_msp": {
                         "required": true,
@@ -120,11 +99,6 @@
                         "title": "Текущая численность сотрудников (ед.)",
                         "type": "integer"
                     },
-                    "goal_staff": {
-                        "required": true,
-                        "title": "Целевая численность сотрудников (ед.)",
-                        "type": "integer"
-                    },
                     "activity": {
                         "required": true,
                         "title": "Основной вид деятельности",
@@ -140,14 +114,9 @@
                         "title": "Информация о текущих кредитах (перечень банков / суммы / сроки / % /  обеспечение / прочие важные условия)",
                         "type": "text"
                     },
-                    "tax_debt": {
-                        "required": true,
-                        "title": "Наличие неурегулированной просроченной налоговой задолженности с учетом Группы лиц",
-                        "type": "text"
-                    },
                     "bool_tax_debt": {
                         "required": true,
-                        "title": "Отсутствие просроченной задолженности по налогам, сборам и т.п.",
+                        "title": "Отсутствие просроченной задолженности с учетом Группы лиц по налогам, сборам и т.п.",
                         "type": "boolean"
                     },
                     "bool_bankrupt": {
@@ -170,43 +139,47 @@
             },
             "group_company": {
                 "title": "Группа компаний",
+                "description": "Группа компаний (добавьте компании, входящие в группу помимо компании Инициатора и Проектной компании)",
                 "type": "array",
                 "items": {
                     "title": "Компания",
                     "type": "object",
                     "properties": {
-                        "compaign_name": {
+                        "inn": {
+                            "required": true,
+                            "title": "ИНН",
+                            "validator": "inn",
+                            "mask": "9999999999?99",
+                            "type": "string"
+                        },
+                        "name": {
                             "required": true,
                             "title": "Название компании",
                             "type": "string"
                         },
-                        "compaign_inn": {
-                            "required": true,
-                            "title": "ИНН",
-                            "type": "string"
-                        },
-                        "compaign_ogrn": {
+                        "ogrn": {
                             "required": true,
                             "title": "ОГРН",
                             "type": "string"
-                        }
+                        },
+                        "participant": {
+                            "title": "Участники/Акционеры",
+                            "$ref": "#/definitions/participants",
+                            "$id": null
+            }
                     }
                 }
             },
-            "group_of_people": {
+            "participants": {
                 "type": "array",
-                "title": "Приложение №2. Структура Группы лиц",
+                "title": "Участники / акционеры",
                 "items": {
                     "type": "object",
                     "title": "Группа лиц",
                     "properties": {
-                        "compain_name": {
+                        "name": {
                             "type": "string",
-                            "title": "Наименование компании"
-                        },
-                        "participant": {
-                            "type": "string",
-                            "title": "Участники / акционеры"
+                            "title": "Наименование"
                         },
                         "percent": {
                             "type": "string",
@@ -217,8 +190,8 @@
             },
             "dohod": {
                 "title": "Выручка по годам",
-                "minItems": 3,
-                "maxItems": 3,
+                "minItems": 2,
+                "maxItems": 2,
                 "format": "grid",
                 "gridX": "year",
                 "type": "array",
@@ -231,38 +204,39 @@
                             "title": "Год",
                             "type": "string",
                             "enum": [
-                                "2014",
-                                "2015",
-                                "2016"
+                                "2016",
+                                "2017"
                             ]
                         },
                         "proceeds_empscount": {
-                            "required": true,
+                            "required": false,
                             "title": "Численность работников (ед.)",
                             "type": "integer"
                         },
                         "proceeds_comp": {
-                            "required": true,
+                            "required": false,
                             "title": "Выручка(по сегментам/компаниям) (тыс. руб.)",
                             "type": "currency"
                         },
                         "proceeds_oper": {
-                            "required": true,
+                            "required": false,
                             "title": "Операционная прибыль (тыс. руб.)",
+                             "description":" Операционная прибыль рассчитывается как Прибыль до налогообложения (строка 2300) + Проценты к уплате (строка 2330) + Амортизация",
                             "type": "currency"
                         },
                         "proceeds_rent": {
-                            "required": true,
+                            "required": false,
                             "title": "Рентабельность операционной прибыли (%)",
+                             "description":"Рентабельность по операционной прибыли рассчитывается как Операционная прибыль / Выручка", 
                             "type": "currency"
                         },
                         "proceeds_clear": {
-                            "required": true,
+                            "required": false,
                             "title": "Чистая прибыль(тыс. руб.)",
                             "type": "integer"
                         },
                         "proceeds_money": {
-                            "required": true,
+                            "required": false,
                             "title": "Денежные средства и эквивалент",
                             "type": "integer"
                         }
@@ -293,7 +267,7 @@
                             "title": "Право подписи"
                         },
                         "email": {
-                            "required": true,
+                            "required": false,
                             "title": "E-Mail",
                             "type": "email"
                         },
@@ -600,14 +574,17 @@
                                         "type": "object",
                                         "title": "Юридическое лицо",
                                         "properties": {
+                                            "inn": {
+                                                "required": true,
+                                                "title": "ИНН",
+                                                "type": "string",
+                                                "validator": "inn",
+                                                "mask": "9999999999?99"
+
+                                            },
                                             "name": {
                                                 "required": true,
                                                 "title": "Название компании",
-                                                "type": "string"
-                                            },
-                                            "own_inn": {
-                                                "required": true,
-                                                "title": "ИНН",
                                                 "type": "string"
                                             }
                                         }
@@ -616,17 +593,20 @@
                                 {
                                     "phislico": {
                                         "type": "object",
-                                        "title": "Физическое лицо (не бенифициар)",
+                                        "title": "Физическое лицо (не бенефициар)",
                                         "description": "Меньше или равно 25% владения",
                                         "properties": {
-                                            "fio": {
-                                                "required": true,
-                                                "title": "ФИО",
-                                                "type": "string"
-                                            },
-                                            "own_inn": {
+                                            "inn": {
                                                 "required": true,
                                                 "title": "ИНН",
+                                                "type": "string",
+                                                "validator": "inn",
+                                                "mask": "9999999999?99"
+
+                                            },
+                                            "name": {
+                                                "required": true,
+                                                "title": "ФИО",
                                                 "type": "string"
                                             }
                                         }
@@ -634,19 +614,22 @@
                                 },
                                 {
                                     "beneficiar": {
-                                        "title": "Физическое лицо (бенифициар)",
+                                        "title": "Физическое лицо (бенефициар)",
                                         "description": "Больше 25% владения",
                                         "type": "object",
                                         "properties": {
-                                            "fio": {
+                                           "inn": {
+                                                "required": true,
+                                                "title": "ИНН",
+                                                "type": "string",
+                                                "validator": "inn",
+                                                "mask": "9999999999?99"
+
+                                            },
+                                            "name": {
                                                 "required": true,
                                                 "type": "string",
                                                 "title": "ФИО"
-                                            },
-                                            "inn": {
-                                                "required": true,
-                                                "title": "ИНН",
-                                                "type": "string"
                                             },
                                             "birthday": {
                                                 "required": true,
@@ -658,7 +641,12 @@
                                                 "title": "Место рождения",
                                                 "type": "string"
                                             },
-                                            "rezident": {
+                                            "email": {
+                                                "required": true,
+                                                "title": "E-Mail",
+                                                "type": "email"
+                                            },
+                                             "rezident": {
                                                 "title": "Гражданство",
                                                 "$ref": "#/definitions/rezident",
                                                 "$id": null
