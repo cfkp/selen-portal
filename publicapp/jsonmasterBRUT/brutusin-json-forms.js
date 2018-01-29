@@ -484,39 +484,56 @@ validate(input);
 
             var input = document.createElement("select");
             var display = document.createElement("div");
+		var textNode; var delta_null_i=0;
             display.innerHTML = "";
             input.type = "select";
             input.schema = schemaId;
-            var noption = document.createElement("option");
-            noption.value = null;
-            appendChild(input, noption, s);
+	    if (!s.required){
+            	var noption = document.createElement("option");
+            	noption.value = null;
+		delta_null_i=1;
+		textNode =document.createTextNode('Значение не указано');
+		appendChild(noption, textNode, s);
+	        appendChild(input, noption, s);
+	    };
             for (var i = 0; i < s.oneOf.length; i++) {
                 var option = document.createElement("option");
                 var propId = s.oneOf[i];
                 var ss = getSchema(propId);
-		var textNode =document.createTextNode(ss.title);
+		textNode =document.createTextNode(ss.title);
                 option.value = s.oneOf[i];
                 appendChild(option, textNode, s);
                 appendChild(input, option, s);
-                if (value === undefined || value === null)
-                    continue;
+
+                if (s.readOnly)
+                    input.disabled = true;
+
 		var oneOfvariantName=propId.substring(propId.lastIndexOf(".")+1); 
-                if (value.hasOwnProperty(oneOfvariantName)) {
-                     //var tryit = getSchemaId(propId);
-                        input.selectedIndex = i + 1;
+		var val;	
+
+                if (!s.required&&(value === undefined || value === null)||(s.required&&!value&&i!==0) )
+                    {continue;}
+		else if (value&&!value.hasOwnProperty(oneOfvariantName))
+                    {continue;}
+
+                else if (s.required&&!value&&i===0){val=undefined}
+		else if (value&&value.hasOwnProperty(oneOfvariantName)) {val=value[oneOfvariantName]}
+                     
+                        input.selectedIndex = i + delta_null_i;// добавляем еще один пункт так как есть пустое значение
                     
 			var pp = createStaticPropertyProvider(oneOfvariantName);
 				
 			current['$select']= oneOfvariantName;
-                        render(null, display, propId, current, pp, value[oneOfvariantName]);
+                        render(null, display, propId, current, pp, val);
                      
-                }
-                if (s.readOnly)
-                    input.disabled = true;
-               
+                
+                
             }
             input.onchange = function () {
 		var sel_schemaid=input.options[input.options.selectedIndex].value;
+		if (sel_schemaid==null||sel_schemaid=="null")
+		{clear(display);   current['$select']=null; return;}
+
 		var oneOfvariantName=sel_schemaid.substring(sel_schemaid.lastIndexOf(".")+1); 
 		var pp = createStaticPropertyProvider(oneOfvariantName);
 		var val=null;
