@@ -84,7 +84,7 @@ if (typeof brutusin === "undefined") {
   */
     BrutusinForms.messages = {
         "validationError": "Ошибка проверки",
-        "required": "Укажите **обязательное** поле",
+        "required": "Укажите обязательное поле",
         "invalidValue": "Ошибка значения",
         "addpropNameExistent": "Это свойство уже присутствует в форме",
         "addpropNameRequired": "A name is required",
@@ -94,10 +94,10 @@ if (typeof brutusin === "undefined") {
         "minLength": "Минимальное  количество сиволов  `{0}`",
         "maxLength": "Максимальное количество символов  `{0}`",
         "multipleOf": "Значение должно делиться на  `{0}`",
-        "minimum": "Значение должно быть **больше или равно** `{0}`",
-        "exclusiveMinimum": "Значение должно быть **больше** `{0}`",
-        "maximum": "Значение должно быть **меньше или равно** `{0}`",
-        "exclusiveMaximum": "Значение должно быть **меньше** `{0}`",
+        "minimum": "Значение должно быть больше или равно `{0}`",
+        "exclusiveMinimum": "Значение должно быть больше `{0}`",
+        "maximum": "Значение должно быть меньше или равно `{0}`",
+        "exclusiveMaximum": "Значение должно быть меньше `{0}`",
         "minProperties": "At least `{0}` properties are required",
         "maxProperties": "At most `{0}` properties are allowed",
         "uniqueItems": "Значение должно быть уникально",
@@ -1183,6 +1183,7 @@ validate(input);
 		
           var elem= $(container).find('.has-error .form-control:first') ;
 		elem.focus();
+	return res;
         };
 
         obj.getData = function () {

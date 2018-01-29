@@ -99,6 +99,7 @@ this.createwindow();
 
 
    Execute(){
+//alert (JSON.stringify(this.bf.getData(),4,4));
 	if (this.bf.validate()) {
 	this.data=this.bf.getData();
 	this.modal_container.find('#execute').prop('disabled', true);

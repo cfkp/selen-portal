@@ -1,4 +1,4 @@
-{
+﻿{
     "_id": "59784ac448491c032d7f2a5b",
     "meta_name": "project_ent",
     "meta_table_name": "project_ent",
@@ -7,37 +7,55 @@
         "type": "object",
         "required": true,
         "properties": {
-            "enterprise_data": {
-                "title": "Организация",
-                "$ref": "#/definitions/enterprise",
-                "$id": null
-            },
-            "enterprise_contacts": {
-                "title": "Контакты потенциального заемщика/принципала/инвестора проекта",
-                "$ref": "#/definitions/contacts",
-                "$id": null
-            },
-            "enterprise_group_company": {
-                "title": "Группа компаний (добавьте компании, входящие в группу помимо компании Инициатора и Проектной компании)",
-                "description": "Группа компаний (добавьте компании, входящие в группу помимо компании Инициатора и Проектной компании)",
-                "$ref": "#/definitions/group_company",
-                "$id": null
-            },
-            "enterprise_dohod": {
-                "title": "Финансовые показатели компании по годам",
-                "description": "Указывается консолидированная выручка по группе, при отсутствии группы компаний - по компании Инициатору",
-                "$ref": "#/definitions/dohod",
-                "$id": null
-            },
-            "enterprise_manager": {
-                "title": "Менеджеры",
-                "$ref": "#/definitions/manager",
-                "$id": null
-            },
-            "enterprise_owners": {
-                "title": "Структура владения",
-                "$ref": "#/definitions/enterprise_owners",
-                "$id": null
+            "project_ent": {
+                "title": "Проектная компания",
+                "required": true,
+                "description": "Проектная компания - компания, которая создана «под реализацию проекта», не вела хозяйственной деятельности, за исключением деятельности, связанной с реализацией проекта.",
+                "oneOf": [
+                    {
+                        "is_enteprise": {
+                            "type": "object",
+                            "required": true,
+                            "title": "Является компанией инициатор",
+                            "properties": {
+                                "add_info": {
+                                    "title": "Дополнительные данные",
+                                    "$ref": "#/definitions/add_project_ent_info",
+                                    "$id": null
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "is_project_ent": {
+                            "required": true,
+                            "type": "object",
+                            "title": "Проектная компания",
+                            "properties": {
+                                "enterprise_data": {
+                                    "title": "Организация",
+                                    "$ref": "#/definitions/enterprise",
+                                    "$id": null
+                                },
+                                "enterprise_contacts": {
+                                    "title": "Контакты потенциального заемщика/принципала/инвестора проекта",
+                                    "$ref": "#/definitions/contacts",
+                                    "$id": null
+                                },
+                                "enterprise_manager": {
+                                    "title": "Менеджеры",
+                                    "$ref": "#/definitions/manager",
+                                    "$id": null
+                                },
+                                "enterprise_owners": {
+                                    "title": "Структура владения",
+                                    "$ref": "#/definitions/enterprise_owners",
+                                    "$id": null
+                                }
+                            }
+                        }
+                    }
+                ]
             }
         },
         "definitions": {
@@ -68,7 +86,7 @@
                         "title": "Регион РФ",
                         "type": "string"
                     },
-                     "ogrn": {
+                    "ogrn": {
                         "required": true,
                         "title": "ОГРН",
                         "type": "string",
@@ -160,10 +178,35 @@
                     }
                 }
             },
+            "add_project_ent_info": {
+                "title": "Дополнительные данные",
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "okpo": {
+                        "required": true,
+                        "title": "ОКПО",
+                        "type": "string",
+                        "pattern": "^([0-9]{10}|[0-9]{8})"
+                    },
+                    "okato": {
+                        "required": true,
+                        "title": "ОКАТО",
+                        "type": "string",
+                        "pattern": "^([0-9]{8}|[0-9]{9}|[0-9]{10}|[0-9]{13})"
+                    },
+                    "goal_staff": {
+                        "required": true,
+                        "title": "Целевая численность сотрудников (ед.)",
+                        "type": "integer"
+                    }
+                }
+            },
             "group_company": {
                 "title": "Группа компаний",
                 "description": "Группа компаний (добавьте компании, входящие в группу помимо компании Инициатора и Проектной компании)",
                 "type": "array",
+                "minItems": 1,
                 "items": {
                     "title": "Компания",
                     "type": "object",
@@ -195,6 +238,7 @@
             },
             "participants": {
                 "type": "array",
+                "minItems": 1,
                 "title": "Участники / акционеры",
                 "items": {
                     "type": "object",
@@ -244,13 +288,13 @@
                         "proceeds_oper": {
                             "required": false,
                             "title": "Операционная прибыль (тыс. руб.)",
-                             "description":" Операционная прибыль рассчитывается как Прибыль до налогообложения (строка 2300) + Проценты к уплате (строка 2330) + Амортизация",
+                            "description": " Операционная прибыль рассчитывается как Прибыль до налогообложения (строка 2300) + Проценты к уплате (строка 2330) + Амортизация",
                             "type": "currency"
                         },
                         "proceeds_rent": {
                             "required": false,
                             "title": "Рентабельность операционной прибыли (%)",
-                             "description":"Рентабельность по операционной прибыли рассчитывается как Операционная прибыль / Выручка", 
+                             "description":"Рентабельность по операционной прибыли рассчитывается как Операционная прибыль / Выручку (строка 2110)", 
                             "type": "currency"
                         },
                         "proceeds_clear": {
@@ -340,6 +384,7 @@
             "address": {
                 "title": "Адреса",
                 "type": "array",
+                "minItems": 1,
                 "required": true,
                 "items": {
                     "title": "Адрес",
@@ -350,8 +395,7 @@
                             "title": "Тип адреса",
                             "type": "string",
                             "enum": [
-                                "Регистрация",
-                                "Фактическое"
+                               "Жительства", "Пребывания", "Почтовый"
                             ]
                         },
                         "region_loc": {
@@ -394,6 +438,7 @@
             },
             "rezident": {
                 "title": "Гражданство",
+                "required": true,
                 "oneOf": [
                     {
                         "rezident": {
@@ -590,6 +635,7 @@
                     "type": "object",
                     "properties": {
                         "owner": {
+                            "required": true,
                             "title": "Владелец",
                             "oneOf": [
                                 {
@@ -603,7 +649,6 @@
                                                 "type": "string",
                                                 "validator": "inn",
                                                 "mask": "9999999999?99"
-
                                             },
                                             "name": {
                                                 "required": true,
@@ -625,7 +670,6 @@
                                                 "type": "string",
                                                 "validator": "inn",
                                                 "mask": "9999999999?99"
-
                                             },
                                             "name": {
                                                 "required": true,
@@ -641,13 +685,12 @@
                                         "description": "Больше 25% владения",
                                         "type": "object",
                                         "properties": {
-                                           "inn": {
+                                            "inn": {
                                                 "required": true,
                                                 "title": "ИНН",
                                                 "type": "string",
                                                 "validator": "inn",
                                                 "mask": "9999999999?99"
-
                                             },
                                             "name": {
                                                 "required": true,
@@ -675,7 +718,7 @@
                                                 "$id": null
                                             },
                                             "official": {
-                                                "required": false,
+                                                "required": true,
                                                 "title": "Должностное лицо",
                                                 "oneOf": [
                                                     {

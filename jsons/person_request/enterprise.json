@@ -23,7 +23,14 @@
                 "$ref": "#/definitions/group_company",
                 "$id": null
             },
-            "enterprise_manager": {
+                      "enterprise_dohod": {
+                "title": "Финансовые показатели компании по годам",
+                "description": "Указывается консолидированная выручка по группе, при отсутствии группы компаний - по компании Инициатору",
+                "$ref": "#/definitions/dohod",
+                "$id": null
+            },
+ 
+ "enterprise_manager": {
                 "title": "Менеджеры",
                 "$ref": "#/definitions/manager",
                 "$id": null
@@ -141,6 +148,7 @@
                 "title": "Группа компаний",
                 "description": "Группа компаний (добавьте компании, входящие в группу помимо компании Инициатора и Проектной компании)",
                 "type": "array",
+                "minItems": 1,
                 "items": {
                     "title": "Компания",
                     "type": "object",
@@ -172,6 +180,7 @@
             },
             "participants": {
                 "type": "array",
+                "minItems": 1,
                 "title": "Участники / акционеры",
                 "items": {
                     "type": "object",
@@ -227,7 +236,7 @@
                         "proceeds_rent": {
                             "required": false,
                             "title": "Рентабельность операционной прибыли (%)",
-                             "description":"Рентабельность по операционной прибыли рассчитывается как Операционная прибыль / Выручка", 
+                             "description":"Рентабельность по операционной прибыли рассчитывается как Операционная прибыль / Выручку (строка 2110)", 
                             "type": "currency"
                         },
                         "proceeds_clear": {
@@ -317,6 +326,7 @@
             "address": {
                 "title": "Адреса",
                 "type": "array",
+                "minItems": 1,
                 "required": true,
                 "items": {
                     "title": "Адрес",
@@ -327,8 +337,7 @@
                             "title": "Тип адреса",
                             "type": "string",
                             "enum": [
-                                "Регистрация",
-                                "Фактическое"
+                               "Жительства", "Пребывания", "Почтовый"
                             ]
                         },
                         "region_loc": {
@@ -371,6 +380,7 @@
             },
             "rezident": {
                 "title": "Гражданство",
+                "required": true,
                 "oneOf": [
                     {
                         "rezident": {
@@ -567,6 +577,7 @@
                     "type": "object",
                     "properties": {
                         "owner": {
+                            "required": true,
                             "title": "Владелец",
                             "oneOf": [
                                 {
@@ -580,7 +591,6 @@
                                                 "type": "string",
                                                 "validator": "inn",
                                                 "mask": "9999999999?99"
-
                                             },
                                             "name": {
                                                 "required": true,
@@ -602,7 +612,6 @@
                                                 "type": "string",
                                                 "validator": "inn",
                                                 "mask": "9999999999?99"
-
                                             },
                                             "name": {
                                                 "required": true,
@@ -624,7 +633,6 @@
                                                 "type": "string",
                                                 "validator": "inn",
                                                 "mask": "9999999999?99"
-
                                             },
                                             "name": {
                                                 "required": true,
@@ -652,7 +660,7 @@
                                                 "$id": null
                                             },
                                             "official": {
-                                                "required": false,
+                                                "required": true,
                                                 "title": "Должностное лицо",
                                                 "oneOf": [
                                                     {

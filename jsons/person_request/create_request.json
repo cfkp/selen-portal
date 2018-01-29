@@ -1,0 +1,138 @@
+﻿{
+    "_id": "5a2702cb80f4900b48ea24fe",
+    "meta_name": "create_request",
+    "meta_class": "person_request",
+    "data": {
+        "meta_class": "person_request",
+        "meta_method": "create_request",
+        "objectlist": "0",
+        "required": true,
+        "title": "Подать заявку",
+        "type": "object",
+        "properties": {
+            "fio": {
+                "required": true,
+                "title": "Фамилия Имя Отчество",
+                "type": "string"
+            },
+            "email": {
+                "required": true,
+                "title": "E-Mail",
+                "type": "email",
+                "format": "email"
+            },
+            "phone": {
+                "required": true,
+                "title": "Контактный телефон",
+                "type": "string",
+                "mask": "+7-999-999-99-99"
+            },
+            "project_name": {
+                "required": true,
+                "title": "Наименование проекта",
+                "type": "string"
+            },
+            "project_essence": {
+                "required": true,
+                "title": "Суть проекта(кратко)",
+                "type": "textarea"
+            },
+            "INN": {
+                "required": true,
+                "title": "ИНН компании-инициатора",
+                "type": "string",
+                "pattern": "^([0-9]{10}|[0-9]{12})$",
+                "mask": "9999999999?99",
+                "description": "Инициатор проекта это компания- заемщик, если кредит привлекается на Компанию с действующем бизнесом либо компания-поручителем по кредиту, в случае, если проект планируется реализовывать на иной, вновь созданной компании. Поручитель должен иметь стабильный бизнес, сопоставимый с суммой запрашиваемого кредита и обеспечить уплату процентов на инвестиционной фазе."
+            },
+            "project_ent": {
+                "title": "Проектная компания",
+                "description": "Проектная компания - компания, которая создана «под реализацию проекта», не вела хозяйственной деятельности, за исключением деятельности, связанной с реализацией проекта.",
+                "oneOf": [
+                    {
+                        "is_enteprise": {
+                            "required": true,
+                            "title": "Является компанией инициатор"
+                        }
+                    },
+                    {
+                        "is_project_ent": {
+                            "required": true,
+                            "type": "object",
+                            "title": "Проектная компания",
+                            "properties": {
+                                "inn": {
+                                    "required": true,
+                                    "title": "ИНН",
+                                    "type": "string",
+                                    "validator": "inn",
+                                    "mask": "9999999999?99"
+                                },
+                                "okved": {
+                                    "required": true,
+                                    "title": "ОКВЭД-2",
+                                    "type": "string",
+                                    "description": "Обязательное поле. Требуется указать отрасль в которой будет реализован проект. Эта отрасль может быть не связана с текущей деятельностью компании и не соответствовать действующим ОКВЭДам. Указать отрасль и выбрать ОКВЭД из списка приоритетных. "
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "product": {
+                "required": true,
+                "title": "Продукт",
+                "type": "string",
+                "readOnly": true,
+                "enum": [
+                    "Кредит/Займ",
+                    "Гарантия",
+                    "Лизинг"
+                ]
+            },
+            "goal": {
+                "required": true,
+                "title": "Цель привлечения  финансирования",
+                "readOnly": true,
+                "type": "string",
+                "enum": [
+                    "Капитальные вложения",
+                    "Пополнение оборотных средств"
+                ]
+            },
+            "fin_amount": {
+                "readOnly": true,
+                "required": true,
+                "title": "Сумма финансирования (тыс.руб)",
+                "type": "integer",
+                "description": "Размер запрашиваемого  финансирования;"
+            },
+            "fin_period": {
+                "readOnly": true,
+                "required": true,
+                "title": "Срок финансирования (мес)",
+                "type": "integer"
+            },
+            "program_id": {
+                "type": "string",
+                "title": "Программа",
+                "meta_ref": {
+                    "meta_class": "cfkp_product",
+                    "colmodel": [
+                        {
+                            "label": "id",
+                            "name": "_id",
+                            "key": true,
+                            "hidden": true
+                        },
+                        {
+                            "label": "Программа",
+                            "name": "data.program.name"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "this_meta_class": "meta_method"
+}
