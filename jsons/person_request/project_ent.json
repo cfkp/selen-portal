@@ -51,7 +51,14 @@
                                     "title": "Структура владения",
                                     "$ref": "#/definitions/enterprise_owners",
                                     "$id": null
-                                }
+                                },
+                      "enterprise_dohod": {
+                            "title": "Финансовые показатели компании по годам",
+                            "description": "Указывается консолидированная выручка по группе, при отсутствии группы компаний - по компании Инициатору",
+                           "$ref": "#/definitions/dohod",
+                           "$id": null
+                           }
+
                             }
                         }
                     }
@@ -199,7 +206,18 @@
                         "required": true,
                         "title": "Целевая численность сотрудников (ед.)",
                         "type": "integer"
-                    }
+                    },
+                    "enterprise_owners": {
+                        "title": "Структура владения",
+                        "$ref": "#/definitions/enterprise_owners",
+                        "$id": null
+                    },
+                      "enterprise_dohod": {
+                            "title": "Финансовые показатели компании по годам",
+                            "description": "Указывается консолидированная выручка по группе, при отсутствии группы компаний - по компании Инициатору",
+                           "$ref": "#/definitions/dohod",
+                           "$id": null
+                           }
                 }
             },
             "group_company": {
@@ -294,7 +312,7 @@
                         "proceeds_rent": {
                             "required": false,
                             "title": "Рентабельность операционной прибыли (%)",
-                             "description":"Рентабельность по операционной прибыли рассчитывается как Операционная прибыль / Выручку (строка 2110)", 
+                            "description": "Рентабельность по операционной прибыли рассчитывается как Операционная прибыль / Выручку (строка 2110)",
                             "type": "currency"
                         },
                         "proceeds_clear": {
@@ -381,58 +399,51 @@
                     }
                 }
             },
-            "address": {
-                "title": "Адреса",
-                "type": "array",
-                "minItems": 1,
+            "address_struct": {
+                "title": "Адресные данные",
+                "type": "object",
                 "required": true,
-                "items": {
-                    "title": "Адрес",
-                    "type": "object",
-                    "properties": {
-                        "addr_type_loc": {
-                            "required": true,
-                            "title": "Тип адреса",
-                            "type": "string",
-                            "enum": [
-                               "Жительства", "Пребывания", "Почтовый"
-                            ]
-                        },
-                        "region_loc": {
-                            "required": false,
-                            "title": "Область",
-                            "type": "string"
-                        },
-                        "district_loc": {
-                            "required": false,
-                            "title": "Район",
-                            "type": "string"
-                        },
-                        "town_loc": {
-                            "required": true,
-                            "title": "Населенный пункт",
-                            "type": "string"
-                        },
-                        "street_loc": {
-                            "required": true,
-                            "title": "Улица",
-                            "type": "string"
-                        },
-                        "home_loc": {
-                            "required": true,
-                            "title": "Дом",
-                            "type": "string"
-                        },
-                        "building_loc": {
-                            "required": false,
-                            "title": "Корпус",
-                            "type": "string"
-                        },
-                        "apartment_loc": {
-                            "required": false,
-                            "title": "Квартира",
-                            "type": "string"
-                        }
+                "properties": {
+                    "index": {
+                        "required": false,
+                        "title": "Индекс",
+                        "type": "string",
+                        "mask": "999999"
+                    },
+                    "region_loc": {
+                        "required": false,
+                        "title": "Область",
+                        "type": "string"
+                    },
+                    "district_loc": {
+                        "required": false,
+                        "title": "Район",
+                        "type": "string"
+                    },
+                    "town_loc": {
+                        "required": true,
+                        "title": "Населенный пункт",
+                        "type": "string"
+                    },
+                    "street_loc": {
+                        "required": true,
+                        "title": "Улица",
+                        "type": "string"
+                    },
+                    "home_loc": {
+                        "required": true,
+                        "title": "Дом",
+                        "type": "string"
+                    },
+                    "building_loc": {
+                        "required": false,
+                        "title": "Корпус",
+                        "type": "string"
+                    },
+                    "apartment_loc": {
+                        "required": false,
+                        "title": "Квартира",
+                        "type": "string"
                     }
                 }
             },
@@ -484,9 +495,54 @@
                                     }
                                 },
                                 "address": {
-                                    "title": "Адрес",
-                                    "$ref": "#/definitions/address",
-                                    "$id": null
+                                    "title": "Адреса",
+                                    "type": "object",
+                                    "required": true,
+                                    "properties": {
+                                        "register": {
+                                            "title": "Жительства",
+                                            "$ref": "#/definitions/address_struct",
+                                            "$id": null
+                                        },
+                                        "living": {
+                                            "title": "Пребывания",
+                                            "required": true,
+                                            "oneOf": [
+                                                {
+                                                    "equal_reg": {
+                                                        "required": true,
+                                                        "title": "Совпадает с местом жительства"
+                                                    }
+                                                },
+                                                {
+                                                    "not_eq_reg": {
+                                                        "title": "Пребывания",
+                                                        "$ref": "#/definitions/address_struct",
+                                                        "$id": null
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        "post": {
+                                            "title": "Почтовый",
+                                            "required": true,
+                                            "oneOf": [
+                                                {
+                                                    "equal_reg": {
+                                                        "required": true,
+                                                        "title": "Совпадает с местом жительства"
+                                                    }
+                                                },
+                                                {
+                                                    "not_eq_reg": {
+                                                        "title": "Пребывания",
+                                                        "$ref": "#/definitions/address_struct",
+                                                        "$id": null
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
                                 }
                             }
                         }

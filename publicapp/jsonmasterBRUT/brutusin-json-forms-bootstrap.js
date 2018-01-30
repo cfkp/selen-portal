@@ -206,7 +206,7 @@ if (element.tagName) {
             if (!("undefined" === typeof $ || "undefined" === typeof $.fn || "undefined" === typeof $.fn.selectpicker) && tagName === "select") {
                 element.title = "";
                 element.className += " selectpicker";
-                element.setAttribute("data-live-search", true);
+                //element.setAttribute("data-live-search", true);
                 $(element).selectpicker();
             }
         }
