@@ -27,6 +27,8 @@
 <script src="../jasny-bootstrap/js/jasny-bootstrap.js"></script>
 <!--script src="../bootstrap/js/bootstrap-formhelpers-phone.js"></script-->
 
+<script src="../enjoyhint/enjoyhint.min.js"></script>
+<script src="../enjoyhint/kinetic.min.js"></script>
 
 
 <!--script type="text/javascript" src="../lib/jsonform-master/deps/underscore.js"></script>
@@ -37,20 +39,28 @@
 <link rel="stylesheet" href="../jasny-bootstrap/css/jasny-bootstrap.min.css">
 <link rel="stylesheet" href="../bootstrap-select/css/bootstrap-select.min.css">
 <link rel="stylesheet" href='../jsonmasterBRUT/brutusin-json-forms.css'/>
+<link rel="stylesheet" href="../enjoyhint/jquery.enjoyhint.css">
+
 <script src="../jsonmasterBRUT/markdown.min.js"></script>
 <script src="../bootstrap-select/js/bootstrap-select.min.js"></script>
 <script src="../bootstrap-select/js/i18n/defaults-en_US.min.js"></script>
+
+<script src="../jsonmasterBRUT/data-validation.js"></script>
 
 <script src="../jsonmasterBRUT/brutusin-json-forms.js"></script>
 <script src="../jsonmasterBRUT/brutusin-json-forms-bootstrap.js"></script>
 
 
+
+
 <script type="text/ecmascript" src="../jqgrid/js/i18n/grid.locale-ru.js"></script>
 <script type="text/ecmascript" src="../jqgrid/js/jquery.jqGrid.min.js"></script>
+<!--script type="text/ecmascript" src="../jqgrid/src/jquery.jqGrid.js"></script-->
 <link rel="stylesheet" type="text/css" media="screen" href="../jqgrid/css/ui.jqgrid-bootstrap.css" />
 
 <link href="../css/dashboard.css" rel="stylesheet">
 <link href="../css/style_DR.css" rel="stylesheet">
+<link href="../css/messages.css" rel="stylesheet">
 
 <script src="../js/common.js"></script>
 
@@ -65,12 +75,16 @@
 <script src="../js/selen_objclass.js"></script>
 <script src="../js/selen_viewclass.js"></script>
 <script src="../js/selen_menuclass.js"></script>
+<script src="../js/selen_methclass.js"></script>
 
 <script src="../js/main.js"></script>
 
 
 </head>
+
 <body>
+<img id="loading" class='loader'  />
+
 <!--------------------Error modal--------------------------------------------------->
 <div class="modal fade" id="messagedlg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-content">
@@ -82,7 +96,7 @@
         <p id="msg"></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Закрыть</button>
         <!--button type="button" class="btn btn-primary">Сохранить изменения</button-->
       </div>
     </div><!-- /.modal-content -->
@@ -96,11 +110,12 @@
         <h4 class="modal-title" id="method_title">Modal title</h4>
       </div>
       <div class="modal-body">
-     <form class="method_form"> </form>
+     <form id='data_container' class="method_form"> </form>
       </div>
       <div class="modal-footer">
+	<div id= "executealert" class="alert alert-danger" ></div>
         <button type="button" class="btn btn-primary" id='execute' >Сохранить</button>
-        <button type="button" class="btn btn-default" id='cancel' data-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-primary" id='cancel' data-dismiss="modal">Отмена</button>
       </div>
     </div>
   </div>
@@ -114,31 +129,41 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="refview_title">Выбрать значение</h4>
       </div>
-      <div class="modal-body">
-     <div class="refview_form">
-   <div id="grid_container">  <!--table id="vwGrid"></table> 
-   <div id="vwGridPager"></div-->
-</div>
-	</div>
-      </div>
+      <div class="modal-body"></div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" >Выбрать</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена</button>
       </div>
     </div>
   </div>
 </div>
 
 
-<div class="col-xs-12">
+<div class="col1-xs-12">
 <%-partial('../partials/topNavigation')%>
 </div>
 <div class="container-fluid">
 <div class="row-fluid">
+ 
+<div class="col1-sm-12 c1ol-sm-offset-3 col1-md-12 c1ol-md-offset-2 main " >
+<!--div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="width: fit-content;"-->
+<div id= "sub_menu">
+<ul id ="left_menu" class="nav nav-tabs">
+</ul>
+
+	<div id="main_workspace">
 <%-body -%>
+ 
+</div>
+
+</div>
+
 </div>
 
 </div>
 
 </body>
+
 </html>
+
+
