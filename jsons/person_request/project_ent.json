@@ -115,7 +115,7 @@
                         "required": true,
                         "title": "Статус субъекта МСП",
                         "description": "Наличие в Едином реестре малого и среднего предпринимательства www.nalog.ru",
-                        "type": "text"
+                        "type": "boolean"
                     },
                     "rezident": {
                         "required": true,

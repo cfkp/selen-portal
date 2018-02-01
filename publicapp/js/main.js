@@ -4,8 +4,36 @@ var selen_obj={};
 var selen_meth={};
 var selen_view={};
 var main_menu={};
+var enjoyhint_instance = null;
 
-$(document).ready(function () {
+      var enjoyhint_script_data = [
+         {
+          description:'Для оформления заявки необходимо заполнить данные',
+          event:'next',
+	  selector:'#request_detail_menu',
+         // shape:'circle',
+	nextButton : {className: "myNext", text: "Конечно!"},
+	skipButton : {className: "mySkip", text: "Обойдусь"},        
+showSkip:true,
+
+showNext:true
+} ,
+
+         {
+          description:'Для оформления заявки необходимо заполнить данные',
+
+	  selector:'#sln_cntrequest_detail_menu',
+         // shape:'circle',
+showNext:true,  event:'next',
+	'nextButton' : {className: "myNext", text: "Конечно!"},
+	'skipButton' : {className: "mySkip", text: "Обойдусь"},
+          timeout:100
+        } 
+
+      ];
+
+
+  $(document).ready(function () {
 /* window.onerror = function (message, url, lineNumber, columnNo, error) {	
 if (error.name&&error.name==='SelenError'){messagedlg(error.errobj);}
 else{	
@@ -67,10 +95,15 @@ main_menu  = new SelenMenu(undefined,'main_menu'); }
 //selen_view=new SelenView($('#test_workspace'),'users','vw_user_property');
 //   	load_main_menu();
 
+
+        enjoyhint_instance = new EnjoyHint({});
+        enjoyhint_instance.setScript(enjoyhint_script_data);
   
 
 });
-
+function starthelp(){
+        enjoyhint_instance.runScript();
+ };
 function load_class(container,elem) {
 	var meta_class = $(elem).attr("meta_class");
 	var parent = $(elem).parents().find('#detail_tabs');

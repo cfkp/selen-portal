@@ -221,6 +221,10 @@ var header=this.header;
 	} // search options - define multiple search
 	);
 
+var grid_element=this.container.find(this.gridid.grid_id_);
+var    ids = grid_element.jqGrid("getDataIDs");
+if(ids && ids.length > 0)
+   { grid_element.jqGrid("setSelection", ids[0]);}
  
 }
 refresh(){

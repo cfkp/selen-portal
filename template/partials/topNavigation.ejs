@@ -17,9 +17,13 @@
 	<div id="top_menu" class="nav navbar-nav">
  
  	</div>
- 
-	<ul class="nav navbar-nav navbar-right">
-<a href="" onclick="$('<form method=POST action=/logout>').appendTo('body').submit();return false">Выйти</a></form></li>
+
+ 	<ul class="nav navbar-nav navbar-right">
+<li>         <a  title='Помощь' onclick='starthelp();'>Помощь</a>
+ </li>
+<li>
+		<a href="" onclick="$('<form method=POST action=/logout>').appendTo('body').submit();return false">Выйти</a></form></li>
+</li>
 	</ul>
     </div>
 		<% } %>
