@@ -22,13 +22,7 @@
                 "description": "Группа компаний (добавьте компании, входящие в группу помимо компании Инициатора и Проектной компании)",
                 "$ref": "#/definitions/group_company",
                 "$id": null
-            },
-  
- "enterprise_manager": {
-                "title": "Менеджеры",
-                "$ref": "#/definitions/manager",
-                "$id": null
-            }
+            } 
         },
         "definitions": {
             "enterprise": {

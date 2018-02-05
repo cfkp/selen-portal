@@ -207,6 +207,12 @@
                         "title": "Целевая численность сотрудников (ед.)",
                         "type": "integer"
                     },
+                                "enterprise_manager": {
+                                    "title": "Менеджеры",
+                                    "$ref": "#/definitions/manager",
+                                    "$id": null
+                                },
+
                     "enterprise_owners": {
                         "title": "Структура владения",
                         "$ref": "#/definitions/enterprise_owners",
