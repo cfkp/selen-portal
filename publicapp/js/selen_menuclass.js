@@ -3,12 +3,12 @@
  
 class SelenMenu {
 
-  constructor(parentobj,_meta_name) 
+  constructor(parentobj,_meta_name,menu_container) 
 { if (parentobj){      
 	this.parent=parentobj;
-	this.parent_container=this.parent.container;
+	this.parent_container=menu_container;
 	var obj_container = $('<div></div>'); 
-//	obj_container.attr('class','sln_container')	 
+//	obj_container.attr('class','sln_menu_container')	 
 	obj_container.attr('id','sln_cnt'+_meta_name);
 	this.parent_container.append(obj_container);
 	this.container=obj_container;

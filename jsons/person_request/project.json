@@ -17,6 +17,11 @@
                 "$ref": "#/definitions/project_info_type",
                 "$id": null
             },
+            "check_list": {
+                "title": "Наличие информации в пакете документов",
+                "$ref": "#/definitions/project_check_list",
+                "$id": null
+            },
             "sum": {
                 "title": "Сумма проекта",
                 "$ref": "#/definitions/project_sum",
@@ -79,14 +84,7 @@
                 "type": "object",
                 "required": true,
                 "properties": {
-                    "project_name": {
-                        "required": true,
-                        "title": "Наименование проекта",
-                        "type": "string",
-                        "format": "text",
-                        "description": "Введите наименование проекта например: возведение моста в коровнике "
-                    },
-                     "project_vid": {
+                    "project_vid": {
                         "required": true,
                         "title": "Направление проекта",
                         "description": "К какому направлению из нижеперечисленных относится Ваш проект?",
@@ -110,85 +108,6 @@
                         "description": "Поддержка проекта со стороны региона, профильных федеральных органов исполнительной власти (Минсельхоз, Минпромторг, Минэнерго, Минкомсвязь и т.д.)",
                         "type": "boolean"
                     },
-                    "perfletters": {
-                        "required": true,
-                        "title": "Преференциальные/комфортные письма",
-                        "description": "Преференциальные/комфортные письма в рамках проекта от органов управления субъекта РФ,  ФОИВов, иных органов государственной власти",
-                        "type": "boolean"
-                    },
-                    "other_support": {
-                        "required": true,
-                        "title": "Прочиe виды поддержки",
-                        "description": "Оказание прочих видов поддержки проекта со стороны субъекта РФ, ФОИВа,  иных субъектов инфраструктуры поддержки  МСП (субсидирование, гарантийная поддержка, концессия и т.д.)",
-                        "type": "boolean" 
-                    },
-                    "project_resume": {
-                        "required": true,
-                        "title": "Краткое описание проекта",
-                        "description": "Краткое описание проекта, текущий статус реализации проекта, информация об инициаторах проекта",
-                        "type": "boolean"
-                    },
-                    "rationale": {
-                        "required": true,
-                        "title": "Экономическое обоснование проекта",
-                        "description": "Экономическое обоснование проекта, описание финансовой модели и результата проекта",
-                        "type": "boolean"
-                    },
-                    "sales_analysis": {
-                        "required": true,
-                        "title": "Анализ сбыта, данные о покупателях/маркетинговое исследование рынка",
-                        "type": "boolean"
-                    },
-                    "suppliers": {
-                        "required": true,
-                        "title": "Данные о поставщиках/подрядчиках",
-                        "type": "boolean"
-                    },
-                    "stages": {
-                        "required": true,
-                        "title": "Этапы реализации",
-                        "type": "text"
-                    },
-                    "estimate": {
-                        "required": true,
-                        "title": "Смета проекта",
-                        "type": "boolean"
-                    },
-                    "sources_and_structure": {
-                        "required": true,
-                        "title": "Источники и структура финансирования каждого этапа (собственные средства, заемные средства и т.д.)",
-                        "type": "boolean"
-                    },
-                    "professional_experience": {
-                        "required": true,
-                        "title": "Данные о наличии профессионального опыта менеджеров/бенефициаров в сфере реализуемого проекта",
-                        "type": "boolean"
-                    },
-                    "SWOT": {
-                        "required": true,
-                        "title": "Конкурентный/SWOT –анализ",
-                        "type": "boolean"
-                    },
-                    "percentage_of_participation": {
-                        "required": true,
-                        "title": "Доля собственного участия в проекте %",
-                        "type": "integer"
-                    },
-                    "source_doc": {
-                        "required": true,
-                        "title": "Наличие исходно-разрешительной документации по строительству сооружений в рамках реализуемого проекта",
-                        "type": "boolean"
-                    },
-                    "tech_expertise": {
-                        "required": true,
-                        "title": "Наличие технологической и технической экспертизы проекта, подтверждающая инвестиционный бюджет проекта и целесообразность его реализации",
-                        "type": "boolean"
-                    },
-                    "information": {
-                        "required": true,
-                        "title": "Наличие информации о текущей деятельности инициатора проекта, связанных компаний/группы компаний инициатора проекта (при наличии группы)",
-                        "type": "boolean"
-                    },
                     "project_type": {
                         "required": true,
                         "title": "Вид проекта",
@@ -201,12 +120,6 @@
                     "project_goal": {
                         "required": true,
                         "title": "Цель реализации проекта / целевые проектные показатели",
-                        "type": "string",
-                        "format": "text"
-                    },
-                    "project_plan": {
-                        "required": true,
-                        "title": "Сроки / график реализации",
                         "type": "string",
                         "format": "text"
                     },
@@ -232,6 +145,89 @@
                             "Программа 6,5 %",
                             "Гарантийная поддержка и Программа 6,5%"
                         ]
+                    },
+                    "stages": {
+                        "required": true,
+                        "title": "Этапы реализации",
+                        "type": "text"
+                    }
+
+                }
+            },
+            "project_check_list": {
+                "title": "Наличие информации в пакете документов",
+                "description": "Просьба подтвердить наличие в пакете документов следующей информации",
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "perfletters": {
+                        "required": true,
+                        "title": "Преференциальные/комфортные письма",
+                        "description": "Преференциальные/комфортные письма в рамках проекта от органов управления субъекта РФ,  ФОИВов, иных органов государственной власти",
+                        "type": "boolean"
+                    },
+                    "other_support": {
+                        "required": true,
+                        "title": "Прочиe виды поддержки",
+                        "description": "Оказание прочих видов поддержки проекта со стороны субъекта РФ, ФОИВа,  иных субъектов инфраструктуры поддержки  МСП (субсидирование, гарантийная поддержка, концессия и т.д.)",
+                        "type": "boolean"
+                    },
+                    "project_resume": {
+                        "required": true,
+                        "title": "Краткое описание проекта",
+                        "description": "Краткое описание проекта, текущий статус реализации проекта, информация об инициаторах проекта",
+                        "type": "boolean"
+                    },
+                    "rationale": {
+                        "required": true,
+                        "title": "Экономическое обоснование проекта",
+                        "description": "Экономическое обоснование проекта, описание финансовой модели и результата проекта",
+                        "type": "boolean"
+                    },
+                    "sales_analysis": {
+                        "required": true,
+                        "title": "Анализ сбыта, данные о покупателях/маркетинговое исследование рынка",
+                        "type": "boolean"
+                    },
+                    "suppliers": {
+                        "required": true,
+                        "title": "Данные о поставщиках/подрядчиках",
+                        "type": "boolean"
+                    },
+                    "estimate": {
+                        "required": true,
+                        "title": "Смета проекта",
+                        "type": "boolean"
+                    },
+                    "sources_and_structure": {
+                        "required": true,
+                        "title": "Источники и структура финансирования каждого этапа (собственные средства, заемные средства и т.д.)",
+                        "type": "boolean"
+                    },
+                    "professional_experience": {
+                        "required": true,
+                        "title": "Данные о наличии профессионального опыта менеджеров/бенефициаров в сфере реализуемого проекта",
+                        "type": "boolean"
+                    },
+                    "SWOT": {
+                        "required": true,
+                        "title": "Конкурентный/SWOT –анализ",
+                        "type": "boolean"
+                    },
+                    "source_doc": {
+                        "required": true,
+                        "title": "Наличие исходно-разрешительной документации по строительству сооружений в рамках реализуемого проекта",
+                        "type": "boolean"
+                    },
+                    "tech_expertise": {
+                        "required": true,
+                        "title": "Наличие технологической и технической экспертизы проекта, подтверждающая инвестиционный бюджет проекта и целесообразность его реализации",
+                        "type": "boolean"
+                    },
+                    "information": {
+                        "required": true,
+                        "title": "Наличие информации о текущей деятельности инициатора проекта, связанных компаний/группы компаний инициатора проекта (при наличии группы)",
+                        "type": "boolean"
                     }
                 }
             },
@@ -243,44 +239,44 @@
                     "sum_total": {
                         "required": true,
                         "title": "Общая сумма проекта (тыс. руб)",
-                        "type": "integer"
+                        "type": "currency"
                     },
                     "sum_min": {
                         "required": true,
                         "title": "Общая сумма проекта, не менее(тыс. руб)",
                         "description": "Укажите минимально возможную сумму для запуска проекта",
-                        "type": "integer"
+                        "type": "currency"
                     },
                     "sum_max": {
                         "required": true,
                         "title": "Общая сумма проекта, не более(тыс. руб)",
                         "description": "Укажите максимальную сумму для запуска проекта",
-                        "type": "integer"
+                        "type": "currency"
                     },
                     "sum_doc": {
                         "required": true,
-                        "title": "Проектная и разрешительная документация",
-                        "type": "integer"
+                        "title": "Проектная и разрешительная документация (тыс. руб)",
+                        "type": "currency"
                     },
                     "sum_equipment": {
                         "required": true,
-                        "title": "Оборудование",
-                        "type": "integer"
+                        "title": "Оборудование (тыс. руб)",
+                        "type": "currency"
                     },
                     "sum_CMP": {
                         "required": true,
-                        "title": "СМР",
-                        "type": "integer"
+                        "title": "СМР (тыс. руб)",
+                        "type": "currency"
                     },
                     "sum_working_capital": {
                         "required": true,
-                        "title": "Оборотные средства",
-                        "type": "integer"
+                        "title": "Оборотные средства (тыс. руб)",
+                        "type": "currency"
                     },
                     "sum_nds": {
                         "required": true,
-                        "title": "НДС",
-                        "type": "integer"
+                        "title": "НДС (тыс. руб)",
+                        "type": "currency"
                     }
                 }
             },
@@ -289,26 +285,20 @@
                 "type": "object",
                 "required": true,
                 "properties": {
-                    "invest_sum": {
+                    "percentage_of_participation": {
                         "required": true,
-                        "title": "Сумма финансирования тыс. руб.",
+                        "title": "Доля собственного участия в проекте %",
                         "type": "integer"
-                    },
-                    "invest_struct": {
-                        "required": true,
-                        "title": "Структура финансирования тыс. руб.",
-                        "type": "string",
-                        "format": "text"
                     },
                     "invest_own_percent": {
                         "required": true,
                         "title": "Собственные средства %",
-                        "type": "string"
+                        "type": "integer"
                     },
                     "invest_debt_percent": {
                         "required": true,
                         "title": "Долговое финансирование %",
-                        "type": "string"
+                        "type": "integer"
                     }
                 }
             },
@@ -375,13 +365,13 @@
                     },
                     "tech_loc_address": {
                         "required": true,
-                        "title": "Местонахождение (адрес)",
+                        "title": "Местонахождение (адрес) проекта (участка)",
                         "type": "string",
                         "format": "text"
                     },
                     "tech_loc_status": {
                         "required": true,
-                        "title": "Юридический статус",
+                        "title": "Юридический статус участка",
                         "type": "string",
                         "enum": [
                             "аренда",
@@ -427,7 +417,7 @@
                     "market_emkost": {
                         "required": true,
                         "title": "Емкость, тыс. руб.",
-                        "type": "integer"
+                        "type": "currency"
                     },
                     "market_key": {
                         "required": true,
@@ -654,7 +644,7 @@
                         "title": "Контактное лицо в банке",
                         "type": "text"
                     },
- 
+
                     "status_bank": {
                         "required": false,
                         "title": "Статус кредитной заявки в банке",
@@ -667,17 +657,17 @@
                     },
                     "term": {
                         "required": true,
-                        "title": "Срок",
-                        "type": "string"
+                        "title": "Срок (мес)",
+                        "type": "integer"
                     },
                     "percent": {
                         "required": true,
-                        "title": "Процентная ставка",
-                        "type": "string"
+                        "title": "Процентная ставка %",
+                        "type": "integer"
                     },
                     "goal_bool": {
                         "required": true,
-                        "title": "Цель кредита попадает под категории",
+                        "title": "Цель кредита – приобретение/строительство основных средств, финансирование текущих затрат по проекту, пополнение оборотных средств",
                         "describe": "Цель кредита – приобретение/строительство основных средств, финансирование текущих затрат по проекту, пополнение оборотных средств",
                         "type": "boolean"
                     },
@@ -685,11 +675,6 @@
                         "required": true,
                         "title": "Цель кредита(описание)",
                         "type": "text"
-                    },
-                    "region_rf": {
-                        "required": true,
-                        "title": "Регион субьект РФ",
-                        "type": "string"
                     },
                     "who_init": {
                         "title": "Инициатор",
@@ -732,9 +717,9 @@
                                         "inn": {
                                             "required": true,
                                             "title": "ИНН",
-                                             "type": "string",
+                                            "type": "string",
                                             "mask": "9999999999?99"
-                                       }
+                                        }
                                     }
                                 }
                             }
@@ -765,11 +750,6 @@
                         "title": "Гарантия МСП - сумма (тыс.руб.)",
                         "type": "currency"
                     },
-                    "garant_other": {
-                        "required": true,
-                        "title": "Гарантия МСП - прочее",
-                        "type": "text"
-                    },
                     "garant_term": {
                         "required": true,
                         "title": "Срок независимой гарантии",
@@ -789,7 +769,7 @@
                     "garant_date": {
                         "required": true,
                         "title": "Планируемая дата заключения кредитной документации с гарантией Корпорации",
-                        "type": "string"
+                        "type": "date"
                     },
                     "provision": {
                         "required": true,
@@ -862,23 +842,23 @@
                         "title": "Заключенные договоры, платежные поручения/другие комментарии"
                     },
                     "sum_total": {
-                        "type": "integer",
+                        "type": "currency",
                         "title": "Сумма всего, тыс. руб."
                     },
                     "sum_own": {
-                        "type": "integer",
+                        "type": "currency",
                         "title": "Собственные средства, тыс. руб."
                     },
                     "sum_creditor": {
-                        "type": "integer",
+                        "type": "currency",
                         "title": "Средства кредитора, тыс. руб."
                     },
                     "sum_rest_own": {
-                        "type": "integer",
+                        "type": "currency",
                         "title": "Остаток к финансированию, за счет собственных средств, тыс. руб."
                     },
                     "sum_rest_creditor": {
-                        "type": "integer",
+                        "type": "currency",
                         "title": "Остаток к финансированию, за счет кредитора, тыс. руб."
                     }
                 }

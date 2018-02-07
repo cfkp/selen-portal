@@ -36,7 +36,7 @@ class SelenView {
 	}else {this.parent_container=$('#refview .modal-body')}
 
 	obj_container = $('<div></div>'); 
-	obj_container.attr('class','sln_container');	 
+	obj_container.attr('class','sln_view_container');	 
 	obj_container.attr('id','sln_cnt'+_meta_view);
 	this.parent_container.append(obj_container);
 	 		
@@ -48,7 +48,19 @@ class SelenView {
 	this.meta_class=_meta_class;
 	this.meta_view=_meta_view;
 	this.gridid=get_grid_id(this.container);
-	this.selected_rows=[];
+
+    var menu_method_container = $('<div class="sln_menu_method_container"></div>');
+	this.container.append(menu_method_container);
+    this.menu_method_container=menu_method_container;
+    var content_container = $('<div class="sln_view_content_container"></div>');
+	this.container.append(content_container);
+    this.content_container=content_container;
+
+     var detail_container = $('<div class="sln_detail_container"></div>');
+	this.container.append(detail_container);
+    this.detail_container=detail_container;
+
+ this.selected_rows=[];
 	this.header={};
 	this.rows={};
 	this.methods=null;
@@ -93,7 +105,10 @@ class SelenView {
 	}
 
 Show()
-{
+{ 	if (this.header.methods_menu) {
+ 		this.methods=new SelenMenu(this,this.header.methods_menu,this.menu_method_container);
+	}; 
+
 	if ((this.header.view_mode)&&(this.header.view_mode=="page" ))
 	{ this.showpage()}
 	else 
@@ -105,18 +120,15 @@ Show()
 showpage() {
 	this.view_mode='page'; 
 
- 	if (this.header.methods_menu) {
-/*	   	var div_detail = $('<div></div>'); 
-		div_detail.attr('id','method_menu');	 
-	        this.container.append(div_detail);*/
-		this.methods=new SelenMenu(this,this.header.methods_menu);
+ /*	if (this.header.methods_menu) {
+ 		this.methods=new SelenMenu(this,this.header.methods_menu);
 		
 		
-	}; 
+	}; */
      	var gr_cont = $('<div></div>');
     
      	gr_cont.attr('id',this.gridid.grid_id);
-        this.container.append(gr_cont);
+        this.content_container.append(gr_cont);
 	
 	if (!this.header.template){this.header.template='default.ejs'};
         
@@ -133,25 +145,19 @@ showpage() {
 showgrid() {
 this.view_mode='grid'; 
 var header=this.header; 
- 	if (this.header.methods_menu) {
-/*	   	var div_detail = $('<div></div>'); 
-		div_detail.attr('id','method_menu');	 
-	        this.container.append(div_detail);*/
-		this.methods=new SelenMenu(this,this.header.methods_menu);
-		
-		
+/* 	if (this.header.methods_menu) {
+ 		this.methods=new SelenMenu(this,this.header.methods_menu,this.menu_method_container);
 	}; 
-
+ */
      	var table = $('<table></table>');
     
      	table.attr('id',this.gridid.grid_id);
    	var pager = $('<div></div>'); 
 	pager.attr('id',this.gridid.gridpager_id)	 
-        var gr_cont= this.container.append(table);
+        var gr_cont= this.content_container.append(table);
         gr_cont.append(pager);
 	var container=table;//this.container.find(this.gridid.grid_id_);
- 	var detail_container;//=grid_container.find('#detail_tabs');
-
+ 
 
  	
  	/*if (this.header.detail) {
@@ -195,7 +201,7 @@ var header=this.header;
                 scroll: 1, // set the scroll property to 1 to enable paging with scrollbar - virtual loading of records
                 emptyrecords: '0 записей найдено', // the message will be displayed at the bottom 
    
-		shrinkToFit:false,
+		shrinkToFit:true,
 		beforeSelectRow: function (rowId, e) {
 	            //container.jqGrid("resetSelection");
 	            //return true;
@@ -303,7 +309,7 @@ onSelectRow (elem,rowid, selected) {
 		};	
 		var s=this.get_selected_rows();				
  		if (selected&&s.length==1) {
-			this.detail=new SelenMenu(this,this.header.detail.menu);
+			this.detail=new SelenMenu(this,this.header.detail.menu,this.detail_container);
 			this.detail.container.attr("meta_parent_field", "pers_request_id");
 			this.detail.container.attr("meta_parent_value", rowid);
 			this.detail.container.attr("meta_readonly",this.header.detail.readonly);
@@ -311,7 +317,7 @@ onSelectRow (elem,rowid, selected) {
  			this.detail.collection.meta_parent_field="pers_request_id";
 			this.detail.collection.meta_parent_value=rowid;
 
-			this.detail.meta_readonly="this.header.detail.readonly";
+			this.detail.meta_readonly=this.header.detail.readonly;
 			/*if (this.methods&&this.methods.container) {
 			var reports = this.methods.container.find("#rep_menu")
 			if (reports) {

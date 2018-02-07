@@ -67,6 +67,7 @@ input[type="file"] {
 } 
 form.brutusin-form td {
     white-space: normal;
+    
 }
 
 
@@ -83,3 +84,6 @@ form.brutusin-form td {
        background-color: #CCCCCC;
        display: none;
    } 
+
+
+.sln_view_container,.sln_method_menu,.sln_detail_container,.sln_view_content_container{margin-top: 1%}

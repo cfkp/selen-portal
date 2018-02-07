@@ -61,7 +61,7 @@
     to { transform: scale(1) rotate(360deg);}
 }
 form.brutusin-form table, form.brutusin-form input, form.brutusin-form select, form.brutusin-form textarea{
-    width: 100% !important;
+    width: 100%!important;
     min-width: 80px;
 }
 form.brutusin-form input[type=checkbox]{
@@ -82,7 +82,9 @@ form.brutusin-form td {
     white-space: nowrap;
 }
 form.brutusin-form td.prop-name {
-    text-align: right;
+    width: 20%; 
+    text-align: middle;
+    
 }
 form.brutusin-form td.add-prop-name table {
     text-align: right;
@@ -92,8 +94,9 @@ form.brutusin-form td.add-prop-name table td {
     vertical-align: middle;
 }
 form.brutusin-form td.prop-value {
-    width: 100%;   
+    width: 20%;   
     text-align: left;
+    
 }
 form.brutusin-form td.item-index{
     font-size: 0.8em;

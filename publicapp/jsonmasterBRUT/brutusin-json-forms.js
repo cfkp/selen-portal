@@ -332,7 +332,8 @@ if (typeof brutusin === "undefined") {
                             }
                         }
                         if (s.validator) {
-			 let errmsg=validator(s.validator,value);	
+                            let errmsg;
+                            errmsg=validator(s.validator,value);	
                             if (errmsg!==null) {
                                 return errmsg;
                             }

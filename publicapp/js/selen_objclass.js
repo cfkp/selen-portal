@@ -9,7 +9,7 @@ class SelenObject {
 	this.parent_container=this.parent.container;
 
 	var obj_container = $('<div></div>'); 
-	obj_container.attr('class','sln_container');	 
+	obj_container.attr('class','sln_obj_container');	 
 	obj_container.attr('id','sln_cnt'+_meta_name);
 	this.parent_container.append(obj_container);
 		
@@ -57,7 +57,7 @@ Show()
 	</div>
 	<div id="data_container"></div>
 */
-	var div_meth = $('<div id="methods_container"></div>');
+	var div_meth = $('<div id="methods_container" class="sln_method_menu"></div>');
 	var div_data = $('<div id="data_container"></div>');
 	this.container.append(div_meth,div_data);
 
