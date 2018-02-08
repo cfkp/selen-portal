@@ -285,11 +285,6 @@
                 "type": "object",
                 "required": true,
                 "properties": {
-                    "percentage_of_participation": {
-                        "required": true,
-                        "title": "Доля собственного участия в проекте %",
-                        "type": "integer"
-                    },
                     "invest_own_percent": {
                         "required": true,
                         "title": "Собственные средства %",
@@ -677,7 +672,7 @@
                         "type": "text"
                     },
                     "who_init": {
-                        "title": "Инициатор",
+                        "title": "Источник заявки",
                         "required": true,
                         "oneOf": [
                             {

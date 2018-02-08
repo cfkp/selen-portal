@@ -382,8 +382,10 @@ if (typeof brutusin === "undefined") {
 //        if (s.maximum) {
 //            input.max = s.maximum;
 //        }
-            input.id = getInputId();
+            input.id =id; //getInputId();
             inputCounter++;
+            //tr.setAttribute('brut_schema_id', schemaId);
+		    //tr.setAttribute('brut_node_id', id);
             appendChild(container, input, s);
             input.onchange = function () {
                 var value;
@@ -859,13 +861,29 @@ validate(input);
                 return ret;
             }
         
+                var computRowCount = function (table,schemaId) {
+                    var j=0;	
+                    for (var i = 0; i < table.rows.length; i++) {
+                         var row = table.rows[i];
+                        if (row.getAttribute('brut_schema_id')==schemaId){
+			             j=j+1;   
+                        /*row.cells[0].innerHTML = j;*/}
+                    }
+                    return j;
+                };
 
-    function addItem(format,current, table, id, value, readOnly) {
-                var schemaId = getSchemaId(id);
+    function addItem(format,current, table,parent_id, num, value, readOnly) {
+        
+                var schemaId = getSchemaId(parent_id+"[#]");
                 var s = getSchema(schemaId);
                 var tbody ;
 		 
+                var id;
+                if  (!num) 
+                    {num=computRowCount(table , schemaId)+1;}
 
+                id=parent_id+"["+num+"]";
+ 
 		
                 var tr = document.createElement("tr");
                 tr.className = "item";
@@ -884,24 +902,14 @@ validate(input);
                 if (readOnly === true)
                     removeButton.disabled = true;
                 appendChild(removeButton, document.createTextNode("x"), s);
-                var computRowCount = function () {
-		    var j=0;	
-                    for (var i = 0; i < table.rows.length; i++) {
-			
-                        var row = table.rows[i];
-			if (row.getAttribute('brut_schema_id')==schemaId){
-			j=j+1;
-                        /*row.cells[0].innerHTML = j;*/}
-                    }
-		    return j;
-                };
                 removeButton.onclick = function () {
                     current.splice(tr.rowIndex, 1);
                     table.deleteRow(tr.rowIndex);
-                    computRowCount();
+                    computRowCount(table , schemaId);
                 };
                 appendChild(td2, removeButton, s);
-                var number = document.createTextNode(computRowCount()+1);/* document.createTextNode(table.rows.length + 1);*/
+                var number = document.createTextNode(num);/* document.createTextNode(table.rows.length + 1);*/
+
                 appendChild(td1, number, s);
                 appendChild(tr, td1, s); // добавляем кнопки управления
                 appendChild(tr, td2, s);
@@ -1019,7 +1027,7 @@ validate(input);
                 }
             };
             addButton.onclick = function () {
-                addItem(s.format,current, table, id + "[#]", null);
+                addItem(s.format,current, table, id,null, null);
             };
             if (itemS.description) {
                 addButton.title = itemS.description;
@@ -1038,7 +1046,7 @@ validate(input);
                 for (var i = 0; i < cnt/*value.length*/; i++) {
 		    var val ;
 		    if (value&&	value[i]) {val=value[i]} else {val=null}
-                    addItem(s.format,current, table, id + "[" + i + "]", val, s.readOnly);
+                    addItem(s.format,current, table, id,i, val, s.readOnly);
                 }
             }
 	    if (s.format&& s.format=='grid'&&s.gridX){
