@@ -83,7 +83,7 @@ form.brutusin-form td {
 }
 form.brutusin-form td.prop-name {
     width: 20%; 
-    text-align: middle;
+    text-align: right;
     
 }
 form.brutusin-form td.add-prop-name table {

@@ -1,10 +1,11 @@
 function validator(validatortype,value){
 
- var res =true; error={};  
+ var res =true; var error={};  
  
  if (validatortype=='email'){
          res=validate_email(value,error);
 	}
+    
  else if (validatortype=='inn') {
 	res=validate_inn(value,error);
 	};
@@ -14,6 +15,7 @@ function validator(validatortype,value){
 	};
 return null;	
 } 
+
 
 
 function validate_email(emailAddress,error) {

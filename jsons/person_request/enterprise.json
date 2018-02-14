@@ -22,7 +22,14 @@
                 "description": "Группа компаний (добавьте компании, входящие в группу помимо компании Инициатора и Проектной компании)",
                 "$ref": "#/definitions/group_company",
                 "$id": null
-            } 
+            }, 
+               "enterprise_dohod": {
+                            "title": "Финансовые показатели компании по годам",
+                            "description": "Указывается консолидированная выручка по группе, при отсутствии группы компаний - по компании Инициатору",
+                           "$ref": "#/definitions/dohod",
+                           "$id": null
+                           }
+
         },
         "definitions": {
             "enterprise": {
@@ -182,8 +189,8 @@
             },
             "dohod": {
                 "title": "Выручка по годам",
-                "minItems": 2,
-                "maxItems": 2,
+                "minItems": 3,
+                "maxItems": 3,
                 "format": "grid",
                 "gridX": "year",
                 "type": "array",
@@ -195,15 +202,10 @@
                             "required": true,
                             "title": "Год",
                             "type": "string",
-                            "enum": [
+                            "enum": ["2015",
                                 "2016",
                                 "2017"
                             ]
-                        },
-                        "proceeds_empscount": {
-                            "required": false,
-                            "title": "Численность работников (ед.)",
-                            "type": "integer"
                         },
                         "proceeds_comp": {
                             "required": false,

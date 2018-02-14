@@ -151,7 +151,6 @@
                         "title": "Этапы реализации",
                         "type": "text"
                     }
-
                 }
             },
             "project_check_list": {
@@ -506,44 +505,49 @@
                                 "2021"
                             ]
                         },
+                        "prognosis_dohod": {
+                            "required": true,
+                            "title": "Выручка (По сегментам/компаниям), тыс. руб.",
+                            "type": "integer"
+                        },
                         "prognosis_EBITDA": {
                             "required": true,
-                            "title": "EBITDA",
+                            "title": "EBITDA, тыс. руб.",
                             "type": "integer"
                         },
                         "prognosis_rent_EBITDA": {
                             "required": true,
-                            "title": "Рентабельность по EBITDA",
+                            "title": "Рентабельность по EBITDA, %",
                             "type": "integer"
                         },
                         "prognosis_clear": {
                             "required": true,
-                            "title": "Чистая прибыль",
+                            "title": "Чистая прибыль, тыс. руб.",
                             "type": "integer"
                         },
                         "prognosis_money": {
                             "required": true,
-                            "title": "Денежные средства и эквивалент",
+                            "title": "Денежные средства и эквивалент, тыс. руб.",
                             "type": "integer"
                         },
                         "prognosis_op_money": {
                             "required": true,
-                            "title": "Операционный денежный поток",
+                            "title": "Операционный денежный поток, тыс. руб.",
                             "type": "integer"
                         },
                         "prognosis_invest": {
                             "required": true,
-                            "title": "Инвестиции",
+                            "title": "Инвестиции, тыс. руб.",
                             "type": "integer"
                         },
                         "prognosis_post_invest": {
                             "required": true,
-                            "title": "Денежный поток после инвестиционной деятельности (до финансирования)",
+                            "title": "Денежный поток после инвестиционной деятельности (до финансирования), тыс. руб.",
                             "type": "integer"
                         },
                         "prognosis_post_finans": {
                             "required": true,
-                            "title": "Чистый денежный поток после финансирования",
+                            "title": "Чистый денежный поток после финансирования, тыс. руб.",
                             "type": "integer"
                         }
                     }
@@ -639,7 +643,6 @@
                         "title": "Контактное лицо в банке",
                         "type": "text"
                     },
-
                     "status_bank": {
                         "required": false,
                         "title": "Статус кредитной заявки в банке",
@@ -739,7 +742,6 @@
                             "прямая гарантия, выдаваемая совместно с поручительством РГО (согарантия)"
                         ]
                     },
-
                     "garant_sum": {
                         "required": true,
                         "title": "Гарантия МСП - сумма (тыс.руб.)",
@@ -765,16 +767,6 @@
                         "required": true,
                         "title": "Планируемая дата заключения кредитной документации с гарантией Корпорации",
                         "type": "date"
-                    },
-                    "provision": {
-                        "required": true,
-                        "title": "Предлагаемое обеспечение",
-                        "type": "string",
-                        "enum": [
-                            "Залоги",
-                            "Поручительства",
-                            "Прочие"
-                        ]
                     },
                     "provision_struct": {
                         "required": true,
@@ -822,18 +814,18 @@
             },
             "app1_row": {
                 "type": "object",
-                "title": "Показатели приложения 1",
+                "title": "Показатели Обоснование бюджета проекта",
                 "properties": {
                     "name": {
                         "type": "string",
                         "title": "Наименование"
                     },
                     "terms": {
-                        "type": "string",
+                        "type": "text",
                         "title": "Сроки реализации"
                     },
                     "contracts": {
-                        "type": "string",
+                        "type": "text",
                         "title": "Заключенные договоры, платежные поручения/другие комментарии"
                     },
                     "sum_total": {
@@ -859,7 +851,7 @@
                 }
             },
             "app1": {
-                "title": "Приложение 1",
+                "title": "Обоснование бюджета проекта",
                 "type": "object",
                 "format": "grid",
                 "header": "#/definitions/app1_row",
@@ -963,6 +955,7 @@
                     },
                     "raw_materials": {
                         "type": "array",
+                        "minItems": 1,
                         "title": "7.СЫРЬЕ И МАТЕРИАЛЫ",
                         "items": {
                             "title": "Договоры с поставщиками сырья",
@@ -984,32 +977,32 @@
                     "type": "object",
                     "properties": {
                         "year": {
-                            "required": true,
-                            "title": "Год",
+                            "required": false,
+                            "title": "",
                             "type": "string",
                             "enum": [
-                                "В натуральном выражении, едениц в год",
+                                "В натуральном выражении, единиц в год",
                                 "В денежном выражении, млн. в год",
                                 "Источники информации и (или) подтверждающие документы"
                             ]
                         },
                         "app3_market_volume": {
-                            "required": true,
+                            "required": false,
                             "title": "ОБЩАЯ ЕМКОСТЬ РЫНКА ПРОДУКЦИИ",
                             "type": "string"
                         },
                         "app3_product_volume": {
-                            "required": true,
+                            "required": false,
                             "title": "ТЕКУЩИЙ ОБЪЕМ ВСЕГО РЫНКА ПРОИЗВОДИМОЙ ПРОДУКЦИИ",
                             "type": "string"
                         },
                         "app3_potential_volume": {
-                            "required": true,
+                            "required": false,
                             "title": "ПОТЕНЦИАЛ РЫНКА ПРОДУКЦИИ",
                             "type": "string"
                         },
                         "app3_plan_volume": {
-                            "required": true,
+                            "required": false,
                             "title": "ПЛАНИРУЕМЫЙ ОБЪЕМ ПРОИЗВОДСТВА ПРОДУКЦИИ В РАМКАХ ПРОЕКТА",
                             "type": "string"
                         }
