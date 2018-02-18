@@ -42,7 +42,7 @@ var fileid=new ObjectID().toString();
   form.multiples = true;
  
   // store all uploads in the /uploads directory
-  form.uploadDir = path.join(__dirname,config.get('upload_path'));// path.join(__dirname, '../uploads');
+  form.uploadDir = config.get('upload_path');//path.join(__dirname,config.get('upload_path'));// path.join(__dirname, '../uploads');
 //console.log('uploadDir'+form.uploadDir); 
   // every time a file has been uploaded successfully,
   // rename it to it's orignal name
