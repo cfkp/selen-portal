@@ -15,6 +15,7 @@
  * 
  * @author Ignacio del Valle Alles idelvall@brutusin.org
  */
+function sysdate(){return new Date();}  
 
 if (typeof brutusin === "undefined") {
     window.brutusin = new Object();
@@ -169,6 +170,7 @@ if (typeof brutusin === "undefined") {
         populateSchemaMap("$", schema);
 
         validateDepencyMapIsAcyclic();
+
 
         var renderers = new Object();
 
@@ -376,17 +378,113 @@ if (typeof brutusin === "undefined") {
 //            input.required = true;
 //        }
 //       
-//        if (s.minimum) {
-//            input.min = s.minimum;
-//        }
-//        if (s.maximum) {
-//            input.max = s.maximum;
-//        }
+        if (s.minimum) {
+            input.min = s.minimum;
+        }
+        if (s.maximum) {
+            input.max = s.maximum;
+        }
             input.id =id; //getInputId();
             inputCounter++;
             //tr.setAttribute('brut_schema_id', schemaId);
 		    //tr.setAttribute('brut_node_id', id);
             appendChild(container, input, s);
+
+            function calcfunc(sch,id,value,elem){
+                function getlastIndex(id)
+                    {
+                        var mat=id.match(/\[(\d+)\]$/g);
+                        if (mat){mat=mat[0].match(/\d+/)} 
+                        if (mat){return parseInt( mat[0])} else return  null;
+                        
+                    }    
+                function getParent(id)
+                    {
+                        var mat= id.replace(/\[(\d+)\]$/g,'');
+                         return  mat;
+                        
+                    }    
+                function getnext( id)
+                    {   var par =getParentSchemaId(id);
+                        var currentIndexItem= getlastIndex(par)+1;
+                        var x= id.substring(id.lastIndexOf("."));
+                        var mat= id.replace(/\[(\d+)\].*$/g,"["+currentIndexItem +"]")+x;
+                         
+                        return  mat;
+                        
+                    }    
+                
+                    var d=data;
+                    if (!sch.calcfunc){return;}
+                    else if (sch.calcfunc.name=='percent')
+                        {
+                            var map_obj=renderInfoMap[id];
+                            var parentId =getParentSchemaId(id);
+                            var Parentarr=getParent(parentId);             
+                            var mainarrmap= renderInfoMap[parentId];  
+                             
+                            var prop=map_obj.propertyProvider.getValue();
+                            var res;
+                            try {
+                                       res=map_obj.parentObject.prognosis_EBITDA/map_obj.parentObject.prognosis_dohod*100;
+                                var aaa=mainarrmap.propertyProvider.getValue();
+                                var bb=renderInfoMap[parentId+'.prognosis_rent_EBITDA'];
+                                bb.propertyProvider.setValue(res);    
+                              }
+                            catch (err) {console.log('ошибка расчета '+sch.calcfunc+' '+err)}
+                                
+                            
+/*                            var value=
+                            nextval.map_obj.getValue().setValue(value+i);
+  */                          
+
+                        }
+
+                    else if (sch.calcfunc.name=='sequence')
+                        {   //parentshemaId=getParentSchemaId(sch.$id);
+                            var map_obj=renderInfoMap[id];
+                            var prop=map_obj.propertyProvider.getValue();
+                            var parentId =getParentSchemaId(id);
+                            var Parentarr=getParent(parentId);             
+                            var mainarrmap= renderInfoMap[parentId];  
+                            var currentIndexItem= renderInfoMap[parentId].propertyProvider.getValue();
+
+                            function getval(functext, value){
+                                var getinitval = new Function(' value', functext);
+                                return getinitval( value);
+
+                            } 
+                     
+                        if (currentIndexItem==0&&(!value||value==null||value==0)){
+                            value=getval(sch.calcfunc.initval,value);
+                            map_obj.propertyProvider.setValue(value);
+                        }
+                          else if (currentIndexItem!==0 &&(!value||value==null||value==0) ){
+                            yearsarr=  renderInfoMap[parentId].parentObject;
+                            map_obj.propertyProvider.setValue(yearsarr[currentIndexItem-1][prop]/*year*/+1);
+                            $(map_obj.container).find(':input').attr('disabled', 'disabled');
+                        } 
+                        else if (currentIndexItem==0){
+                         yearsarr=  renderInfoMap[parentId].parentObject;
+                             var nextid= id ;
+                            
+                         for (var i =currentIndexItem+1;i<yearsarr.length;i++){
+                              nextid=getnext( nextid);
+                             var nextval=renderInfoMap[nextid];
+                             nextval.propertyProvider.setValue(value+i);
+                             $(nextval.container).find(':input').attr('disabled', 'disabled');
+                            //yearsarr[i].year=yearsarr[i-1].year+1; 
+                         }
+                     }   
+                            else if(currentIndexItem!==0){
+                                $(map_obj.container).find(':input').attr('disabled', 'disabled');
+
+                            }
+                        } 
+                    return null;	
+                }
+
+            
             input.onchange = function () {
                 var value;
                 try {
@@ -399,13 +497,22 @@ if (typeof brutusin === "undefined") {
                 } else {
                     data = value;
                 }
+                calcfunc(s,id,value,input);
 		
                 onDependencyChanged(schemaId, input);
-validate(input);
-            };
-
+                validate(input);
+             };
+            
+            propertyProvider.setValue=function(value){
+                    input.value=value;
+                    if (parentObject) {
+                        parentObject[propertyProvider.getValue()] = value;
+                    } else {
+                        data = value;
+                    }
+                };
+            
             input.onchange();
-
             return parentObject;
         };
 
@@ -463,432 +570,216 @@ validate(input);
             appendChild(container, input, s);
         };
 
-        renderers["oneOf"] = function (container, id, parentObject, propertyProvider, value) {
-            function createStaticPropertyProvider(propname) {
-                var ret = new Object();
-                ret.getValue = function () {
-                    return propname;
-                };
-                ret.onchange = function (oldName) {
-                };
-                return ret;
+    renderers["oneOf"] = function (container, id, parentObject, propertyProvider, value) {
+
+        var schemaId = getSchemaId(id);
+        var s = getSchema(schemaId);
+        var current = new Object();
+        if (!parentObject) {
+            data = current;
+        } else {
+            if (propertyProvider.getValue() || propertyProvider.getValue() === 0) {
+                parentObject[propertyProvider.getValue()] = current;
             }
+        }
 
-            var schemaId = getSchemaId(id);
-            var s = getSchema(schemaId);
-            var current = new Object();
-            if (!parentObject) {
-                data = current;
-            } else {
-                if (propertyProvider.getValue() || propertyProvider.getValue() === 0) {
-                    parentObject[propertyProvider.getValue()] = current;
-                }
-            }
+        var input = document.createElement("select");
+        var display = document.createElement("div");
+    var textNode; var delta_null_i=0;
+        display.innerHTML = "";
+        input.type = "select";
+        input.schema = schemaId;
+    if (!s.required){
+            var noption = document.createElement("option");
+            noption.value = null;
+    delta_null_i=1;
+    textNode =document.createTextNode('Значение не указано');
+    appendChild(noption, textNode, s);
+        appendChild(input, noption, s);
+    };
+        for (var i = 0; i < s.oneOf.length; i++) {
+            var option = document.createElement("option");
+            var propId = s.oneOf[i];
+            var ss = getSchema(propId);
+    textNode =document.createTextNode(ss.title);
+            option.value = s.oneOf[i];
+            appendChild(option, textNode, s);
+            appendChild(input, option, s);
 
-            var input = document.createElement("select");
-            var display = document.createElement("div");
-		var textNode; var delta_null_i=0;
-            display.innerHTML = "";
-            input.type = "select";
-            input.schema = schemaId;
-	    if (!s.required){
-            	var noption = document.createElement("option");
-            	noption.value = null;
-		delta_null_i=1;
-		textNode =document.createTextNode('Значение не указано');
-		appendChild(noption, textNode, s);
-	        appendChild(input, noption, s);
-	    };
-            for (var i = 0; i < s.oneOf.length; i++) {
-                var option = document.createElement("option");
-                var propId = s.oneOf[i];
-                var ss = getSchema(propId);
-		textNode =document.createTextNode(ss.title);
-                option.value = s.oneOf[i];
-                appendChild(option, textNode, s);
-                appendChild(input, option, s);
+            if (s.readOnly)
+                input.disabled = true;
 
-                if (s.readOnly)
-                    input.disabled = true;
+    var oneOfvariantName=propId.substring(propId.lastIndexOf(".")+1); 
+    var val;	
 
-		var oneOfvariantName=propId.substring(propId.lastIndexOf(".")+1); 
-		var val;	
+            if (!s.required&&(value === undefined || value === null)||(s.required&&!value&&i!==0) )
+                {continue;}
+    else if (value&&!value.hasOwnProperty(oneOfvariantName))
+                {continue;}
 
-                if (!s.required&&(value === undefined || value === null)||(s.required&&!value&&i!==0) )
-                    {continue;}
-		else if (value&&!value.hasOwnProperty(oneOfvariantName))
-                    {continue;}
+            else if (s.required&&!value&&i===0){val=undefined}
+    else if (value&&value.hasOwnProperty(oneOfvariantName)) {val=value[oneOfvariantName]}
 
-                else if (s.required&&!value&&i===0){val=undefined}
-		else if (value&&value.hasOwnProperty(oneOfvariantName)) {val=value[oneOfvariantName]}
-                     
-                        input.selectedIndex = i + delta_null_i;// добавляем еще один пункт так как есть пустое значение
-                    
-			var pp = createStaticPropertyProvider(oneOfvariantName);
-				
-			current['$select']= oneOfvariantName;
-                        render(null, display, propId, current, pp, val);
-                     
-                
-                
-            }
-            input.onchange = function () {
-		var sel_schemaid=input.options[input.options.selectedIndex].value;
-		if (sel_schemaid==null||sel_schemaid=="null")
-		{clear(display);   current['$select']=null; return;}
+                    input.selectedIndex = i + delta_null_i;// добавляем еще один пункт так как есть пустое значение
 
-		var oneOfvariantName=sel_schemaid.substring(sel_schemaid.lastIndexOf(".")+1); 
-		var pp = createStaticPropertyProvider(oneOfvariantName);
-		var val=null;
- 		current['$select']=oneOfvariantName;
-                 if ((value)&&(value.hasOwnProperty(oneOfvariantName))) {
-			      val=value[oneOfvariantName];
-		};
-                 render(null, display,sel_schemaid, current, pp, val);
-            };
-            appendChild(container, input, s);
-            appendChild(container, display, s);
+        var pp = createStaticPropertyProvider(oneOfvariantName);
 
+        current['$select']= oneOfvariantName;
+                    render(null, display, propId, current, pp, val);
+
+
+
+        }
+        input.onchange = function () {
+    var sel_schemaid=input.options[input.options.selectedIndex].value;
+    if (sel_schemaid==null||sel_schemaid=="null")
+    {clear(display);   current['$select']=null; return;}
+
+    var oneOfvariantName=sel_schemaid.substring(sel_schemaid.lastIndexOf(".")+1); 
+    var pp = createStaticPropertyProvider(oneOfvariantName);
+    var val=null;
+    current['$select']=oneOfvariantName;
+             if ((value)&&(value.hasOwnProperty(oneOfvariantName))) {
+              val=value[oneOfvariantName];
+    };
+             render(null, display,sel_schemaid, current, pp, val);
         };
+        appendChild(container, input, s);
+        appendChild(container, display, s);
 
-        renderers["object"] = function (container, id, parentObject, propertyProvider, value) {
+};
 
-            function createStaticPropertyProvider(propname) {
-                var ret = new Object();
-                ret.getValue = function () {
-                    return propname;
-                };
-                ret.onchange = function (oldName) {
-                };
-                return ret;
+    renderers["object"] = function (container, id, parentObject, propertyProvider, value) {
+ 
+        var schemaId = getSchemaId(id);
+        var s = getSchema(schemaId);
+        var current = new Object();
+        if (!parentObject) {
+            data = current;
+        } 
+        else {
+            if (propertyProvider.getValue() || propertyProvider.getValue() === 0) {
+                parentObject[propertyProvider.getValue()] = current;
             }
+        }
+        var tbody
+        if  (container.className!='gorizontal-item') {
+            var table = document.createElement("table");
+            table.className = "object";
+            if (s.format=='grid'){
+                var thead = document.createElement("thead");
+                if(s.header){
+                    var head_schema = getDefinition(s.header);
+                    if (head_schema.hasOwnProperty("properties")) {
+                        var th;
+                        for (var prop in head_schema.properties) {
+                           gridxShm= head_schema.properties[prop];
+                           th = document.createElement("th");
+                           th.className = "head-item";
+                           renderTitle(th,gridxShm.title, gridxShm);	
+                            appendChild(thead , th, gridxShm);
+                        }
+                    }
+                }
+                appendChild(table, thead, s);
+            }	
+            tbody = document.createElement("tbody");
+            appendChild(table, tbody, s);
+        };              
 
-            function addAdditionalProperty(current, table, id, name, value, pattern) {
-                var schemaId = getSchemaId(id);
-                var s = getSchema(schemaId);
-                var tbody = table.tBodies[0];
-                var tr = document.createElement("tr");
-                var td1 = document.createElement("td");
-                td1.className = "add-prop-name";
-                var innerTab = document.createElement("table");
-                var innerTr = document.createElement("tr");
-                var innerTd1 = document.createElement("td");
-                var innerTd2 = document.createElement("td");
-                var keyForBlank = "$" + Object.keys(current).length + "$";
+        if (!tbody) {
+                tbody=container.parentElement;
+            }
+        var propNum = 0;
+        if (s.hasOwnProperty("properties")) {
+            propNum = s.properties.length;
+            for (var prop in s.properties) {
+                if  (container.className!='gorizontal-item'&&s.format!='grid') {
+                        var tr = document.createElement("tr");
+                        var td1 = document.createElement("td");
+                        td1.className = "prop-name";
+                }
+
+                var propId = id + "." + prop;
+                var propSchema = getSchema(getSchemaId(propId));
                 var td2 = document.createElement("td");
                 td2.className = "prop-value";
-                var nameInput = document.createElement("input");
-                nameInput.type = "text";
-                var regExp;
-                if (pattern) {
-                    regExp = RegExp(pattern);
+
+
+                if  (container.className!='gorizontal-item'&&s.format!='grid') {
+                        appendChild(tbody, tr, propSchema);
+                        appendChild(tr, td1, propSchema);
+                        appendChild(tr, td2, propSchema);
                 }
-                nameInput.getValidationError = function () {
-                    if (nameInput.previousValue !== nameInput.value) {
-                        if (current.hasOwnProperty(nameInput.value)) {
-                            return BrutusinForms.messages["addpropNameExistent"];
-                        }
-                    }
-                    if (!nameInput.value) {
-                        return BrutusinForms.messages["addpropNameRequired"];
-                    }
-                };
-                var pp = createPropertyProvider(
-                        function () {
-                            if (nameInput.value) {
-                                if (regExp) {
-                                    if (nameInput.value.search(regExp) !== -1) {
-                                        return nameInput.value;
-                                    }
-                                } else {
-                                    return nameInput.value;
-                                }
-                            }
-                            return keyForBlank;
-                        },
-                        function (oldPropertyName) {
-                            if (pp.getValue() === oldPropertyName) {
-                                return;
-                            }
-                            if (!oldPropertyName || !current.hasOwnProperty(oldPropertyName)) {
-                                oldPropertyName = keyForBlank;
-                            }
-                            if (current.hasOwnProperty(oldPropertyName) || regExp && pp.getValue().search(regExp) === -1) {
-                                current[pp.getValue()] = current[oldPropertyName];
-                                delete current[oldPropertyName];
-                            }
-                        });
-
-                nameInput.onblur = function () {
-                    if (nameInput.previousValue !== nameInput.value) {
-                        var name = nameInput.value;
-                        var i = 1;
-                        while (nameInput.previousValue !== name && current.hasOwnProperty(name)) {
-                            name = nameInput.value + "(" + i + ")";
-                            i++;
-                        }
-                        nameInput.value = name;
-                        pp.onchange(nameInput.previousValue);
-                        nameInput.previousValue = nameInput.value;
-                        return;
-                    }
-                };
-                var removeButton = document.createElement("button");
-                removeButton.setAttribute('type', 'button');
-                removeButton.className = "remove";
-                appendChild(removeButton, document.createTextNode("x"), s);
-                removeButton.onclick = function () {
-                    delete current[nameInput.value];
-                    table.deleteRow(tr.rowIndex);
-                    nameInput.value = null;
-                    pp.onchange(nameInput.previousValue);
-                };
-                appendChild(innerTd1, nameInput, s);
-                appendChild(innerTd2, removeButton, s);
-                appendChild(innerTr, innerTd1, s);
-                appendChild(innerTr, innerTd2, s);
-                appendChild(innerTab, innerTr, s);
-                appendChild(td1, innerTab, s);
-
-                if (pattern !== undefined) {
-                    nameInput.placeholder = pattern;
-                }
-
-                appendChild(tr, td1, s);
-                appendChild(tr, td2, s);
-                appendChild(tbody, tr, s);
-                appendChild(table, tbody, s);
-                render(null, td2, id, current, pp, value);
-
-                if (name) {
-                    nameInput.value = name;
-                    nameInput.onblur();
-                }
-            }
-
-            var schemaId = getSchemaId(id);
-            var s = getSchema(schemaId);
-            var current = new Object();
-            if (!parentObject) {
-                data = current;
-            } else {
-                if (propertyProvider.getValue() || propertyProvider.getValue() === 0) {
-                    parentObject[propertyProvider.getValue()] = current;
-                }
-            }
- 		var tbody
-	    if  (container.className!='gorizontal-item') {
-	            var table = document.createElement("table");
-	            table.className = "object";
-		    if (s.format=='grid'){
-			var thead = document.createElement("thead");
-			if(s.header){
-			  var head_schema = getDefinition(s.header);
-			  if (head_schema.hasOwnProperty("properties")) {
-
-                 	    var th;
-                            for (var prop in head_schema.properties) {
-			           gridxShm= head_schema.properties[prop];
- 			           th = document.createElement("th");
-             			   th.className = "head-item";
-              		 	   renderTitle(th,gridxShm.title, gridxShm);	
-
-			           appendChild(thead , th, gridxShm);
-                                }
-
-
-			}
-			}
-                    appendChild(table, thead, s);
-		    }	
-	            
-
-	             tbody = document.createElement("tbody");
-	            appendChild(table, tbody, s);
-		};              
-
-		if (!tbody) {
-				tbody=container.parentElement;
-			}
-            var propNum = 0;
-            if (s.hasOwnProperty("properties")) {
-                propNum = s.properties.length;
-                for (var prop in s.properties) {
-		    if  (container.className!='gorizontal-item'&&s.format!='grid') {
-	                    var tr = document.createElement("tr");
-	                    var td1 = document.createElement("td");
-	                    td1.className = "prop-name";
-			}
-                    var propId = id + "." + prop;
-                    var propSchema = getSchema(getSchemaId(propId));
-                    var td2 = document.createElement("td");
-                    td2.className = "prop-value";
-
-
-		    if  (container.className!='gorizontal-item'&&s.format!='grid') {
+                else if (s.format=='grid' || container.className=='gorizontal-item'&& propSchema.type=='object') {
+                    var tr_title = document.createElement("tr");
+                    tr_title.className='gorizontal-title';
+                    appendChild(tbody, tr_title, propSchema);
+                    var td_title = document.createElement("td");
+                    td_title.className='gorizontal-title';
+                    td_title.setAttribute('colspan', 100);
+                    appendChild(tr_title, td_title, propSchema);
+                    var tr = document.createElement("tr");
+                    tr.className='gorizontal-item';
                     appendChild(tbody, tr, propSchema);
-                    appendChild(tr, td1, propSchema);
-                    appendChild(tr, td2, propSchema);
-		    }
-			else if (s.format=='grid' || container.className=='gorizontal-item'&& propSchema.type=='object') {
-				var tr_title = document.createElement("tr");
-				tr_title.className='gorizontal-title';
-				appendChild(tbody, tr_title, propSchema);
-
-				var tr = document.createElement("tr");
-				tr.className='gorizontal-item';
-				appendChild(tbody, tr, propSchema);
-								}
-
-			else
-			{appendChild(container, td2, s);}
-
-                    var pp = createStaticPropertyProvider(prop);
-                    var propInitialValue = null;
-                    if (value) {
-                        propInitialValue = value[prop];
-                    }
-		    if  (container.className!='gorizontal-item'&&s.format!='grid' ) {
-                    render(td1, td2, propId, current, pp, propInitialValue);}
-		    else if (s.format=='grid'|| container.className=='gorizontal-item'&& propSchema.type=='object'){
-                    render(tr_title, tr, propId, current, pp, propInitialValue);
-
-			}
-		    else {
-                    render(null, td2, propId, current, pp, propInitialValue);
-			}		
                 }
+                else{
+                    appendChild(container, td2, s);
+                }
+
+                var pp = createStaticPropertyProvider(prop);
+                var propInitialValue = null;
+                if (value) {
+                    propInitialValue = value[prop];
+                }
+                if  (container.className!='gorizontal-item'&&s.format!='grid' ) {
+                    render(td1, td2, propId, current, pp, propInitialValue);
+                }
+                else if (s.format=='grid'|| container.className=='gorizontal-item'&& propSchema.type=='object'){
+                    render(td_title, tr, propId, current, pp, propInitialValue);
+
+                }
+                else {
+                        render(null, td2, propId, current, pp, propInitialValue);
+                }		
             }
-            var usedProps = [];
-            if (s.patternProperties || s.additionalProperties) {
-                var div = document.createElement("div");
-                appendChild(div, table, s);
-                if (s.patternProperties) {
-                    for (var pattern in s.patternProperties) {
-                        var patProps = s.patternProperties[pattern];
-                        var patdiv = document.createElement("div");
-                        patdiv.className = "add-pattern-div";
-                        var addButton = document.createElement("button");
-                        addButton.setAttribute('type', 'button');
-                        addButton.pattern = pattern;
-                        addButton.id = id + "[" + pattern + "]";
-                        addButton.onclick = function () {
-                            addAdditionalProperty(current, table, this.id, undefined, undefined, this.pattern);
-                        };
-                        if (s.maxProperties || s.minProperties) {
-                            addButton.getValidationError = function () {
-                                if (s.minProperties && propNum + table.rows.length < s.minProperties) {
-                                    return BrutusinForms.messages["minProperties"].format(s.minProperties);
-                                }
-                                if (s.maxProperties && propNum + table.rows.length > s.maxProperties) {
-                                    return BrutusinForms.messages["maxProperties"].format(s.maxProperties);
-                                }
-                            };
-                        }
-                        if (patProps.description) {
-                            addButton.title = patProps.description;
-                        }
-                        appendChild(addButton, document.createTextNode("Add " + pattern), s);
-                        appendChild(patdiv, addButton, s);
-                        if (value) {
-                            for (var p in value) {
-                                if (s.properties && s.properties.hasOwnProperty(p)) {
-                                    continue;
-                                }
-                                var r = RegExp(pattern);
-                                if (p.search(r) === -1) {
-                                    continue;
-                                }
-                                if (usedProps.indexOf(p) !== -1) {
-                                    continue;
-                                }
-                                addAdditionalProperty(current, table, id + "[" + pattern + "]", p, value[p], pattern);
-                                usedProps.push(p);
-                            }
-                        }
-                        appendChild(div, patdiv, s);
-                    }
-                }
-                if (s.additionalProperties) {
-                    var addPropS = getSchema(s.additionalProperties);
-                    var addButton = document.createElement("button");
-                    addButton.setAttribute('type', 'button');
-                    addButton.onclick = function () {
-                        addAdditionalProperty(current, table, id + "[*]", undefined);
-                    };
-                    if (s.maxProperties || s.minProperties) {
-                        addButton.getValidationError = function () {
-                            if (s.minProperties && propNum + table.rows.length < s.minProperties) {
-                                return BrutusinForms.messages["minProperties"].format(s.minProperties);
-                            }
-                            if (s.maxProperties && propNum + table.rows.length > s.maxProperties) {
-                                return BrutusinForms.messages["maxProperties"].format(s.maxProperties);
-                            }
-                        };
-                    }
-                    if (addPropS.description) {
-                        addButton.title = addPropS.description;
-                    }
-                    appendChild(addButton, document.createTextNode("Add"), s);
-                    appendChild(div, addButton, s);
-                    if (value) {
-                        for (var p in value) {
-                            if (s.properties && s.properties.hasOwnProperty(p)) {
-                                continue;
-                            }
-                            if (usedProps.indexOf(p) !== -1) {
-                                continue;
-                            }
-                            addAdditionalProperty(current, table, id + "[\"" + prop + "\"]", p, value[p]);
-                        }
-                    }
-                }
-                appendChild(container, div, s);
-            } else {
-	    if  (container.className!='gorizontal-item') {
-                appendChild(container, table, s);}
-            }
-        };
+        }
+        var usedProps = [];
+        if  (container.className!='gorizontal-item') {
+            appendChild(container, table, s);
+        }
+         
+    };
         // end of object renderer
-        renderers["array"] = function (container, id, parentObject, propertyProvider, value) {
-            function createStaticPropertyProvider(propname) {
-                var ret = new Object();
-                ret.getValue = function () {
-                    return propname;
-                };
-                ret.onchange = function (oldName) {
-                };
-                return ret;
-            }
+    renderers["array"] = function (container, id, parentObject, propertyProvider, value) {
         
-                var computRowCount = function (table,schemaId) {
-                    var j=0;	
-                    for (var i = 0; i < table.rows.length; i++) {
-                         var row = table.rows[i];
-                        if (row.getAttribute('brut_schema_id')==schemaId){
-			             j=j+1;   
-                        /*row.cells[0].innerHTML = j;*/}
-                    }
-                    return j;
-                };
+            var computRowCount = function (table,schemaId) {
+                var j=0;	
+                for (var i = 0; i < table.rows.length; i++) {
+                     var row = table.rows[i];
+                    if (row.getAttribute('brut_schema_id')==schemaId){
+                     j=j+1;   
+                    /*row.cells[0].innerHTML = j;*/}
+                }
+                return j;
+            };
 
-    function addItem(format,current, table,parent_id, num, value, readOnly) {
-        
+            function addItem(format,current, table,parent_id, num, value, readOnly) {
+
                 var schemaId = getSchemaId(parent_id+"[#]");
                 var s = getSchema(schemaId);
                 var tbody ;
-		 
+
                 var id;
-                if  (!num) 
-                    {num=computRowCount(table , schemaId)+1;}
+                if  (num==null||num==NaN){
+                    num=computRowCount(table , schemaId)+1;
+                }
 
                 id=parent_id+"["+num+"]";
- 
-		
                 var tr = document.createElement("tr");
                 tr.className = "item";
-		tr.setAttribute('brut_schema_id', schemaId);
-		tr.setAttribute('brut_node_id', id);
+                tr.setAttribute('brut_schema_id', schemaId);
+                tr.setAttribute('brut_node_id', id);
 
                 var td1 = document.createElement("td");
                 td1.className = "item-index";
@@ -899,13 +790,15 @@ validate(input);
                 var removeButton = document.createElement("button");
                 removeButton.setAttribute('type', 'button');
                 removeButton.className = "remove";
+
                 if (readOnly === true)
                     removeButton.disabled = true;
+
                 appendChild(removeButton, document.createTextNode("x"), s);
                 removeButton.onclick = function () {
-                    current.splice(tr.rowIndex, 1);
-                    table.deleteRow(tr.rowIndex);
-                    computRowCount(table , schemaId);
+                            current.splice(tr.rowIndex, 1);
+                            table.deleteRow(tr.rowIndex);
+                            computRowCount(table , schemaId);
                 };
                 appendChild(td2, removeButton, s);
                 var number = document.createTextNode(num);/* document.createTextNode(table.rows.length + 1);*/
@@ -913,62 +806,59 @@ validate(input);
                 appendChild(td1, number, s);
                 appendChild(tr, td1, s); // добавляем кнопки управления
                 appendChild(tr, td2, s);
-                
+
                 var pp = createPropertyProvider(function () {
                     return tr.rowIndex;
                 });
 
-		if (format=='grid' ) { 
+                if (format=='grid' ) { 
+                    if (table.getElementsByTagName("tbody").length>0){
+                        tbody=table.getElementsByTagName("tbody")[0];
+                      }
+                    else{
+                        tbody= document.createElement("tbody");
+                        appendChild(table, tbody, s);
+                    };
+                    appendChild(tbody, tr, s);
+                    tr.className = "gorizontal-item";
 
+                    render(null,  tr, id, current, pp, value); 
+                    appendChild(tr, td1, s); // добавляем кнопки управления
+                    appendChild(tr, td2, s);
 
-                if (table.getElementsByTagName("tbody").length>0){
-			tbody=table.getElementsByTagName("tbody")[0];
-		} else{
-		 tbody= document.createElement("tbody");
-		 appendChild(table, tbody, s);
-		};
-		 appendChild(tbody, tr, s);
+                //appendChild( tr,div, s);     
 
-                //var div = document.createElement("div");
-                tr.className = "gorizontal-item";
-		
-                render(null,  tr, id, current, pp, value); 
-                appendChild(tr, td1, s); // добавляем кнопки управления
-                appendChild(tr, td2, s);
-
-		//appendChild( tr,div, s);     
-
-		}else{
-		 tbody= document.createElement("tbody");
-		
-		appendChild(tr, td3, s); // контейнер для следующего обьекта
-
-		appendChild(tbody, tr, s);
-                appendChild(table, tbody, s);
-                render(null, td3, id, current, pp, value); 
-		}
-		
-            }
-
-            var schemaId = getSchemaId(id);
-            var s = getSchema(schemaId);
-            var itemS = getSchema(s.items);
-            var current = new Array();
-            if (!parentObject) {
-                data = current;
-            } else {
-                if (propertyProvider.getValue() || propertyProvider.getValue() === 0) {
-                    parentObject[propertyProvider.getValue()] = current;
                 }
+                else{
+                    tbody= document.createElement("tbody");
+                    appendChild(tr, td3, s); // контейнер для следующего обьекта
+                    appendChild(tbody, tr, s);
+                    appendChild(table, tbody, s);
+                    render(null, td3, id, current, pp, value); 
+                }
+
             }
-            if (propertyProvider) {
-                propertyProvider.onchange = function (oldPropertyName) {
-                    delete parentObject[oldPropertyName];
-                    parentObject[propertyProvider.getValue()] = current;
-                };
+
+        var schemaId = getSchemaId(id);
+        var s = getSchema(schemaId);
+        var itemS = getSchema(s.items);
+        var current = new Array();
+
+        if (!parentObject) {
+            data = current;
+        }
+        else {
+            if (propertyProvider.getValue() || propertyProvider.getValue() === 0) {
+                parentObject[propertyProvider.getValue()] = current;
             }
-            if (container.className!='gorizontal-item')
-		{
+        }
+        if (propertyProvider) {
+            propertyProvider.onchange = function (oldPropertyName) {
+                delete parentObject[oldPropertyName];
+                parentObject[propertyProvider.getValue()] = current;
+            };
+        }
+        if (container.className!='gorizontal-item'){
             var div = document.createElement("div");
 
             var table = document.createElement("table");
@@ -976,91 +866,88 @@ validate(input);
 
             var thead = document.createElement("thead");
             appendChild( table,thead, s);
-      	    if (s.format&&s.format=='grid'){
-		// делаем  заголовок
-		var gridxShm;
-		var th;
-                for (var prop in itemS.properties) {
-			gridxShm= getSchema(itemS.properties[prop]);
- 			th = document.createElement("th");
-             			   th.className = "head-item";
-              		 	renderTitle(th,gridxShm.title, gridxShm);	
+            if (s.format&&s.format=='grid'){
+        // делаем  заголовок
+            var gridxShm;
+            var th;
+            for (var prop in itemS.properties) {
+            gridxShm= getSchema(itemS.properties[prop]);
+            th = document.createElement("th");
+                           th.className = "head-item";
+                        renderTitle(th,gridxShm.title, gridxShm);	
 
-			appendChild(thead , th, gridxShm);
-                }
-                var th1 = document.createElement("th");
-                th1.className = "item-index-header";
-                var th2 = document.createElement("th");
-                th2.className = "item-action-header";
+            appendChild(thead , th, gridxShm);
+            }
+            var th1 = document.createElement("th");
+            th1.className = "item-index-header";
+            var th2 = document.createElement("th");
+            th2.className = "item-action-header";
 
-                appendChild(thead, th1, s); // добавляем кнопки управления
-                appendChild(thead, th2, s);
-		
+            appendChild(thead, th1, s); // добавляем кнопки управления
+            appendChild(thead, th2, s);
+
             };
-		appendChild(div, table, s);
-             }
-		else {
-			table=container.parentNode.parentNode;
-			s["format"]="grid";
-			}   ;
-           // appendChild(container, div, s);
-            var addButton = document.createElement("button");
-            if (s.readOnly)
-                addButton.disabled = true;
-            addButton.setAttribute('type', 'button');
-            addButton.className = "addItem";
-            addButton.getValidationError = function () {
-                if (s.minItems && s.minItems > table.rows.length) {
-                    return BrutusinForms.messages["minItems"].format(s.minItems);
-                }
-                if (s.maxItems && s.maxItems < table.rows.length) {
-                    return BrutusinForms.messages["maxItems"].format(s.maxItems);
-                }
-                if (s.uniqueItems) {
-                    for (var i = 0; i < current.length; i++) {
-                        for (var j = i + 1; j < current.length; j++) {
-                            if (JSON.stringify(current[i]) === JSON.stringify(current[j])) {
-                                return BrutusinForms.messages["uniqueItems"];
-                            }
+            appendChild(div, table, s);
+        }
+        else {
+            table=container.parentNode.parentNode;
+            s["format"]="grid";
+            };
+       // appendChild(container, div, s);
+        var addButton = document.createElement("button");
+        if (s.readOnly)
+            addButton.disabled = true;
+        addButton.setAttribute('type', 'button');
+        addButton.className = "addItem";
+        addButton.getValidationError = function () {
+            if (s.minItems && s.minItems > table.rows.length) {
+                return BrutusinForms.messages["minItems"].format(s.minItems);
+            }
+            if (s.maxItems && s.maxItems < table.rows.length) {
+                return BrutusinForms.messages["maxItems"].format(s.maxItems);
+            }
+            if (s.uniqueItems) {
+                for (var i = 0; i < current.length; i++) {
+                    for (var j = i + 1; j < current.length; j++) {
+                        if (JSON.stringify(current[i]) === JSON.stringify(current[j])) {
+                            return BrutusinForms.messages["uniqueItems"];
                         }
                     }
                 }
-            };
-            addButton.onclick = function () {
-                addItem(s.format,current, table, id,null, null);
-            };
-            if (itemS.description) {
-                addButton.title = itemS.description;
             }
-            appendChild(addButton, document.createTextNode(BrutusinForms.messages["addItem"]), s);
-            if (container.className!='gorizontal-item')
-		{
-            appendChild(div, table, s);
-            appendChild(div, addButton, s);
-		}
-		else 
-		{appendChild(container, addButton, s);		}            
-	    if ((value && value instanceof Array)||s.minItems)  {
-		var cnt =0;
-		if (!value||!(value instanceof Array)||(value.length<s.minItems)) {cnt=s.minItems} else {cnt=value.length}
+        };
+        addButton.onclick = function () {
+            addItem(s.format,current, table, id,null, null);
+        };
+        if (itemS.description) {
+            addButton.title = itemS.description;
+        }
+        appendChild(addButton, document.createTextNode(BrutusinForms.messages["addItem"]), s);
+        if (container.className!='gorizontal-item'){
+                appendChild(div, table, s);
+                appendChild(div, addButton, s);
+            }
+        else {appendChild(container, addButton, s);		}            
+        if ((value && value instanceof Array)||s.minItems)  {
+        var cnt =0;
+        if (!value||!(value instanceof Array)||(value.length<s.minItems)) {cnt=s.minItems} else {cnt=value.length}
                 for (var i = 0; i < cnt/*value.length*/; i++) {
-		    var val ;
-		    if (value&&	value[i]) {val=value[i]} else {val=null}
+            var val ;
+            if (value&&	value[i]) {val=value[i]} else {val=null}
                     addItem(s.format,current, table, id,i, val, s.readOnly);
                 }
             }
-	    if (s.format&& s.format=='grid'&&s.gridX){
-	            renderers["arraygrid"](container, id, current, propertyProvider, value);
-		return;
-	    };
+        if (s.format&& s.format=='grid'&&s.gridX){
+                renderers["arraygrid"](container, id, current, propertyProvider, value);
+        return;
+        };/**/
 
-            if (container.className!='gorizontal-item')
-		{
+        if (container.className!='gorizontal-item') {
             appendChild(container, div, s);
-};
         };
+    };
         // end of array render
-        renderers["arraygrid"] = function (container, id, parentObject, propertyProvider, value) {
+    renderers["arraygrid"] = function (container, id, parentObject, propertyProvider, value) {
  
             var schemaId = getSchemaId(id);
             var s = getSchema(schemaId);
@@ -1071,78 +958,133 @@ validate(input);
             table.className = "array";
             appendChild(div, table, s);
             appendChild(container, div, s);
-
+    
 //////////    add header
                 var thead = document.createElement("thead");
                 appendChild( table,thead, s);
 
                 var tbody = document.createElement("tbody");
-	        appendChild( table,tbody, s);
+                appendChild( table,tbody, s);
 	        
-  
-                for (var prop in itemS.properties) {
-		   if ((s.gridX&&prop==s.gridX) ) {
-			//var gridxShm= getSchema(itemS.properties[s.gridX]);
-             		var gridxShm= getSchema(itemS.properties[prop]);
- 				var th = document.createElement("th");
-             			   th.className = "head-item";
-              		 	renderTitle(th,gridxShm.title, gridxShm);	
+                var gridxShm= getSchema(itemS.properties[s.gridX]);
+                var numCols=s.minItems;
+                if (gridxShm&&gridxShm.enum){
+                    numCols= gridxShm.enum.length}
+/// делаем шапку таблицы
+                var th = document.createElement("th");
+                th.className = "head-item gridX";
+                renderTitle(th,gridxShm.title, gridxShm);	
 
-			appendChild(thead , th, gridxShm);
-                       if (s.gridX&&gridxShm.enum )	{
+                appendChild(thead , th, gridxShm);
 
-			 for (var i = 0; i < gridxShm.enum.length; i++) {
- 				var textNode = document.createTextNode(gridxShm.enum[i]);
- 				var th = document.createElement("th");
-                		th.className = "head-item";
-			     var pph=renderInfoMap[id + "[#]"+'.'+prop].propertyProvider ;
-			     render(null, th,  id + "[" + i + "]"+'.'+prop, parentObject[i], pph, gridxShm.enum[i]);
-			     th.removeChild(th.firstChild); 
-			     appendChild(th, textNode,gridxShm );
-			     appendChild(thead , th, gridxShm);
-			     
-              		}}
-			continue; }; 
-                    var tr = document.createElement("tr");
-                    var td1 = document.createElement("td");
-                    td1.className = "row-name";
-
-                    var propId = itemS.properties[prop];
-                    var propSchema = getSchema(propId);
- 		    var textNode = document.createTextNode(propSchema.title);
-                     renderTitle(td1,propSchema.title,propSchema );	
-	
-
-                    appendChild(tr, td1, propSchema);
-                    if (gridxShm&&gridxShm.enum){
-		    for (var i = 0; i < gridxShm.enum.length; i++) {
-			var td2 = document.createElement("td");
-                	th.className = "prop-value";
-
-		        appendChild(tr , td2, gridxShm);
-		
-	 		var propInitialValue = null;	
-			if (value && value instanceof Array) {
-		
-			for (var rowidx in value){
-				 if (rowidx&&value[rowidx][s.gridX]==gridxShm.enum[i]) {
-				    if (value[rowidx][prop]) {
-		                        propInitialValue = value[rowidx][prop];
-                		    }
-		
-				 }	
-			} 
-			}              
-			var pp=renderInfoMap[id + "[#]"+'.'+prop].propertyProvider ;
-			render(null, td2,  id + "[" + i + "]"+'.'+prop, parentObject[i], pp, propInitialValue);
-
-              	       } 
-		    }
-                     appendChild(tbody, tr, propSchema);
+                
+                    
+                 for (var i = 0; i < numCols; i++) {
+                    var th = document.createElement("th");
+                    th.className = "head-item gridX";
+                /*    var pph=renderInfoMap[id + "[" + i + "]"+'.'+s.gridX].propertyProvider;
+                */   var initVal;
+                     var pph = createStaticPropertyProvider(s.gridX);
+                     
+                     if (value && value instanceof Array) {
+                        initVal = value[i][s.gridX];
+                     }else  if (gridxShm.enum&&gridxShm.enum[i]){initVal=gridxShm.enum[i];}
+                    render(null, th,  id + "[" + i + "]"+'.'+s.gridX, parentObject[i], pph, initVal);
+                    if ( gridxShm.readOnly&&gridxShm.enum) {   
+                     th.removeChild(th.firstChild); 
+                        var textNode = document.createTextNode(gridxShm.enum[i]);
+                     appendChild(th, textNode,gridxShm );
+                    }
+                     appendChild(thead , th, gridxShm);
                 }
 
+                if (s.calcsum) {
+                    var th = document.createElement("th");
+                    th.className = "head-item-sum gridX";
+                     
+                    appendChild(th , document.createTextNode("ИТОГО"), gridxShm);    
+                    appendChild(thead , th, gridxShm);
+                }
 
-         };
+// заполняем тело таблицы            
+            
+            for (var prop in itemS.properties) {
+		        if ((s.gridX&&prop==s.gridX) ) {
+                    //заголовок уже сформирован
+			         continue; 
+                   };
+                    
+                var tr = document.createElement("tr");
+                var td1 = document.createElement("td");
+                td1.className = "row-name gridX";
+
+                var propId = itemS.properties[prop];
+                var propSchema = getSchema(propId);
+                var textNode = document.createTextNode(propSchema.title);
+                renderTitle(td1,propSchema.title,propSchema );	
+
+
+                appendChild(tr, td1, propSchema);
+                var numCols=s.minItems;
+                if (gridxShm&&gridxShm.enum){
+                    numCols= gridxShm.enum.length}
+
+                for (var i = 0; i < numCols; i++) {
+                    var td2 = document.createElement("td");
+                    td2.className = "prop-value gridX";
+
+                    appendChild(tr , td2, propSchema);
+
+                    var propInitialValue = null;	
+                    if (value && value instanceof Array) {
+                        propInitialValue = value[i][prop];
+ 
+                    }              
+                     var pp = createStaticPropertyProvider(prop);     
+                    render(null, td2,  id + "[" + i + "]"+'.'+prop, parentObject[i], pp, propInitialValue);
+
+                } 
+
+                if (s.calcsum) {
+                    var td2 = document.createElement("td");
+                    td2.className = "prop-value-sum gridX";
+                    appendChild(tr , td2, gridxShm);
+                    var input = document.createElement("input");
+                    input.type = "number";
+                    input.id =id + "[sum]"+'.'+prop  ;
+                    input.disabled = true;  
+                    input.schema = propSchema.$id;
+                    appendChild(td2, input, propSchema);
+                    input.className='input-sum';
+                    var calc_sum=function (elem ){
+                        var alsum=0;
+                        var tr1 = $(elem).closest('tr');
+                        var s=getSchema(elem.schema);
+                            tr1.find(':input').each(
+                                function(){
+                                    if (this.className!=='input-sum'){
+                                        var  v = getValue(s ,this) ;   
+                                        alsum=alsum+v;
+                                    }
+                                    else  {this.value=alsum;
+                                          this.value= getValue(s ,this)}
+                                    
+                                 }
+                            );
+                          }; 
+                     $(tr).find(':input').each(function(){
+                        $(this).change(function(){calc_sum(this)});
+                    });
+                    calc_sum(input);
+                }
+
+             appendChild(tbody, tr, propSchema);
+            }
+
+
+
+
+    };
         // end of array render
 
 
@@ -1591,12 +1533,21 @@ validate(input);
             //console.log(id);
             var schemaId = getSchemaId(id);
             var s = getSchema(schemaId);
-            renderInfoMap[schemaId] = new Object();
+    /*        renderInfoMap[schemaId] = new Object();
             renderInfoMap[schemaId].titleContainer = titleContainer;
             renderInfoMap[schemaId].container = container;
             renderInfoMap[schemaId].parentObject = parentObject;
             renderInfoMap[schemaId].propertyProvider = propertyProvider;
             renderInfoMap[schemaId].value = value;
+*/
+            renderInfoMap[id] = new Object();
+            renderInfoMap[id].titleContainer = titleContainer;
+            renderInfoMap[id].container = container;
+            renderInfoMap[id].parentObject = parentObject;
+            renderInfoMap[id].propertyProvider = propertyProvider;
+            renderInfoMap[id].value = value;
+            renderInfoMap[id].schemaId=schemaId;
+            
             clear(titleContainer);
             clear(container);
             //console.log(id,s,value);
@@ -1643,12 +1594,23 @@ validate(input);
          * @param {type} onchange
          * @returns {Object.create.createPropertyProvider.ret}
          */
-        function createPropertyProvider(getValue, onchange) {
+        function createPropertyProvider(getValue, onchange,setValue) {
             var ret = new Object();
             ret.getValue = getValue;
             ret.onchange = onchange;
+            ret.setValue= setValue;
             return ret;
         }
+        function createStaticPropertyProvider(propname) {
+                var ret = new Object();
+                ret.getValue = function () {
+                    return propname;
+                };
+                ret.onchange = function (oldName) {
+                };
+                
+                return ret;
+            }
 
         function getInitialValue(id) {
             var ret;
@@ -1772,6 +1734,7 @@ validate(input);
 
 
         }
+        
 
         function Expression(exp) {
             if (exp === null || exp.length === 0 || exp === ".") {
