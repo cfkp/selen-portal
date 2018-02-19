@@ -178,8 +178,8 @@ BrutusinForms.addDecorator(function (element, schema) {
 if (element.tagName) {
             var tagName = element.tagName.toLowerCase();
         if (element.title && (tagName === "input" || tagName === "textarea" || tagName === "select")) {
-            element.setAttribute("data-toggle", "tooltip");
-            element.setAttribute("data-trigger", "focus");
+            element.setAttribute("data-toggle", "popover");
+            element.setAttribute("data-trigger", "manual");
             if ("undefined" === typeof markdown) {
                 element.setAttribute("data-content", element.title);
             } else {
@@ -191,10 +191,17 @@ if (element.tagName) {
                 element.title = "Help";
             }
             $(element).popover({
-                placement: 'top',
+                placement: 'auto',
                 container: 'body',
                 html: !("undefined" === typeof markdown)
             });
+             element.addEventListener("focus",function (){
+				 $(this).popover("show");
+  			});
+            element.addEventListener("blur",function (){
+				 $(this).popover("hide");
+  			});
+  
         }
     }
 });
@@ -359,12 +366,18 @@ if (element.tagName) {
                 element.parentNode.className += " has-error";
              }
 		
-		element.onfocus=function (e){
+/*		element.onfocus=function (e){
 				 $(parent).find('.alert').show();
 			};		
 		element.onblur=function (e){
 				 $(parent.parentNode).find('.alert').hide();
-  			};		
+  			};*/		
+             element.addEventListener("focus",function (){
+				 $(parent).find('.alert').show();
+  			});
+            element.addEventListener("blur",function (){
+				 $(parent.parentNode).find('.alert').hide();
+  			});
         
                 
     }

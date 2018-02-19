@@ -665,23 +665,28 @@ if (typeof brutusin === "undefined") {
             }
         }
         var tbody
+        var head_cols=0;
+        
         if  (container.className!='gorizontal-item') {
             var table = document.createElement("table");
             table.className = "object";
             if (s.format=='grid'){
+                table.className += " grid";
                 var thead = document.createElement("thead");
                 if(s.header){
                     var head_schema = getDefinition(s.header);
                     if (head_schema.hasOwnProperty("properties")) {
                         var th;
                         for (var prop in head_schema.properties) {
+                            head_cols+=1;
                            gridxShm= head_schema.properties[prop];
                            th = document.createElement("th");
                            th.className = "head-item";
                            renderTitle(th,gridxShm.title, gridxShm);	
                             appendChild(thead , th, gridxShm);
                         }
-                    }
+                        table.setAttribute('cols', head_cols);
+                     }
                 }
                 appendChild(table, thead, s);
             }	
@@ -719,7 +724,9 @@ if (typeof brutusin === "undefined") {
                     appendChild(tbody, tr_title, propSchema);
                     var td_title = document.createElement("td");
                     td_title.className='gorizontal-title';
-                    td_title.setAttribute('colspan', 100);
+                    var t = $(tbody).closest('table.grid');
+                    head_cols= t.attr("cols");
+                    td_title.setAttribute('colspan', head_cols);
                     appendChild(tr_title, td_title, propSchema);
                     var tr = document.createElement("tr");
                     tr.className='gorizontal-item';

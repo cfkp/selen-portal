@@ -22,14 +22,13 @@
                 "description": "Группа компаний (добавьте компании, входящие в группу помимо компании Инициатора и Проектной компании)",
                 "$ref": "#/definitions/group_company",
                 "$id": null
-            }, 
-               "enterprise_dohod": {
-                            "title": "Финансовые показатели компании по годам",
-                            "description": "Указывается консолидированная выручка по группе, при отсутствии группы компаний - по компании Инициатору",
-                           "$ref": "#/definitions/dohod",
-                           "$id": null
-                           }
-
+            },
+            "enterprise_dohod": {
+                "title": "Финансовые показатели компании по годам",
+                "description": "Указывается консолидированная выручка по группе, при отсутствии группы компаний - по компании Инициатору",
+                "$ref": "#/definitions/dohod",
+                "$id": null
+            }
         },
         "definitions": {
             "enterprise": {
@@ -164,7 +163,7 @@
                             "title": "Участники/Акционеры",
                             "$ref": "#/definitions/participants",
                             "$id": null
-            }
+                        }
                     }
                 }
             },
@@ -200,12 +199,15 @@
                     "properties": {
                         "year": {
                             "required": true,
+                            "readOnly": true,
                             "title": "Год",
-                            "type": "string",
-                            "enum": ["2015",
-                                "2016",
-                                "2017"
-                            ]
+                            "type": "number",
+                            "minimum": 1900,
+                            "maximum": 2099,
+                            "calcfunc": {
+                                "name": "sequence",
+                                "initval": " if (!value||value==0)  { if (sysdate().getMonth()>3 ){return sysdate().getFullYear()-2;} else {return sysdate().getFullYear()-3;}} else return value;"
+                            }
                         },
                         "proceeds_comp": {
                             "required": false,
@@ -215,13 +217,13 @@
                         "proceeds_oper": {
                             "required": false,
                             "title": "Операционная прибыль (тыс. руб.)",
-                             "description":" Операционная прибыль рассчитывается как Прибыль до налогообложения (строка 2300) + Проценты к уплате (строка 2330) + Амортизация",
+                            "description": " Операционная прибыль рассчитывается как Прибыль до налогообложения (строка 2300) + Проценты к уплате (строка 2330) + Амортизация",
                             "type": "currency"
                         },
                         "proceeds_rent": {
                             "required": false,
                             "title": "Рентабельность операционной прибыли (%)",
-                             "description":"Рентабельность по операционной прибыли рассчитывается как Операционная прибыль / Выручку (строка 2110)", 
+                            "description": "Рентабельность по операционной прибыли рассчитывается как Операционная прибыль / Выручку (строка 2110)",
                             "type": "currency"
                         },
                         "proceeds_clear": {
@@ -313,50 +315,50 @@
                 "type": "object",
                 "required": true,
                 "properties": {
-                        "index": {
-                            "required": false,
-                            "title": "Индекс",
-                            "type": "string",
-                            "mask":"999999"
-                        },
-                        "region_loc": {
-                            "required": false,
-                            "title": "Область",
-                            "type": "string"
-                        },
-                        "district_loc": {
-                            "required": false,
-                            "title": "Район",
-                            "type": "string"
-                        },
-                        "town_loc": {
-                            "required": true,
-                            "title": "Населенный пункт",
-                            "type": "string"
-                        },
-                        "street_loc": {
-                            "required": true,
-                            "title": "Улица",
-                            "type": "string"
-                        },
-                        "home_loc": {
-                            "required": true,
-                            "title": "Дом",
-                            "type": "string"
-                        },
-                        "building_loc": {
-                            "required": false,
-                            "title": "Корпус",
-                            "type": "string"
-                        },
-                        "apartment_loc": {
-                            "required": false,
-                            "title": "Квартира",
-                            "type": "string"
-                        }
-                   }
+                    "index": {
+                        "required": false,
+                        "title": "Индекс",
+                        "type": "string",
+                        "mask": "999999"
+                    },
+                    "region_loc": {
+                        "required": false,
+                        "title": "Область",
+                        "type": "string"
+                    },
+                    "district_loc": {
+                        "required": false,
+                        "title": "Район",
+                        "type": "string"
+                    },
+                    "town_loc": {
+                        "required": true,
+                        "title": "Населенный пункт",
+                        "type": "string"
+                    },
+                    "street_loc": {
+                        "required": true,
+                        "title": "Улица",
+                        "type": "string"
+                    },
+                    "home_loc": {
+                        "required": true,
+                        "title": "Дом",
+                        "type": "string"
+                    },
+                    "building_loc": {
+                        "required": false,
+                        "title": "Корпус",
+                        "type": "string"
+                    },
+                    "apartment_loc": {
+                        "required": false,
+                        "title": "Квартира",
+                        "type": "string"
+                    }
+                }
             },
-              "rezident": {
+            "rezident": {
                 "title": "Гражданство",
                 "required": true,
                 "oneOf": [
@@ -408,51 +410,51 @@
                                     "type": "object",
                                     "required": true,
                                     "properties": {
-                            "register": {
-                                  "title": "Жительства",
-                                  "$ref": "#/definitions/address_struct",
-                                  "$id": null
-                              },
-                            "living": {
-                               "title": "Пребывания",
-                               "required": true,
-                                 "oneOf": [
-                                    {
-                                     "equal_reg": {
-                                     "required": true,
-                                     "title": "Совпадает с местом жительства"
-                                            }
-                                     },
+                                        "register": {
+                                            "title": "Жительства",
+                                            "$ref": "#/definitions/address_struct",
+                                            "$id": null
+                                        },
+                                        "living": {
+                                            "title": "Пребывания",
+                                            "required": true,
+                                            "oneOf": [
+                                                {
+                                                    "equal_reg": {
+                                                        "required": true,
+                                                        "title": "Совпадает с местом жительства"
+                                                    }
+                                                },
                                                 {
                                                     "not_eq_reg": {
-                                        "title": "Пребывания",
-                                        "$ref": "#/definitions/address_struct",
-                                        "$id": null
+                                                        "title": "Пребывания",
+                                                        "$ref": "#/definitions/address_struct",
+                                                        "$id": null
                                                     }
                                                 }
                                             ]
                                         },
-                            "post": {
-                               "title": "Почтовый",
-                               "required": true,
-                                 "oneOf": [
-                                    {
-                                     "equal_reg": {
-                                     "required": true,
-                                     "title": "Совпадает с местом жительства"
-                                            }
-                                     },
+                                        "post": {
+                                            "title": "Почтовый",
+                                            "required": true,
+                                            "oneOf": [
+                                                {
+                                                    "equal_reg": {
+                                                        "required": true,
+                                                        "title": "Совпадает с местом жительства"
+                                                    }
+                                                },
                                                 {
                                                     "not_eq_reg": {
-                                        "title": "Пребывания",
-                                        "$ref": "#/definitions/address_struct",
-                                        "$id": null
+                                                        "title": "Пребывания",
+                                                        "$ref": "#/definitions/address_struct",
+                                                        "$id": null
                                                     }
                                                 }
                                             ]
                                         }
                                     }
-                               }
+                                }
                             }
                         }
                     },
@@ -650,7 +652,7 @@
                                         "description": "Больше 25% владения",
                                         "type": "object",
                                         "properties": {
-                                           "inn": {
+                                            "inn": {
                                                 "required": true,
                                                 "title": "ИНН",
                                                 "type": "string",
@@ -677,7 +679,7 @@
                                                 "title": "E-Mail",
                                                 "type": "email"
                                             },
-                                             "rezident": {
+                                            "rezident": {
                                                 "title": "Гражданство",
                                                 "$ref": "#/definitions/rezident",
                                                 "$id": null

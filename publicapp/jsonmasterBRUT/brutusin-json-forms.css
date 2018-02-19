@@ -115,13 +115,15 @@ form.brutusin-form .error-message {
 }
 
  
- form.brutusin-form .gridX > input {
+ form.brutusin-form .gridX  input {
     text-align: center;
         border: none;
     box-shadow: none;
  }
-form.brutusin-form .gridX > input[disabled] {
+form.brutusin-form .gridX  input[disabled] {
      background-color: inherit;
+            border: none;
+
   }
 
 form.brutusin-form  .gridX  {
@@ -130,4 +132,25 @@ form.brutusin-form  .gridX  {
     border: solid 1px lightgray;
 }
 
+form.brutusin-form  .grid,form.brutusin-form  table.grid  td 
+,form.brutusin-form  table.grid  th{
+    text-align: center;
+    vertical-align: middle;
+    border: solid 1px lightgray;
+}
+form.brutusin-form  .grid,form.brutusin-form  table.grid  td.gorizontal-title  {
+    text-align: left;
+    vertical-align: middle;
+    border: solid 1px lightgray;
+}
+
+
+ form.brutusin-form table.grid  input,form.brutusin-form table.grid  textarea {
+    text-align: center;
+        border-top: none;
+        border-left: none;
+    box-shadow: none;
+     border-bottom-color: lightgray;
+    border-right: none;
+ }
  

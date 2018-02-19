@@ -487,6 +487,7 @@
                 "maxItems": 6,
                 "format": "grid",
                 "gridX": "year",
+                "calcsum": "true",
                 "type": "array",
                 "items": {
                     "title": "",
@@ -495,28 +496,33 @@
                         "year": {
                             "required": true,
                             "title": "Год",
-                            "type": "string",
-                            "enum": [
-                                "2016",
-                                "2017",
-                                "2018",
-                                "2019",
-                                "2020",
-                                "2021"
-                            ]
+                            "type": "number",
+                            "minimum": 1900,
+                            "maximum": 2099,
+                            "calcfunc": {
+                                "name": "sequence",
+                                "initval": " if (!value||value==0)  return sysdate().getFullYear(); else return value;"
+                            }
                         },
                         "prognosis_dohod": {
                             "required": true,
                             "title": "Выручка (По сегментам/компаниям), тыс. руб.",
-                            "type": "integer"
+                            "type": "integer",
+                            "calcfunc": {
+                                "name": "percent"
+                            }
                         },
                         "prognosis_EBITDA": {
                             "required": true,
                             "title": "EBITDA, тыс. руб.",
-                            "type": "integer"
+                            "type": "currency",
+                            "calcfunc": {
+                                "name": "percent"
+                            }
                         },
                         "prognosis_rent_EBITDA": {
                             "required": true,
+                            "readOnly": true,
                             "title": "Рентабельность по EBITDA, %",
                             "type": "integer"
                         },
@@ -817,35 +823,43 @@
                 "title": "Показатели Обоснование бюджета проекта",
                 "properties": {
                     "name": {
-                        "type": "string",
-                        "title": "Наименование"
+                        "type": "text",
+                        "title": "Наименование",
+                        "description": "Наименование"
                     },
                     "terms": {
                         "type": "text",
-                        "title": "Сроки реализации"
+                        "title": "Сроки реализации",
+                        "description": "Сроки реализации"
                     },
                     "contracts": {
                         "type": "text",
-                        "title": "Заключенные договоры, платежные поручения/другие комментарии"
+                        "title": "Заключенные договоры, платежные поручения/другие комментарии",
+                        "description": "Заключенные договоры, платежные поручения/другие комментарии"
                     },
                     "sum_total": {
                         "type": "currency",
-                        "title": "Сумма всего, тыс. руб."
+                        "title": "Сумма всего, тыс. руб.",
+                        "description": "Сумма всего, тыс. руб."
                     },
                     "sum_own": {
                         "type": "currency",
-                        "title": "Собственные средства, тыс. руб."
+                        "title": "Собственные средства, тыс. руб.",
+                        "description": "Собственные средства, тыс. руб."
                     },
                     "sum_creditor": {
                         "type": "currency",
-                        "title": "Средства кредитора, тыс. руб."
+                        "title": "Средства кредитора, тыс. руб.",
+                        "description": "Средства кредитора, тыс. руб."
                     },
                     "sum_rest_own": {
                         "type": "currency",
+                        "description": "Остаток к финансированию, за счет собственных средств, тыс. руб.",
                         "title": "Остаток к финансированию, за счет собственных средств, тыс. руб."
                     },
                     "sum_rest_creditor": {
                         "type": "currency",
+                        "description": "Остаток к финансированию, за счет кредитора, тыс. руб.",
                         "title": "Остаток к финансированию, за счет кредитора, тыс. руб."
                     }
                 }
@@ -856,6 +870,7 @@
                 "format": "grid",
                 "header": "#/definitions/app1_row",
                 "required": true,
+                "calcsum": true,
                 "properties": {
                     "land_relation": {
                         "type": "object",
@@ -967,8 +982,8 @@
             },
             "app3": {
                 "title": "Реализация продукции по проекту",
-                "minItems": 4,
-                "maxItems": 4,
+                "minItems": 3,
+                "maxItems": 3,
                 "format": "grid",
                 "gridX": "year",
                 "type": "array",
@@ -978,6 +993,7 @@
                     "properties": {
                         "year": {
                             "required": false,
+                            "readOnly": true,
                             "title": "",
                             "type": "string",
                             "enum": [
