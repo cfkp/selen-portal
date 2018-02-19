@@ -426,11 +426,13 @@ if (typeof brutusin === "undefined") {
                             var prop=map_obj.propertyProvider.getValue();
                             var res;
                             try {
-                                       res=map_obj.parentObject.prognosis_EBITDA/map_obj.parentObject.prognosis_dohod*100;
                                 var aaa=mainarrmap.propertyProvider.getValue();
                                 var bb=renderInfoMap[parentId+'.prognosis_rent_EBITDA'];
-                                bb.propertyProvider.setValue(res);    
-                              }
+                             if (bb&&bb.propertyProvider){
+                                 res=Math.round(map_obj.parentObject.prognosis_EBITDA/map_obj.parentObject.prognosis_dohod*100*100)/100;
+                                bb.propertyProvider.setValue(res);
+                             }
+                            }
                             catch (err) {console.log('ошибка расчета '+sch.calcfunc+' '+err)}
                                 
                             
@@ -703,7 +705,7 @@ if (typeof brutusin === "undefined") {
                 var propId = id + "." + prop;
                 var propSchema = getSchema(getSchemaId(propId));
                 var td2 = document.createElement("td");
-                td2.className = "prop-value";
+                td2. className = "prop-value";
 
 
                 if  (container.className!='gorizontal-item'&&s.format!='grid') {
@@ -744,7 +746,6 @@ if (typeof brutusin === "undefined") {
                 }		
             }
         }
-        var usedProps = [];
         if  (container.className!='gorizontal-item') {
             appendChild(container, table, s);
         }

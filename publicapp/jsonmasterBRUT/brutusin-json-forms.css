@@ -113,3 +113,21 @@ form.brutusin-form .error {
 form.brutusin-form .error-message {
     color: red;
 }
+
+ 
+ form.brutusin-form .gridX > input {
+    text-align: center;
+        border: none;
+    box-shadow: none;
+ }
+form.brutusin-form .gridX > input[disabled] {
+     background-color: inherit;
+  }
+
+form.brutusin-form  .gridX  {
+    text-align: center;
+    vertical-align: middle;
+    border: solid 1px lightgray;
+}
+
+ 
