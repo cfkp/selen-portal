@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var config = require('config');
 
 mongoose.connect(config.get('mongoose:uri'), {
-  useMongoClient: true});
+    useMongoClient: true
+});
 
 module.exports = mongoose;

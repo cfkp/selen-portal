@@ -18,10 +18,15 @@ var ObjectID = require('mongodb').ObjectID;
 
 
 router.get('/', function (req, res) {
-log.debug({req:req},"login form");
+    log.debug({
+        req: req
+    }, "login form");
 
-    res.render('login',{mode:req.query.mode,params:req.query});
-} );
+    res.render('login', {
+        mode: req.query.mode,
+        params: req.query
+    });
+});
 /*
 router.get('/:mode :programm', function (req, res) {
  console.log("login ?:mode :programm");
@@ -32,11 +37,13 @@ router.get('/:mode :programm', function (req, res) {
 
 router.post('/', function (req, res, next) {
 
-log.info({req:req},"authorize");
+    log.info({
+        req: req
+    }, "authorize");
 
-// isNew - 0 - Уже зарегистрированный
-// isNew - 1 - Новый
-// isNew - 2 - забыл пароль
+    // isNew - 0 - Уже зарегистрированный
+    // isNew - 1 - Новый
+    // isNew - 2 - забыл пароль
 
     var isNew = parseInt(req.body.isNew);
     var tel = null;
@@ -44,143 +51,163 @@ log.info({req:req},"authorize");
         tel = req.body.tel;
     if (req.body.phone)
         tel = req.body.phone;
-   // console.log(req.body.tel);
+    // console.log(req.body.tel);
     var email = req.body.email;
     var password = req.body.password;
     var fio = req.body.fio;
-    
-    User.authorize(isNew,email,fio,password,tel, function(err, user) {
- 
-	 if (err) {
- 
+
+    User.authorize(isNew, email, fio, password, tel, function (err, user) {
+
+        if (err) {
+
             if (err instanceof AuthError) {
 
-               //  return next(new HttpError(403, err.message));
-		return res.status(403).send({
-				'type': 'error',
-				'msg': err.message
-			});
-	
+                //  return next(new HttpError(403, err.message));
+                return res.status(403).send({
+                    'type': 'error',
+                    'msg': err.message
+                });
+
             } else {
- 
+
                 return next(err);
             }
         }
-	if ((isNew=='1')||(!user.state)||(user.state=="new")) {
- //		mailer(user.email,'Регистрация',null,'regmail',{user:user});
-		if (req.body.program_id){
-    			pers_req.create_request(String(user._id),fio,req.body.phone,req.body.fin_amount,req.body.fin_period,req.body.program_id,req.body.enterprise_inn,req.body.goal,req.body.product)
-		}	
-	    req.session.destroy();
+        if ((isNew == '1') || (!user.state) || (user.state == "new")) {
+            //		mailer(user.email,'Регистрация',null,'regmail',{user:user});
+            if (req.body.program_id) {
+                pers_req.create_request(String(user._id), fio, req.body.phone, req.body.fin_amount, req.body.fin_period, req.body.program_id, req.body.enterprise_inn, req.body.goal, req.body.product)
+            }
+            req.session.destroy();
 
-		res.status(200).send({
-				'type': 'Сообщение',
-				'msg': 'По указанному Вами адресу направлено письмо с подтверждением регистрации. Просьба перейти по ссылке, указанной в письме'
-			});
+            res.status(200).send({
+                'type': 'Сообщение',
+                'msg': 'По указанному Вами адресу направлено письмо с подтверждением регистрации. Просьба перейти по ссылке, указанной в письме'
+            });
 
-		}
-	else if (isNew=='2') {
-     req.session.destroy();
+        } else if (isNew == '2') {
+            req.session.destroy();
 
-		res.status(200).send({
-				'type': 'Сообщение',
-				'msg': 'По указанному Вами адресу направлено письмо с временным паролем.  В целях безопасности. После входа смените на новый пароль в личном кабинете.'
-			});
+            res.status(200).send({
+                'type': 'Сообщение',
+                'msg': 'По указанному Вами адресу направлено письмо с временным паролем.  В целях безопасности. После входа смените на новый пароль в личном кабинете.'
+            });
 
-		}
-
-	else{
- 	 req.session.user = user._id;
-			res.status(200).send({
-				'type': 'Сообщение',
-				'msg': 'Добро пожаловать'
-			});
-             }
+        } else {
+            req.session.user = user._id;
+            res.status(200).send({
+                'type': 'Сообщение',
+                'msg': 'Добро пожаловать'
+            });
+        }
     });
 
-}  
-);
+});
 
 router.get('/registration', function (req, res, next) {
 
-       log.info({req:req},"registration");
+    log.info({
+        req: req
+    }, "registration");
 
-	var userID = req.session.user;
-	var meta_class = "users";
+    var userID = req.session.user;
+    var meta_class = "users";
 
-	/////////////////////////
-	var dbloc = db.get();
-	var new_state="work";
-	var obj_id = req.query.confirm;//new ObjectID(req.query.confirm);
+    /////////////////////////
+    var dbloc = db.get();
+    var new_state = "work";
+    var obj_id = req.query.confirm; //new ObjectID(req.query.confirm);
 
-	dbloc.collection(meta_class).updateOne({
-						"_id": obj_id
-						}, 
-						{
-						$set: {
-						"state": new_state
-							}
-						},
-			function (err, docs) {
- 		if (err || (!docs)|| (docs.result.n==0)) {
-		//	res.status(400).json({'msg': 'Ошибка регистрации пользователь не найден'});
-		  res.render('regfinish',{'msg':{'type':'error','msg': 'Ошибка регистрации пользователь не найден'}});
+    dbloc.collection(meta_class).updateOne({
+            "_id": obj_id
+        }, {
+            $set: {
+                "state": new_state
+            }
+        },
+        function (err, docs) {
+            if (err || (!docs) || (docs.result.n == 0)) {
+                //	res.status(400).json({'msg': 'Ошибка регистрации пользователь не найден'});
+                res.render('regfinish', {
+                    'msg': {
+                        'type': 'error',
+                        'msg': 'Ошибка регистрации пользователь не найден'
+                    }
+                });
 
-		} else {
-		req.session.user = obj_id;
-  		sess.setCurrentUserbyID (obj_id,
-		function (err){
-			var user=sess.CurrentUser();
-			mailer(user.email,'Окончание регистрации',null,'end_register',{user:user}); 
- 	 		pers_req.update_newuser_request(obj_id) ;
-			res.render('regfinish',{'msg':{'type':'message','msg':  "Спасибо за регистрацию. По указанному Вами адресу направлено письмо с временным паролем.  В целях безопасности. После входа смените на новый пароль в личном кабинете."}});
- 
-		}
-		);
- 			
- 
-		}
- 
+            } else {
+                req.session.user = obj_id;
+                sess.setCurrentUserbyID(obj_id,
+                    function (err) {
+                        var user = sess.CurrentUser();
+                        mailer(user.email, 'Окончание регистрации', null, 'end_register', {
+                            user: user
+                        });
+                        pers_req.update_newuser_request(obj_id);
+                        res.render('regfinish', {
+                            'msg': {
+                                'type': 'message',
+                                'msg': "Спасибо за регистрацию. По указанному Вами адресу направлено письмо с временным паролем.  В целях безопасности. После входа смените на новый пароль в личном кабинете."
+                            }
+                        });
 
- 	}); 
-	
- 	
+                    }
+                );
+
+
+            }
+
+
+        });
+
+
 });
 
 router.get('/confirm_request', function (req, res, next) {
 
-       log.info({req:req},"confirm_request");
+    log.info({
+        req: req
+    }, "confirm_request");
 
-	var userID = req.session.user;
-	var meta_class = "person_request";
+    var userID = req.session.user;
+    var meta_class = "person_request";
 
-	/////////////////////////
-	var dbloc = db.get();
-	var new_state="Экспертиза";
-	var obj_id = req.query.confirm;//new ObjectID(req.query.confirm);
+    /////////////////////////
+    var dbloc = db.get();
+    var new_state = "Экспертиза";
+    var obj_id = req.query.confirm; //new ObjectID(req.query.confirm);
 
-	dbloc.collection(meta_class).updateOne({
-						"_id": obj_id
-						}, 
-						{
-						$set: {
-						"state": new_state
-							}
-						},
-			function (err, docs) {
- 		if (err || (!docs)|| (docs.result.n==0)) {
-		  res.render('regfinish',{'msg':{'type':'error','msg': 'Ошибка подтверждения, заявка не найдена'}});
+    dbloc.collection(meta_class).updateOne({
+            "_id": obj_id
+        }, {
+            $set: {
+                "state": new_state
+            }
+        },
+        function (err, docs) {
+            if (err || (!docs) || (docs.result.n == 0)) {
+                res.render('regfinish', {
+                    'msg': {
+                        'type': 'error',
+                        'msg': 'Ошибка подтверждения, заявка не найдена'
+                    }
+                });
 
-		} else {
+            } else {
 
-		  res.render('regfinish',{'msg':{'type':'message','msg':  "Спасибо. В ближайшее время с Вами свяжется специалист"}});
+                res.render('regfinish', {
+                    'msg': {
+                        'type': 'message',
+                        'msg': "Спасибо. В ближайшее время с Вами свяжется специалист"
+                    }
+                });
 
-		}
- 
+            }
 
- 	}); 
-	
- 	
+
+        });
+
+
 });
 
 module.exports = router;

@@ -1,22 +1,18 @@
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
+
 <body>
-<p>
+    <p>
 
-По заявке  <br>
-  
-	ФИО - <%=person_request.data.fio%>  <br>
-	ИНН - <%=person_request.data.INN%>  <br>
-        Проект - <%=person_request.data.project_name%> <br>
-<br>
- 
-Поступило сообщение<br>
-  <%=person_message.data.message%>
+        По заявке <br> ФИО -
+        <%=person_request.data.fio%> <br> ИНН -
+            <%=person_request.data.INN%> <br> Проект -
+                <%=person_request.data.project_name%> <br>
+                    <br> Поступило сообщение<br>
+                    <%=person_message.data.message%>
 
-<br>
-<a href="https://<%=server%>/login">Перейти в Личный кабинет ЦФКП</a>
-</p>
+                        <br>
+                        <a href="https://<%=server%>/login">Перейти в Личный кабинет ЦФКП</a>
+    </p>
 </body>
-	
-

@@ -29,7 +29,7 @@ if (("undefined" === typeof $ || "undefined" === typeof $.fn || "undefined" === 
 (function () {
     var BrutusinForms = brutusin["json-forms"];
 
-// Basic bootstrap css
+    // Basic bootstrap css
     BrutusinForms.addDecorator(function (element, schema) {
         if (element.tagName) {
             var tagName = element.tagName.toLowerCase();
@@ -50,97 +50,98 @@ if (("undefined" === typeof $ || "undefined" === typeof $.fn || "undefined" === 
             }
         }
     });
-    
+
     BrutusinForms.addDecorator(function (element, schema) {
         if (element.tagName) {
             var tagName = element.tagName.toLowerCase();
 
-            if (tagName === "input" && schema.meta_ref ) {
- 
-		var parent = element.parentNode;
-		main_div = document.createElement("div");
+            if (tagName === "input" && schema.meta_ref) {
+
+                var parent = element.parentNode;
+                main_div = document.createElement("div");
                 main_div.className = "div-autoref";
 
                 parent.appendChild(main_div);
                 parent.removeChild(element);
                 main_div.appendChild(element);
 
-                     
-		var input_value;
+
+                var input_value;
                 input_value = document.createElement("input");
                 input_value.type = "input";
-		input_value.className=element.className;
-          	main_div.appendChild(input_value);
-                
-                element.type=  "hidden";
+                input_value.className = element.className;
+                main_div.appendChild(input_value);
 
-               if (!schema.meta_ref.mode||schema.meta_ref.mode=="grid"){
+                element.type = "hidden";
 
-		var searchButton = document.createElement("button");
-                searchButton.className = " glyphicon glyphicon-level-up btn btn-primary  btn-xs";
+                if (!schema.meta_ref.mode || schema.meta_ref.mode == "grid") {
 
-                searchButton.onclick = function () {
-                     refviewmodal(schema.meta_ref.meta_class,schema.meta_ref.meta_view,
+                    var searchButton = document.createElement("button");
+                    searchButton.className = " glyphicon glyphicon-level-up btn btn-primary  btn-xs";
 
-			function (event,ui){
- 			$( element ).val( ui.item.value );
-			fill_ref( schema.meta_ref,input_value,element);
- 			      
- 			$(element).change();
-       			return false;
-			}
-		);
+                    searchButton.onclick = function () {
+                        refviewmodal(schema.meta_ref.meta_class, schema.meta_ref.meta_view,
+
+                            function (event, ui) {
+                                $(element).val(ui.item.value);
+                                fill_ref(schema.meta_ref, input_value, element);
+
+                                $(element).change();
+                                return false;
+                            }
+                        );
+                    };
+                    main_div.appendChild(searchButton);
                 };
-                main_div.appendChild(searchButton);
-                };			
-                if (schema.meta_ref.mode=="auto"){
+                if (schema.meta_ref.mode == "auto") {
 
 
-		 $( input_value ).autocomplete({
-		      minLength: 3,
-		      source: function(request,response) {
+                    $(input_value).autocomplete({
+                        minLength: 3,
+                        source: function (request, response) {
 
-		        get_autodata(schema.meta_ref,request,response);     
- 			   }     
-			,
-		      focus: function( event, ui ) {
- 			       $( input_value ).val( ui.item.label );
-			        return false;
-			      },
-		      select: function( event, ui ) {
- 			       $( element ).val( ui.item.value );
-			       $( element ).attr("meta_ref",ui.item.id );
- 				$(element).change();
- 			        return false;
-      				}
-    			});              
-		 };
-	var clearRefButton = document.createElement("button");
+                            get_autodata(schema.meta_ref, request, response);
+                        },
+                        focus: function (event, ui) {
+                            $(input_value).val(ui.item.label);
+                            return false;
+                        },
+                        select: function (event, ui) {
+                            $(element).val(ui.item.value);
+                            $(element).attr("meta_ref", ui.item.id);
+                            $(element).change();
+                            return false;
+                        }
+                    });
+                };
+                var clearRefButton = document.createElement("button");
                 clearRefButton.className = " glyphicon glyphicon-trash btn btn-primary  btn-xs";
 
                 clearRefButton.onclick = function () {
-                      	$(element.parentNode).find('input').val(null);     
- 			$(element).change();
-       		 
+                    $(element.parentNode).find('input').val(null);
+                    $(element).change();
+
                 };
                 main_div.appendChild(clearRefButton);
-            
-		if (element.value){
-			fill_ref( schema.meta_ref,input_value,element);
-		};
-		 if (schema.readOnly)
-                        {input_value.disabled = true;
-			clearRefButton.disabled=true;
-			searchButton.disabled=true;}
+
+                if (element.value) {
+                    fill_ref(schema.meta_ref, input_value, element);
+                };
+                if (schema.readOnly) {
+                    input_value.disabled = true;
+                    clearRefButton.disabled = true;
+                    searchButton.disabled = true;
+                }
 
 
 
-		
-    	}}
+
+            }
+        }
     });
 
 
-// Description help icon
+    // Description help icon
     BrutusinForms.addDecorator(function (element, schema) {
         if (element.tagName) {
             var tagName = element.tagName.toLowerCase();
@@ -173,39 +174,39 @@ if (("undefined" === typeof $ || "undefined" === typeof $.fn || "undefined" === 
         }
     });
 
-// Popover over inputs
-BrutusinForms.addDecorator(function (element, schema) {
-if (element.tagName) {
+    // Popover over inputs
+    BrutusinForms.addDecorator(function (element, schema) {
+        if (element.tagName) {
             var tagName = element.tagName.toLowerCase();
-        if (element.title && (tagName === "input" || tagName === "textarea" || tagName === "select")) {
-            element.setAttribute("data-toggle", "popover");
-            element.setAttribute("data-trigger", "manual");
-            if ("undefined" === typeof markdown) {
-                element.setAttribute("data-content", element.title);
-            } else {
-                element.setAttribute("data-content", markdown.toHTML(element.title));
+            if (element.title && (tagName === "input" || tagName === "textarea" || tagName === "select")) {
+                element.setAttribute("data-toggle", "popover");
+                element.setAttribute("data-trigger", "manual");
+                if ("undefined" === typeof markdown) {
+                    element.setAttribute("data-content", element.title);
+                } else {
+                    element.setAttribute("data-content", markdown.toHTML(element.title));
+                }
+                if (schema.title) {
+                    element.title = schema.title;
+                } else {
+                    element.title = "Help";
+                }
+                $(element).popover({
+                    placement: 'auto',
+                    container: 'body',
+                    html: !("undefined" === typeof markdown)
+                });
+                element.addEventListener("focus", function () {
+                    $(this).popover("show");
+                });
+                element.addEventListener("blur", function () {
+                    $(this).popover("hide");
+                });
+
             }
-            if (schema.title) {
-                element.title = schema.title;
-            } else {
-                element.title = "Help";
-            }
-            $(element).popover({
-                placement: 'auto',
-                container: 'body',
-                html: !("undefined" === typeof markdown)
-            });
-             element.addEventListener("focus",function (){
-				 $(this).popover("show");
-  			});
-            element.addEventListener("blur",function (){
-				 $(this).popover("hide");
-  			});
-  
         }
-    }
-});
-// Bootstrap select
+    });
+    // Bootstrap select
     BrutusinForms.addDecorator(function (element, schema) {
         if (element.tagName) {
             var tagName = element.tagName.toLowerCase();
@@ -219,53 +220,55 @@ if (element.tagName) {
         }
     });
     BrutusinForms.bootstrap = new Object();
-// helper button for string (with format) fields
+    // helper button for string (with format) fields
     BrutusinForms.bootstrap.addFormatDecorator = function (format, inputType, glyphicon, cb) {
         BrutusinForms.addDecorator(function (element, schema) {
             if (element.tagName) {
                 var tagName = element.tagName.toLowerCase();
 
                 if (tagName === "input" && schema.type === "string" && schema.format === format) {
-	            
-		if (format==="file"){
-		var parent = element.parentNode;
-		main_div = document.createElement("div");
-                main_div.className = "fileupload";
 
-		var file_property;
-		if (element.value) {
-			file_property=JSON.parse(element.value);
-			var file_description = file_property.name+' ('+ Math.ceil(file_property.size/1024)+'kB)';		
-			main_div.innerHTML ='<a class="fileurl" href="'+file_property.url+'">'+file_description +'</a> <div class="progress"> <div class="progress-bar" role="progressbar"></div></div>';
-		}else {
-		main_div.innerHTML ='<a class="fileurl">Выберите файл </a> <div class="progress"> <div class="progress-bar" role="progressbar"></div></div>';
-		}
-                parent.appendChild(main_div);
-                parent.removeChild(element);
-                main_div.appendChild(element);
+                    if (format === "file") {
+                        var parent = element.parentNode;
+                        main_div = document.createElement("div");
+                        main_div.className = "fileupload";
 
-                     
-		var input_file;
-                input_file = document.createElement("input");
-                input_file.type = "file";
-		input_file.className='file_control';
-		input_file.display="none";
-		input_file.onchange=function(){uploadfile(this);};
-        	main_div.appendChild(input_file);
-                
-                element.type=  "hidden";
-		element.className='file_name';
-                var searchButton = document.createElement("button");
-                searchButton.className = "btn btn-default glyphicon " + glyphicon;
+                        var file_property;
+                        if (element.value) {
+                            file_property = JSON.parse(element.value);
+                            var file_description = file_property.name + ' (' + Math.ceil(file_property.size / 1024) + 'kB)';
+                            main_div.innerHTML = '<a class="fileurl" href="' + file_property.url + '">' + file_description + '</a> <div class="progress"> <div class="progress-bar" role="progressbar"></div></div>';
+                        } else {
+                            main_div.innerHTML = '<a class="fileurl">Выберите файл </a> <div class="progress"> <div class="progress-bar" role="progressbar"></div></div>';
+                        }
+                        parent.appendChild(main_div);
+                        parent.removeChild(element);
+                        main_div.appendChild(element);
 
-                searchButton.onclick = function () {
-                     cb(element);
-                };
+
+                        var input_file;
+                        input_file = document.createElement("input");
+                        input_file.type = "file";
+                        input_file.className = 'file_control';
+                        input_file.display = "none";
+                        input_file.onchange = function () {
+                            uploadfile(this);
+                        };
+                        main_div.appendChild(input_file);
+
+                        element.type = "hidden";
+                        element.className = 'file_name';
+                        var searchButton = document.createElement("button");
+                        searchButton.className = "btn btn-default glyphicon " + glyphicon;
+
+                        searchButton.onclick = function () {
+                            cb(element);
+                        };
                         main_div.appendChild(searchButton);
-                return;
-		}			
+                        return;
+                    }
 
-		    if (inputType) {
+                    if (inputType) {
                         element.type = inputType;
                     }
 
@@ -345,40 +348,40 @@ if (element.tagName) {
 
     BrutusinForms.onValidationSuccess = function (element) {
         element.parentNode.className = element.parentNode.className.replace(" has-error", "");
-	$(element.parentNode).find('.alert').remove();	
+        $(element.parentNode).find('.alert').remove();
     }
     BrutusinForms.onValidationError = function (element, message) {
 
-		var parent=element.parentNode;
-        	var divalert =$(parent).find('.alert');
-		if (divalert.length==0){                
-			divalert = document.createElement("div");
-                        divalert.setAttribute("class", "alert alert-danger");
-			divalert.appendChild(document.createTextNode(message));
+        var parent = element.parentNode;
+        var divalert = $(parent).find('.alert');
+        if (divalert.length == 0) {
+            divalert = document.createElement("div");
+            divalert.setAttribute("class", "alert alert-danger");
+            divalert.appendChild(document.createTextNode(message));
 
-                         parent.appendChild(divalert);
-			$(divalert).hide();
-			}
-		else {  divalert.text(message);
-			}
-            element.title = BrutusinForms.messages["validationError"]+' '+message;
-            if (!element.parentNode.className.includes("has-error")) {
-                element.parentNode.className += " has-error";
-             }
-		
-/*		element.onfocus=function (e){
-				 $(parent).find('.alert').show();
-			};		
-		element.onblur=function (e){
-				 $(parent.parentNode).find('.alert').hide();
-  			};*/		
-             element.addEventListener("focus",function (){
-				 $(parent).find('.alert').show();
-  			});
-            element.addEventListener("blur",function (){
-				 $(parent.parentNode).find('.alert').hide();
-  			});
-        
-                
+            parent.appendChild(divalert);
+            $(divalert).hide();
+        } else {
+            divalert.text(message);
+        }
+        element.title = BrutusinForms.messages["validationError"] + ' ' + message;
+        if (!element.parentNode.className.includes("has-error")) {
+            element.parentNode.className += " has-error";
+        }
+
+        /*		element.onfocus=function (e){
+        				 $(parent).find('.alert').show();
+        			};		
+        		element.onblur=function (e){
+        				 $(parent.parentNode).find('.alert').hide();
+          			};*/
+        element.addEventListener("focus", function () {
+            $(parent).find('.alert').show();
+        });
+        element.addEventListener("blur", function () {
+            $(parent.parentNode).find('.alert').hide();
+        });
+
+
     }
 }());

@@ -112,10 +112,9 @@ a.badge:hover {
 
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
-.nav-tabs > li.active > a:focus
-,.nav-tabs > li > a:hover
-{
- /*   background: transparent url('img/hdr-primary.png') no-repeat;
+.nav-tabs > li.active > a:focus,
+.nav-tabs > li > a:hover {
+    /*   background: transparent url('img/hdr-primary.png') no-repeat;
     
 color: white;
     border-radius: 0;
@@ -124,15 +123,17 @@ color: white;
 }
 
 
- 
-.nav-tabs , .nav-tabs a {
-/*    color: #f4f4f4;
+
+.nav-tabs,
+.nav-tabs a {
+    /*    color: #f4f4f4;
     border-radius: 0;
-*/}
+*/
+}
 
 
 .nav-tabs > li > a {
- /*     background: transparent url('img/blue_.png') no-repeat;
+    /*     background: transparent url('img/blue_.png') no-repeat;
     color: black;
     box-shadow: 4px 4px 19px 2px rgba(7, 3, 154, 0.98);
 */
@@ -143,15 +144,16 @@ color: white;
     color: white;
 }
 */
+
 .nav .open > a,
- .nav .open > a:hover,
- .nav .open > a:focus {
+.nav .open > a:hover,
+.nav .open > a:focus {
     background-color: rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.15);
 }
 
 .nav > li > a:hover,
- .nav > li > a:focus {
+.nav > li > a:focus {
     text-decoration: none;
     background-color: rgba(255, 255, 255, 0.15);
 }
@@ -169,7 +171,7 @@ body {
 }
 
 .btn-primary {
-  /*  border-radius: 0;*/
+    /*  border-radius: 0;*/
     background: #59ACE9;
     border-width: inherit;
     /*  color: #fff;    */
@@ -179,17 +181,23 @@ body {
     padding: 10px 20px;
     text-decoration: none;
     text-transform: uppercase;
-  box-shadow: 4px 4px 19px 0px  #092dde; /* Параметры тени */
-  background: -webkit-gradient(linear, left top, left bottom, from(#89c7f5), to(#092dde)); /* для Webkit браузеров */
- background: -moz-linear-gradient(top,  #89c7f5,  #092dde); /* для Firefox */
- background-image: -o-linear-gradient(top,  #89c7f5,  #092dde); /* для Opera 11 */
-     
+    box-shadow: 4px 4px 19px 0px #092dde;
+    /* Параметры тени */
+    background: -webkit-gradient(linear, left top, left bottom, from(#89c7f5), to(#092dde));
+    /* для Webkit браузеров */
+    background: -moz-linear-gradient(top, #89c7f5, #092dde);
+    /* для Firefox */
+    background-image: -o-linear-gradient(top, #89c7f5, #092dde);
+    /* для Opera 11 */
 }
 
-.btn-primary:hover,.btn-primary:focus {
-zoom: 1.01;       
-  background: -webkit-gradient(linear, left top, left bottom, from(#89c7f5), to(#092dde)); /* для Webkit браузеров */
- background: -moz-linear-gradient(top,  #89c7f5,  #092dde); /* для Firefox */
- background-image: -o-linear-gradient(top,  #89c7f5,  #092dde); /* для Opera 11 */
-  
+.btn-primary:hover,
+.btn-primary:focus {
+    zoom: 1.01;
+    background: -webkit-gradient(linear, left top, left bottom, from(#89c7f5), to(#092dde));
+    /* для Webkit браузеров */
+    background: -moz-linear-gradient(top, #89c7f5, #092dde);
+    /* для Firefox */
+    background-image: -o-linear-gradient(top, #89c7f5, #092dde);
+    /* для Opera 11 */
 }
