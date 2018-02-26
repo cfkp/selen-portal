@@ -271,3 +271,30 @@ a[disabled] {
     bottom: 0px;
     
 }
+
+.footer{
+    /*  border-radius: 0;*/
+    background: #59ACE9;
+    border-width: inherit;
+    color: #fff;    
+    font-size: 15px;
+    font-weight: bold;
+    /* margin: 0 auto;  */
+    margin-top: 10%;
+    text-align: center;
+    text-decoration: none;
+    background: -webkit-gradient(linear, left top, left bottom, from(#e9f6ff00), to(#2c50ffb8));
+    /* для Webkit браузеров */
+    background: -moz-linear-gradient(top, #e9f6ff00, #2c50ffb8);
+    /* для Firefox */
+    background-image: -o-linear-gradient(top, #e9f6ff00, #2c50ffb8);
+    /* для Opera 11 */
+}
+
+
+.footer h3,
+.footer h4,
+.footer h5 {
+    color: black;
+}
+
