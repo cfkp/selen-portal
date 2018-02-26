@@ -1,0 +1,114 @@
+<% function add_attr (attr,value){
+    if (value) {
+        %>
+        <%=attr%>=<%=value%>
+<%
+    }
+    
+}
+%>
+
+
+<% function add_item(item){
+%>
+   
+       
+        id="sln_menu_item"  
+             <%add_attr ("hreftempl",item.href)%> 
+             <%add_attr ("target",item.target)%> 
+             <%add_attr ("meta_action_type",item.meta_action_type)%> 
+             <%add_attr ("meta_class",item.meta_class)%> 
+             <%add_attr ("meta_method",item.meta_method)%> 
+             <%add_attr ("active_def",item.active)%> 
+             <%add_attr ("objectlist",item.objectlist)%> 
+           ><%=item.title%>  
+ 
+ <%}%>
+
+
+<% function add_subitems(items){
+%>
+    <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+  
+  <%  for(var i=0; i <  items.length; i++) { var item=items[i]; 
+    if (!item.items){
+    %>     <li  >
+          <a
+    <%add_item(item)%>
+             </a></li>
+             
+             <%         
+        }else{ %>
+              <li class="dropdown-submenu">
+                <a tabindex="-1" href="#"><%=item.title%></a>
+            
+        <% add_subitems(item.items)}
+                      %></li><%
+        }%>
+</ul>
+<%}%>
+
+        <div sln_menu=<%=data.name%>>
+            <div class="btn-group btn-group-justified ">
+                <% for(var i=0; i < data.items.length; i++) { var items2=data.items[i].items ; var isitems;
+                               %>
+
+
+                    <div class="btn-group">
+               <%  if (!items2){
+                    %><a role="button" data-toggle="dropdown" class="btn btn-default"       
+                         <%add_item(data.items[i]);%> </a>
+                    <% }else{ %>
+ 
+                        <div class="dropdown ">
+                        
+                        <a id="<%=data.items[i].name%>" role="button" data-toggle="dropdown" class="btn btn-default">
+                            <%=data.items[i].title%>
+                                 <span class="caret"></span>
+                        </a>
+                         
+                        <%add_subitems(items2 );%>
+
+   
+                    </div>
+                          <%  }%>    
+     
+                    </div>
+                    <% } %>
+
+            </div>
+        </div>
+
+
+
+
+
+
+<!--
+       <div class="dropdown">
+            <a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-primary" data-target="#" href="/page.html">
+                Dropdown <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+              <li><a href="#">Some action</a></li>
+              <li><a href="#">Some other action</a></li>
+              <li class="divider"></li>
+              <li class="dropdown-submenu">
+                <a tabindex="-1" href="#">Hover me for more options</a>
+                <ul class="dropdown-menu">
+                  <li><a tabindex="-1" href="#">Second level</a></li>
+                  <li class="dropdown-submenu">
+                    <a href="#">Even More..</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">3rd level</a></li>
+                        <li><a href="#">3rd level</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#">Second level</a></li>
+                  <li><a href="#">Second level</a></li>
+                </ul>
+              </li>
+            </ul>
+        </div>
+
+-->

@@ -1,19 +1,6 @@
 'use strict';
 
-
-function getfile_sync(file, callback) {
-    var result = $.ajax(file, {
-        type: 'GET',
-        async: false
-    });
-    if (result.status != 200) {
-        throw result.responseText //new IstoeServiceException(this.lastResult.status,xml+" "+this.lastResult.statusText,this.lastResult.responseText);
-    }
-
-    return result;
-};
-
-
+ /*
 var get_grid_id = function (grid_container) {
     var id_cont = {};
     id_cont['grid_id'] = grid_container.attr('id') + '_' + 'vwGrid';
@@ -23,7 +10,7 @@ var get_grid_id = function (grid_container) {
     return id_cont;
 
 };
-
+*/
 
 class SelenView {
 
@@ -48,7 +35,7 @@ class SelenView {
 
         this.meta_class = _meta_class;
         this.meta_view = _meta_view;
-        this.gridid = get_grid_id(this.container);
+        this.gridid = this.get_grid_id();
 
         var menu_method_container = $('<div class="sln_menu_method_container"></div>');
         this.container.append(menu_method_container);
@@ -105,7 +92,7 @@ class SelenView {
         }
 
 
-        this.lastresponse = view_load_sync(this.meta_class + '/' + this.meta_view, JSON.stringify(requestdata));
+        this.lastresponse = SelenApi.view_load_sync(this.meta_class + '/' + this.meta_view, JSON.stringify(requestdata));
         this.header = this.lastresponse.responseJSON.header;
         this.rows = this.lastresponse.responseJSON.rows;
     }
@@ -127,11 +114,6 @@ class SelenView {
     showpage() {
         this.view_mode = 'page';
 
-        /*	if (this.header.methods_menu) {
- 		this.methods=new SelenMenu(this,this.header.methods_menu);
-		
-		
-	}; */
         var gr_cont = $('<div></div>');
 
         gr_cont.attr('id', this.gridid.grid_id);
@@ -142,15 +124,15 @@ class SelenView {
         };
 
         if (!this.EJSTemplate) {
-            var tpl = getfile_sync('../template/' + this.header.template);
-            this.EJSTemplate = tpl.responseText;
+            this.EJSTemplate=new SelenTemplate(this.header.template);
         };
-        var html = ejs.render(this.EJSTemplate, {
+        
+        var html =this.EJSTemplate.render( {
             header: this.header,
             rows: this.rows
         });
         gr_cont.html(html);
-
+this.get_selected_rows(); 
 
     }
 
@@ -171,7 +153,7 @@ class SelenView {
         var container = table; //this.container.find(this.gridid.grid_id_);
 
 
-
+ 
         /*if (this.header.detail) {
 	   	var div_detail = $('<div></div>'); 
 		div_detail.attr('id','detail_tabs')	 
@@ -218,8 +200,8 @@ class SelenView {
                 //container.jqGrid("resetSelection");
                 //return true;
             },
-            onSelectRow: cb(this, this.onSelectRow),
-            onSelectAll: cb(this, this.onSelectAll)
+            onSelectRow: SelenUtil.cb(this, this.onSelectRow),
+            onSelectAll: SelenUtil.cb(this, this.onSelectAll)
         });
 
         container.navGrid(this.gridid.gridpager_id_, {
@@ -229,8 +211,8 @@ class SelenView {
                 del: false,
                 refresh: true,
 
-                beforeRefresh: cb(this, this.refresh),
-                afterRefresh: cb(this, this.setSelection)
+                beforeRefresh: SelenUtil.cb(this, this.refresh),
+                afterRefresh: SelenUtil.cb(this, this.setSelection)
 
             }, {}, // edit options
             {}, // add options
@@ -260,12 +242,12 @@ class SelenView {
             });
             grid_element.trigger('reloadGrid');
         } else {
-            //	 	if (this.rows){ 
-            var html = ejs.render(this.EJSTemplate, {
-                header: this.header,
-                rows: this.rows
-            });
-            grid_element.html(html);
+            var html =this.EJSTemplate.render( {
+            header: this.header,
+            rows: this.rows
+        });
+        grid_element.html(html);
+        this.get_selected_rows();    
         };
 
 
@@ -297,6 +279,7 @@ class SelenView {
             }
         };
         this.selected_rows = s;
+        if (this.methods) {this.methods.enableByObjlist(s.length)}
         return this.selected_rows;
     }
 
@@ -349,6 +332,17 @@ class SelenView {
 
         }
     }
+
+    
+      get_grid_id  () {
+    var id_cont = {};
+    id_cont['grid_id'] = this.container.attr('id') + '_' + 'vwGrid';
+    id_cont['gridpager_id'] = this.container.attr('id') + '_' + 'vwPager';
+    id_cont['grid_id_'] = '#' + id_cont['grid_id'];
+    id_cont['gridpager_id_'] = '#' + id_cont['gridpager_id'];
+    return id_cont;
+
+};
 
 
 };

@@ -1,195 +1,7 @@
 var view;
 
-function arrayToTable(meta_class, meta_view, data) {
-    var table = $('<table class="table table-striped pageview"></table>');
-    table.attr('id', meta_view);
-    table.attr('meta_view', meta_view);
-    $(data.header.colmodel).each(function (i, rowData) {
-        var row = $('<tr></tr>');
-        /*$(rowData).each(function (j, cellData) {
-            row.append($('<td>'+cellData+'</td>'));
-        });*/
-
-        row.append($('<td>' + rowData.label + '</td>'));
-        row.append($('<td>' + data.rows[0][rowData.name] + '</td>'));
-        if (rowData.hidden) {
-            row.hide();
-        };
-        if (rowData.key) {
-            table.attr("meta_id", data.rows[0][rowData.name])
-        };
-        table.append(row);
-
-    });
-    return table;
-};
-
-var closegrid = function (grid_container) {
-    grid_container.find("#method_menu").empty();
-    grid_container.find("#detail_tabs").empty();
-    hide_formBRUT(grid_container);
-    grid_container.find('#grid_container').empty();
-
-};
-var get_grid_id = function (grid_container) {
-    var id_cont = {};
-    id_cont['grid_id'] = grid_container.attr('id') + '_' + 'vwGrid';
-    id_cont['gridpager_id'] = grid_container.attr('id') + '_' + 'vwPager';
-    id_cont['grid_id_'] = '#' + id_cont['grid_id'];
-    id_cont['gridpager_id_'] = '#' + id_cont['gridpager_id'];
-    return id_cont;
-
-};
-
-var showgrid = function (grid_container, data, selectrows) {
-    closegrid(grid_container);
-    var header = data.header;
-    var rows = data.rows;
-    var meta_class = grid_container.attr('meta_class');
-    var meta_view = grid_container.attr('meta_view');
-
-    if ((header.view_mode) && (header.view_mode == "page")) {
-        //   drawpage(meta_class, meta_view, data);
-        grid_container.find('#grid_container').append(arrayToTable(meta_class, meta_view, data));
-        return;
-    };
-
-    var gridid = get_grid_id(grid_container);
-
-
-    var table = $('<table></table>');
-
-    table.attr('id', gridid.grid_id);
-    var pager = $('<div></div>');
-    pager.attr('id', gridid.gridpager_id)
-    var gr_cont = grid_container.find('#grid_container').append(table);
-    gr_cont.append(pager);
-    var container = gr_cont.find(gridid.grid_id_);
-    var detail_container = grid_container.find('#detail_tabs');
-
-
-    if (header.methods_menu) {
-        load_menu(header.methods_menu);
-
-
-    };
-
-    if (header.detail) {
-        load_menu(header.detail.menu);
-
-
-    };
-    ////console.log(JSON.stringify(header.colmodel));
-
-    $.jgrid.defaults.width = 900;
-    $.jgrid.defaults.responsive = true;
-    $.jgrid.defaults.styleUI = 'Bootstrap';
-    $.jgrid.styleUI.Bootstrap.base.headerTable = "table table-bordered table-condensed";
-    $.jgrid.styleUI.Bootstrap.base.rowTable = "table table-bordered table-condensed";
-    $.jgrid.styleUI.Bootstrap.base.footerTable = "table table-bordered table-condensed";
-    $.jgrid.styleUI.Bootstrap.base.pagerTable = "table table-condensed";
-
-    container.jqGrid({
-        datatype: "local",
-        data: rows,
-        height: 400,
-        colModel: header.colmodel,
-        viewrecords: true, // show the current page, data rang and total records on the toolbar
-        caption: header.title,
-        multiselect: true,
-        pager: gridid.gridpager_id_,
-        loadonce: true,
-        rowNum: 30,
-        viewrecords: true,
-        scroll: 1, // set the scroll property to 1 to enable paging with scrollbar - virtual loading of records
-        emptyrecords: '0 записей найдено', // the message will be displayed at the bottom 
-
-        shrinkToFit: false,
-        beforeSelectRow: function (rowId, e) {
-            container.jqGrid("resetSelection");
-            //return true;
-        },
-        onSelectRow: function (rowid, selected) {
-            if ((header.detail) && (rowid != null) && detail_container.length != 0) {
-
-                if (selected) {
-                    detail_container.attr("meta_parent_field", "pers_request_id");
-                    detail_container.attr("meta_parent_value", rowid);
-                    detail_container.attr("meta_readonly", header.detail.readonly);
-
-                    var reports = detail_container.find("#rep_menu")
-                    if (reports) {
-                        reports.find("li a").each(function (index) {
-                            $(this).attr("href", $(this).attr("hreftempl").replace('<%=meta_parent_value%>', rowid))
-                            //	console.log( index + ": " + $( this ).attr("href") );	
-                        });
-                    }
-                    detail_container.show();
-                    detail_container.find("[root_menu='#detail_tabs']").show();
-                    detail_container.find('.active a').click();
-                    //	container.jqGrid('setGridState', 'hidden');
-                } else {
-                    detail_container.hide();
-                    hide_formBRUT(grid_container);
-                };
-            }
-        }
-    });
-
-    container.navGrid(gridid.gridpager_id_, {
-            search: true, // show search button on the toolbar
-            add: false,
-            edit: false,
-            del: false,
-            refresh: true,
-            view: true,
-            beforeRefresh: function () {
-                var s = get_selected_rows(grid_container);
-
-                get_view_data(grid_container, undefined, refresh_grid, s);
-            },
-            afterRefresh: function () {
-                //	alert("afterRefresh" + meta_view);
-            }
-
-        }, {}, // edit options
-        {}, // add options
-        {}, // delete options
-        {
-            multipleSearch: true
-        } // search options - define multiple search
-    );
-
-    /* container.jqGrid('setGridWidth', parseInt($(window).width()) - 20);    
-
-     //handles the grid resize on window resize
-     $(window).resize(function () { 
-           container.jqGrid('setGridWidth', parseInt($(window).width()) - 20); 
-     });
-    */
-
-};
-
-function refresh_grid(grid_container, dataresponse, selectrows) {
-    var gridid = get_grid_id(grid_container);
-    var grid_element = $(gridid.grid_id_);
-    var rows = dataresponse.rows;
-    grid_element.jqGrid('clearGridData');
-    grid_element.jqGrid('setGridParam', {
-        data: rows
-    });
-    grid_element.trigger('reloadGrid');
-    grid_element.jqGrid('setSelection', selectrows);
-};
-
-function show_view(grid_container, meta_class, meta_view) {
-    grid_container.attr('meta_class', meta_class);
-    grid_container.attr('meta_view', meta_view);
-
-    get_view_data(grid_container, undefined, showgrid);
-
-};
-
+ 
+ 
 var get_view_data = function (grid_container, user_filter, datarender, selectrows) {
     //  function api_load(url,requestdata,responsefunc) {
     var requestdata; //filter потом будет
@@ -293,18 +105,7 @@ function get_autodata(params, request, response) {
     $.post('view/ref_value_list', params,
         function (data) {
             if (data) {
-                /*var rows =data.rows;
-	   for (d in rows){ 
-	        auto_row={};
-		var row= rows[d];
-		for (cols in colmodel){
-	        if (colmodel[cols]&&colmodel[cols].key){
-		auto_row['value']=row[colmodel[cols].name];
-		};
-		autodata[d]=auto_row;
-		};
-	    };*/
-                var autodata = convert_colmodel2auto(data.rows, colmodel);
+                 var autodata = convert_colmodel2auto(data.rows, colmodel);
             };
             response(autodata);
         });
@@ -388,9 +189,7 @@ var refviewmodal = function (meta_class, meta_view, selectFunc) {
 
         } else {
             modal_view.modal('hide');
-            //closegrid(grid_container);
-            //	if (from_method)  {setTimeout(function(){ $('#method_execute').modal('show'); }, 500);};
-            var ui = {
+             var ui = {
                 "item": {
                     "value": null,
                     "id": null,
@@ -404,12 +203,10 @@ var refviewmodal = function (meta_class, meta_view, selectFunc) {
         }
     });
 
-    //$('#refview #method_title').html(schema.title);
-    setTimeout(function () {
+     setTimeout(function () {
         modal_view.modal();
     }, 500);
 
-    //grid_container.modal();
-
+  
 
 };

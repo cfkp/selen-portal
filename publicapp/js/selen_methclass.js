@@ -65,9 +65,9 @@ class SelenMethod {
 
     Init() {
 
-        api_load_async('callmethod/' + this.meta_class + '/' + this.meta_name + '/init', {
+        SelenApi.api_load_async('callmethod/' + this.meta_class + '/' + this.meta_name + '/init', {
             objectlist: this.objectlist
-        }, cb(this, this.AfterInit))
+        }, SelenUtil.cb(this, this.AfterInit))
         /*	this.lastresponse= api_load_sync('callmethod/'+this.meta_class+'/'+this.meta_name+'/init', JSON.stringify({objectlist:this.objectlist}));
         	this.schema=this.lastresponse.responseJSON.schema;
         	 
@@ -107,11 +107,11 @@ class SelenMethod {
         if (this.bf.validate()) {
             this.data = this.bf.getData();
             this.modal_container.find('#execute').prop('disabled', true);
-            api_load_async('callmethod/' + this.meta_class + '/' + this.meta_name + '/execute', {
+            SelenApi.api_load_async('callmethod/' + this.meta_class + '/' + this.meta_name + '/execute', {
                 objectlist: this.objectlist,
                 collection: this.collection,
                 data: this.data
-            }, cb(this, this.AfterExecute), cb(this, this.Errorhandler));
+            }, SelenUtil.cb(this, this.AfterExecute), SelenUtil.cb(this, this.Errorhandler));
 
             /* 	this.lastresponse=api_load_sync('callmethod/'+this.meta_class+'/'+this.meta_name+'/execute', JSON.stringify({objectlist:this.objectlist,collection:this.collection,data:this.data}));
              	if (this.lastresponse.responseJSON.msg) {messagedlg(this.lastresponse.responseJSON.msg);};
@@ -126,11 +126,12 @@ class SelenMethod {
         if (this.lastresponse.msg) {
             messagedlg(this.lastresponse.msg);
         };
+        $('#method_execute').modal('hide');
+
         if (this.parent && this.parent.parent instanceof SelenView) {
             this.parent.parent.refresh();
         };
-        $('#method_execute').modal('hide');
-
+ 
         if (window.opener) {
 
             window.close();
@@ -187,7 +188,7 @@ class SelenMethod {
         this.modal_container.find('#execute').prop('disabled', false);
         this.modal_container.find('#executealert').hide();
 
-        this.modal_container.find('#execute').bind('click', cb(this, this.Execute));
+        this.modal_container.find('#execute').bind('click', SelenUtil.cb(this, this.Execute));
         if (window.opener) {
             this.modal_container.find('#cancel').unbind('click');
             this.modal_container.find('#cancel').bind('click', function () {

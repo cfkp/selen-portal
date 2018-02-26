@@ -170,11 +170,12 @@ body {
     color: #080808;
 }
 
+ 
 .btn-primary {
     /*  border-radius: 0;*/
     background: #59ACE9;
     border-width: inherit;
-    /*  color: #fff;    */
+       color: #fff;    
     font-size: 15px;
     font-weight: bold;
     /* margin: 0 auto;  */
@@ -192,7 +193,7 @@ body {
 }
 
 .btn-primary:hover,
-.btn-primary:focus {
+.btn-primary:focus{
     zoom: 1.01;
     background: -webkit-gradient(linear, left top, left bottom, from(#89c7f5), to(#092dde));
     /* для Webkit браузеров */
@@ -200,4 +201,73 @@ body {
     /* для Firefox */
     background-image: -o-linear-gradient(top, #89c7f5, #092dde);
     /* для Opera 11 */
+}
+
+
+
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu>.dropdown-menu.multi-level {
+    top: 0;
+    /*  background: #59ACE9;*/
+
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px;
+    border-radius: 0 6px 6px 6px;
+}
+
+.dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu>a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #ccc;
+    margin-top: 5px;
+    margin-right: -10px;
+ 
+}
+
+.dropdown-submenu:hover>a:after {
+    border-left-color: #fff;
+ 
+}
+
+.dropdown-submenu.pull-left {
+    float: none;
+}
+
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+    -webkit-border-radius: 6px 0 6px 6px;
+    -moz-border-radius: 6px 0 6px 6px;
+    border-radius: 6px 0 6px 6px;
+   /* background: #59ACE9;*/
+
+}
+
+a[disabled] {
+  z-index: -1;
+    background: grey;
+}
+
+.sln_method_menu.affix{
+    
+    margin-bottom: 200px;
+    bottom: 0px;
+    
 }

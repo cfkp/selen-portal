@@ -30,12 +30,7 @@ class SelenMenu {
         this.data = {};
         this.bf = null;
         this.Load();
-        if (this.parent) {
-            this.makemenu(this.value.data, undefined, this.container);
-        } else {
-            this.makemenu(this.value.data, undefined, this.parent_container);
-            this.Show(true);
-        }
+        this.make();
 
     }
     Destroy() {
@@ -48,9 +43,9 @@ class SelenMenu {
 
     Load() {
         if (this.meta_value == 'main_menu') {
-            this.lastresponse = api_load_sync('/load_main_menu', null);
+            this.lastresponse = SelenApi.api_load_sync('/load_main_menu', null);
         } else {
-            this.lastresponse = api_load_sync('/load_menu/' + this.meta_value, null);
+            this.lastresponse = SelenApi.api_load_sync('/load_menu/' + this.meta_value, null);
 
         }
         this.schema = this.lastresponse.responseJSON.schema;
@@ -68,9 +63,36 @@ class SelenMenu {
         //}
 
     }
+
+    make() {
+        if (!this.value.template) {
+            if (this.parent) {
+                this.makemenu(this.value.data, undefined, this.container);
+            } else {
+                this.makemenu(this.value.data, undefined, this.parent_container);
+                this.Show(true);
+            }
+
+        } else {
+
+            if (!this.EJSTemplate) {
+                this.EJSTemplate = new SelenTemplate(this.value.template);
+            };
+
+            var html = this.EJSTemplate.render({
+
+                data: this.value.data
+            });
+            this.parent_container.html(html);
+            var items = this.parent_container.find("#sln_menu_item");
+            items.bind('click', SelenUtil.cb(this, this.MenuClick));
+
+        }
+         this.enableByObjlist(0)
+    }
     set_def_active(menu) {
         var sel;
-        sel = '#' + menu + ' [active_def=true] #menu_item_a';
+        sel = '#' + menu + ' [active_def=true] #sln_menu_item';
         var el = $(sel);
         var par = el.parents("ul");
         if ((par[0]) && (par[0].style) && (par[0].style.display) && (par[0].style.display == 'none')) {
@@ -82,6 +104,8 @@ class SelenMenu {
     MenuClick(clickedElem) {
         var obj = $(clickedElem);
         var root_ul = obj.parents("ul");
+        var parent_li=obj.parent("li");
+        if (parent_li.hasClass('disabled')) {return true};
         //root_ul.find("li").removeClass("active");
         //obj.parent().addClass("active");
         if (obj.attr("sub_id") && !obj.attr("meta_action_type")) {
@@ -145,6 +169,32 @@ class SelenMenu {
 
     }
 
+    enableByObjlist(cnt_objlist) {
+        var items = this.parent_container.find("#sln_menu_item");
+        //                items.bind('click', SelenUtil.cb(this, this.MenuClick));
+        items.each(function (i, elem) {
+            var $this=$(elem);
+            var $li=$(elem).parent('li');
+            
+            var objlist=$(elem).attr("objectlist");
+            if (objlist &&(cnt_objlist == 0 && objlist >= 1 || cnt_objlist == 1 && objlist> 1)) {
+                $li.addClass('disabled');
+                $this.addClass('disabled');
+            } else {
+                $li.removeClass('disabled');
+                $this.removeClass('disabled');
+            }
+
+            /*  if ($(this).hasClass("stop")) {
+		alert("Остановлено на " + i + "-м пункте списка.");
+		return false;
+	} else {
+		alert(i + ': ' + $(elem).text());
+	}*/
+        });
+
+    }
+
     makemenu(json, ulclass, root) {
         if (!json) {
             return;
@@ -189,7 +239,7 @@ class SelenMenu {
             if (array[i].meta_action_type === 'method' || (!array[i].root_menu && array[i].items && array[i].items.length > 0)) {
                 var gr = $('<div class="btn-group"></div>');
                 a = $('<button></button>');
-                a.attr('id', 'menu_item_a');
+                a.attr('id', 'sln_menu_item');
                 a.attr('type', 'button');
                 a.attr('class', 'btn btn-default');
                 a.attr('meta_class', array[i].meta_class);
@@ -200,6 +250,7 @@ class SelenMenu {
                 a.attr('hreftempl', array[i].href);
                 a.attr('sub_id', array[i].name);
                 a.attr('sub_container_id', array[i].root_menu);
+                a.attr('objectlist', array[i].objectlist);
                 a.text(array[i].title);
                 gr.append(a);
                 ul.append(gr);
@@ -210,7 +261,7 @@ class SelenMenu {
                     a.attr('data-toggle', 'dropdown');
                     a.append($('<span class="caret"></span>'));
                 } else {
-                    a.bind('click', cb(this, this.MenuClick));
+                    a.bind('click', SelenUtil.cb(this, this.MenuClick));
                 }
             } else {
                 li = $('<li></li>');
@@ -227,7 +278,7 @@ class SelenMenu {
                 };
                 ul.append(li);
                 a = $('<a></a>');
-                a.attr('id', 'menu_item_a');
+                a.attr('id', 'sln_menu_item');
                 a.attr('class', 'menu_left');
                 a.attr('meta_class', array[i].meta_class);
                 a.attr('meta_action_type', array[i].meta_action_type);
@@ -238,9 +289,10 @@ class SelenMenu {
                 a.attr('target', array[i].target);
                 a.attr('sub_id', array[i].name);
                 a.attr('sub_container_id', array[i].root_menu);
+                a.attr('objectlist', array[i].objectlist);
                 a.text(array[i].title);
                 li.append(a);
-                a.bind('click', cb(this, this.MenuClick));
+                a.bind('click', SelenUtil.cb(this, this.MenuClick));
             }
             if (typeof array[i].items !== 'undefined') {
                 this.makemenu(array[i], ulclass, root);

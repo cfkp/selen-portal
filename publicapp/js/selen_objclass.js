@@ -48,7 +48,7 @@ class SelenObject {
     }
 
     Load() {
-        this.lastresponse = api_load_sync('/loadclass/' + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, null);
+        this.lastresponse = SelenApi.api_load_sync('/loadclass/' + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, null);
         this.schema = this.lastresponse.responseJSON.schema;
         this.value = this.lastresponse.responseJSON.value;
     }
@@ -58,7 +58,7 @@ class SelenObject {
         	</div>
         	<div id="data_container"></div>
         */
-        var div_meth = $('<div id="methods_container" class="sln_method_menu"></div>');
+        var div_meth = $('<div id="methods_container" class="sln_method_menu" > </div>');
         var div_data = $('<div id="data_container"></div>');
         this.container.append(div_meth, div_data);
 
@@ -67,15 +67,24 @@ class SelenObject {
             var savebtn = document.createElement("button");
             savebtn.className = "btn btn-primary";
             savebtn.appendChild(document.createTextNode('Сохранить'));
-            savebtn.onclick = cb(this, this.SaveClick);
+            savebtn.onclick = SelenUtil.cb(this, this.SaveClick);
 
             var check_btn = document.createElement("button");
             check_btn.className = "btn btn-primary";
             check_btn.appendChild(document.createTextNode('Проверить'));
-            check_btn.onclick = cb(this, this.CheckClick);
+            check_btn.onclick = SelenUtil.cb(this, this.CheckClick);
 
             var meth_cont = this.container.find("#methods_container");
             meth_cont.append(savebtn, check_btn);
+            $(div_meth).affix({
+                               
+                offset: {
+                    top: 500 /*,
+                    bottom: function () {
+                      return (this.bottom = $('.footer').outerHeight(true))
+                    }*/
+                }
+            })
         }
         var bfcont = this.container.find("#data_container");
         this.bf = BrutusinForms.create(this.schema.data);
@@ -116,6 +125,8 @@ class SelenObject {
     }
 
     CheckClick() {
+        //     HaltError('jkhkjhkhkh');
+
         if (this.bf.validate()) {
             messagedlg(null, "Ошибок нет", "message");
         }
