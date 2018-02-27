@@ -15,142 +15,191 @@
  * 
  * @author Ignacio del Valle Alles idelvall@brutusin.org
  */
-.add-pattern-div{
+
+.add-pattern-div {
     margin-top: 6px;
 }
-.loading-layer{
+
+.loading-layer {
     position: absolute;
-    top:0px;
-    left:0px;
-    z-index : 10;
+    top: 0px;
+    left: 0px;
+    z-index: 10;
     width: 100%;
     height: 100%;
     opacity: 0.7;
     background-color: white;
 }
-.loading-icon{
+
+.loading-icon {
     position: absolute;
-    top:14px;
-    left:50%;
-    z-index : 11;
+    top: 14px;
+    left: 50%;
+    z-index: 11;
 }
-.loading-icon-select{
+
+.loading-icon-select {
     position: absolute;
-    top:14px;
-    left:50%;
-    z-index : 11;
+    top: 14px;
+    left: 50%;
+    z-index: 11;
 }
-.loading-icon-checkbox{
+
+.loading-icon-checkbox {
     position: absolute;
-    top:7px;
-    left:3px;
-    z-index : 11;
+    top: 7px;
+    left: 3px;
+    z-index: 11;
 }
+
 .glyphicon-refresh-animate {
     animation: spin .7s infinite linear;
     -webkit-animation: spin2 .7s infinite linear;
 }
 
 @-webkit-keyframes spin2 {
-    from { -webkit-transform: rotate(0deg);}
-    to { -webkit-transform: rotate(360deg);}
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
 }
 
 @keyframes spin {
-    from { transform: scale(1) rotate(0deg);}
-    to { transform: scale(1) rotate(360deg);}
+    from {
+        transform: scale(1) rotate(0deg);
+    }
+    to {
+        transform: scale(1) rotate(360deg);
+    }
 }
-form.brutusin-form table, form.brutusin-form input, form.brutusin-form select, form.brutusin-form textarea{
-    width: 100%!important;
+
+form.brutusin-form table,
+form.brutusin-form input,
+form.brutusin-form select,
+form.brutusin-form textarea {
+     width: auto !important;
     min-width: 80px;
+
 }
-form.brutusin-form input[type=checkbox]{
+
+form.brutusin-form input[type=checkbox] {
     width: auto !important;
     min-width: auto !important;
 }
-form.brutusin-form  textarea{
+
+form.brutusin-form textarea {
     height: 8em;
 }
-form.brutusin-form table table{
-    border-left:  solid 1px;
+
+form.brutusin-form table table {
+    border-left: solid 1px;
     border-color: lightgray;
-    margin: 4px;   
+    margin: 4px;
 }
+
 form.brutusin-form td {
     vertical-align: top;
     padding: 4px;
     white-space: nowrap;
 }
+
 form.brutusin-form td.prop-name {
-    width: 20%; 
+     width: 30%; 
     text-align: right;
+
+}
+form.brutusin-form   tr.prop-header > td {
+    text-align: left;
     
 }
+form.brutusin-form tr.prop-header {
+    border-bottom: solid 1px;
+    border-bottom-color: lightgray;
+    font-size: 18px;
+}
+
+form.brutusin-form tr.prop-header label {
+    text-align: left;
+    margin-top: 5%;
+}
+
 form.brutusin-form td.add-prop-name table {
     text-align: right;
     border: none;
 }
+
 form.brutusin-form td.add-prop-name table td {
     vertical-align: middle;
 }
+
 form.brutusin-form td.prop-value {
-    width: 20%;   
+/*    width: 20%;*/
     text-align: left;
-    
+
 }
-form.brutusin-form td.item-index{
+
+form.brutusin-form td.item-index {
     font-size: 0.8em;
     color: lightgray;
     width: 25px;
     text-align: right;
 }
-form.brutusin-form td.item-action{
+
+form.brutusin-form td.item-action {
     width: 30px;
 }
+
 form.brutusin-form .error {
     border-color: red;
 }
+
 form.brutusin-form .error-message {
     color: red;
 }
 
- 
- form.brutusin-form .gridX  input {
+
+form.brutusin-form .gridX input {
     text-align: center;
-        border: none;
+    border: none;
     box-shadow: none;
- }
-form.brutusin-form .gridX  input[disabled] {
-     background-color: inherit;
-            border: none;
+}
 
-  }
+form.brutusin-form .gridX input[disabled] {
+    background-color: inherit;
+    border: none;
 
-form.brutusin-form  .gridX  {
+}
+
+form.brutusin-form .gridX {
     text-align: center;
     vertical-align: middle;
     border: solid 1px lightgray;
 }
 
-form.brutusin-form  .grid,form.brutusin-form  table.grid  td 
-,form.brutusin-form  table.grid  th{
+form.brutusin-form .grid,
+form.brutusin-form table.grid td,
+form.brutusin-form table.grid th {
     text-align: center;
     vertical-align: middle;
     border: solid 1px lightgray;
 }
-form.brutusin-form  .grid,form.brutusin-form  table.grid  td.gorizontal-title  {
+
+form.brutusin-form .grid,
+form.brutusin-form table.grid td.gorizontal-title {
     text-align: left;
     vertical-align: middle;
     border: solid 1px lightgray;
 }
 
 
- form.brutusin-form table.grid  input,form.brutusin-form table.grid  textarea {
+form.brutusin-form table.grid input,
+form.brutusin-form table.grid textarea {
     text-align: center;
-        border-top: none;
-        border-left: none;
+    border-top: none;
+    border-left: none;
     box-shadow: none;
-     border-bottom-color: lightgray;
+    border-bottom-color: lightgray;
     border-right: none;
- }
- 
+}

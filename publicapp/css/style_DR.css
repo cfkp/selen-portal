@@ -266,9 +266,11 @@ a[disabled] {
 }
 
 .sln_method_menu.affix{
-    
-    margin-bottom: 200px;
-    bottom: 0px;
+     z-index: 200;
+    /* margin-bottom: 200px; */
+    /* bottom: 0px; */
+    right: 0;
+    top: 20px;
     
 }
 

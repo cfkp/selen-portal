@@ -720,7 +720,8 @@ if (typeof brutusin === "undefined") {
                 propNum = s.properties.length;
                 for (var prop in s.properties) {
                     if (container.className != 'gorizontal-item' && s.format != 'grid') {
-                        var tr = document.createElement("tr");
+                        var tr_name = document.createElement("tr");
+                        tr_name.className="prop-header";
                         var td1 = document.createElement("td");
                         td1.className = "prop-name";
                     }
@@ -732,9 +733,17 @@ if (typeof brutusin === "undefined") {
 
 
                     if (container.className != 'gorizontal-item' && s.format != 'grid') {
-                        appendChild(tbody, tr, propSchema);
-                        appendChild(tr, td1, propSchema);
-                        appendChild(tr, td2, propSchema);
+                        var tr_value = document.createElement("tr");
+
+                         
+                        if (propSchema.type=="object"||propSchema.type=="oneOf"||propSchema.type=="array"){  appendChild(tbody, tr_name, propSchema);
+                      
+                            appendChild(tr_name, td1, propSchema);
+                        }else {
+                            appendChild(tr_value, td1, propSchema);
+                        }
+                        appendChild(tbody, tr_value, propSchema);
+                        appendChild(tr_value, td2, propSchema);
                     } else if (s.format == 'grid' || container.className == 'gorizontal-item' && propSchema.type == 'object') {
                         var tr_title = document.createElement("tr");
                         tr_title.className = 'gorizontal-title';
