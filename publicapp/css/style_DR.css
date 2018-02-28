@@ -274,15 +274,29 @@ a[disabled] {
     
 }
 
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 150px;
+}
+
 .footer{
+      position: absolute;
+  bottom: 0;
+  width: 100%;
+height: 150px;
+  
     /*  border-radius: 0;*/
     background: #59ACE9;
-    border-width: inherit;
     color: #fff;    
     font-size: 15px;
     font-weight: bold;
     /* margin: 0 auto;  */
-    margin-top: 10%;
+   /* margin-top: 10%;*/
     text-align: center;
     text-decoration: none;
     background: -webkit-gradient(linear, left top, left bottom, from(#e9f6ff00), to(#2c50ffb8));
