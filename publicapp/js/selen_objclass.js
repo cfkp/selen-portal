@@ -116,7 +116,7 @@ class SelenObject {
             save = true; // confirm("Данные не сохранены.Сохранить?");
             if (save) {
                 this.data = newdata;
-                var resp = api_load_sync("saveobj/" + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, JSON.stringify(this.data));
+                var resp = SelenApi.api_load_sync("saveobj/" + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, JSON.stringify(this.data));
                 /*if (sayOk){
 			messagedlg(null, "Данные сохранены", "message");
 		}*/

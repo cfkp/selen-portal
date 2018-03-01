@@ -255,27 +255,27 @@
                     "sum_doc": {
                         "required": true,
                         "title": "Проектная и разрешительная документация (тыс. руб)",
-                        "type": "currency"
+                        "type": "number"
                     },
                     "sum_equipment": {
                         "required": true,
                         "title": "Оборудование (тыс. руб)",
-                        "type": "currency"
+                        "type": "number"
                     },
                     "sum_CMP": {
                         "required": true,
                         "title": "СМР (тыс. руб)",
-                        "type": "currency"
+                        "type": "number"
                     },
                     "sum_working_capital": {
                         "required": true,
                         "title": "Оборотные средства (тыс. руб)",
-                        "type": "currency"
+                        "type": "number"
                     },
                     "sum_nds": {
                         "required": true,
                         "title": "НДС (тыс. руб)",
-                        "type": "currency"
+                        "type": "number"
                     }
                 }
             },

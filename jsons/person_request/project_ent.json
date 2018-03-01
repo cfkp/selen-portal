@@ -52,6 +52,12 @@
                                     "$ref": "#/definitions/enterprise_owners",
                                     "$id": null
                                 },
+                                "enterprise_dohod_fin_period": {
+                                    "title": "Финансовые показатели компании по годам",
+                                    "description": " ",
+                                    "$ref": "#/definitions/dohod_fin_period",
+                                    "$id": null
+                                },
                                 "enterprise_dohod2": {
                                     "title": "Финансовые показатели компании по годам",
                                     "description": " ",
@@ -149,6 +155,11 @@
                     "activity": {
                         "required": true,
                         "title": "Основной вид деятельности",
+                        "type": "text"
+                    },
+                    "cur_credits": {
+                        "required": true,
+                        "title": "Информация о текущих кредитах (перечень банков / суммы / сроки / % /  обеспечение / прочие важные условия)",
                         "type": "text"
                     },
                     "bool_cred": {
@@ -295,7 +306,7 @@
                 }
             },
             "staff2": {
-                "title": "Доход за 2 года",
+                "title": "Численность 2 года",
                 "minItems": 2,
                 "maxItems": 2,
                 "format": "grid",
@@ -323,6 +334,28 @@
                             "description": "Средняя численность работников за 2 годовые отчетные даты, предшествующие дате обращения в Корпорацию (определяется с учетом всех его работников, в том числе работников, работающих по гражданско-правовым договорам или по совместительству, работников представительств, филиалов и других обособленных подразделений)",
                             "type": "integer"
                         }
+                    }
+                }
+            },
+            "dohod_fin_period": {
+                "title": "Финансовые  показатели проектной компании за отчетный период",
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "period": {
+                        "required": true,
+                        "title": "Период",
+                        "type": "date"
+                    },
+                    "dohod": {
+                        "required": true,
+                        "title": "Выручка (тыс. руб.)",
+                        "type": "number"
+                    },
+                    "clear": {
+                        "required": true,
+                        "title": "Чистая прибыль (тыс. руб.)",
+                        "type": "number"
                     }
                 }
             },
