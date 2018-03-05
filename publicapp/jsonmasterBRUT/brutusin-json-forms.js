@@ -299,17 +299,25 @@ if (typeof brutusin === "undefined") {
                 }
             }
             if (s.mask) {
-                input.setAttribute("data-mask", s.mask);
-                input.setAttribute("data-placeholder", " ");
+              // $(input).inputmask(s.mask);
+                $(input).inputmask({ mask: s.mask, greedy: false });
+                 
             };
             if (s.type === 'currency') {
-                $(input).maskMoney({
-                    symbol: '',
-                    allowZero: false,
-                    precision: 2,
-                    allowNegative: false,
-                    defaultZero: false
+
+                $(input).inputmask("numeric", {
+                    radixPoint: ".",
+                    groupSeparator: ",",
+                    digits: 2,
+                    autoGroup: true,
+                    prefix: '', //No Space, this will truncate the first character
+                    rightAlign: false,
+                    oncleared: function () {
+                        $(this).val('0');
+                        this.onchange();
+                    }
                 });
+
             };
             input.schema = schemaId;
             input.setAttribute("autocorrect", "off");
@@ -721,7 +729,7 @@ if (typeof brutusin === "undefined") {
                 for (var prop in s.properties) {
                     if (container.className != 'gorizontal-item' && s.format != 'grid') {
                         var tr_name = document.createElement("tr");
-                        tr_name.className="prop-header";
+                        tr_name.className = "prop-header";
                         var td1 = document.createElement("td");
                         td1.className = "prop-name";
                     }
@@ -735,11 +743,12 @@ if (typeof brutusin === "undefined") {
                     if (container.className != 'gorizontal-item' && s.format != 'grid') {
                         var tr_value = document.createElement("tr");
 
-                         
-                        if (propSchema.type=="object"||propSchema.type=="oneOf"||propSchema.type=="array"){  appendChild(tbody, tr_name, propSchema);
-                      
+                        if (propSchema.type == "object" || propSchema.type == "oneOf" || propSchema.type == "array") {
+                            appendChild(tbody, tr_name, propSchema);
+
                             appendChild(tr_name, td1, propSchema);
-                        }else {
+                            td2.setAttribute('colspan',2);
+                        } else {
                             appendChild(tr_value, td1, propSchema);
                         }
                         appendChild(tbody, tr_value, propSchema);

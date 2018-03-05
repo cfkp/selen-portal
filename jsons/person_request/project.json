@@ -450,28 +450,28 @@
                 "properties": {
                     "indic_receipt": {
                         "required": true,
-                        "title": "Выручка",
-                        "type": "string"
+                        "title": "Выручка, тыс. руб.",
+                        "type": "currency"
                     },
                     "indic_ebitda": {
                         "required": true,
-                        "title": "EBITDA",
-                        "type": "string"
+                        "title": "EBITDA, тыс. руб.",
+                        "type": "currency"
                     },
                     "indic_clear": {
                         "required": true,
-                        "title": "Чистая прибыль",
-                        "type": "string"
+                        "title": "Чистая прибыль, тыс. руб.",
+                        "type": "currency"
                     },
                     "indic_nrv": {
                         "required": true,
                         "title": "NRV",
-                        "type": "string"
+                        "type": "currency"
                     },
                     "indic_irr": {
                         "required": true,
                         "title": "IRR",
-                        "type": "string"
+                        "type": "currency"
                     },
                     "indic_other": {
                         "required": true,
@@ -507,7 +507,7 @@
                         "prognosis_dohod": {
                             "required": true,
                             "title": "Выручка (По сегментам/компаниям), тыс. руб.",
-                            "type": "integer",
+                            "type": "currency",
                             "calcfunc": {
                                 "name": "percent"
                             }
@@ -524,37 +524,37 @@
                             "required": true,
                             "readOnly": true,
                             "title": "Рентабельность по EBITDA, %",
-                            "type": "integer"
+                            "type": "currency"
                         },
                         "prognosis_clear": {
                             "required": true,
                             "title": "Чистая прибыль, тыс. руб.",
-                            "type": "integer"
+                            "type": "currency"
                         },
                         "prognosis_money": {
                             "required": true,
                             "title": "Денежные средства и эквивалент, тыс. руб.",
-                            "type": "integer"
+                            "type": "currency"
                         },
                         "prognosis_op_money": {
                             "required": true,
                             "title": "Операционный денежный поток, тыс. руб.",
-                            "type": "integer"
+                            "type": "currency"
                         },
                         "prognosis_invest": {
                             "required": true,
                             "title": "Инвестиции, тыс. руб.",
-                            "type": "integer"
+                            "type": "currency"
                         },
                         "prognosis_post_invest": {
                             "required": true,
                             "title": "Денежный поток после инвестиционной деятельности (до финансирования), тыс. руб.",
-                            "type": "integer"
+                            "type": "currency"
                         },
                         "prognosis_post_finans": {
                             "required": true,
                             "title": "Чистый денежный поток после финансирования, тыс. руб.",
-                            "type": "integer"
+                            "type": "currency"
                         }
                     }
                 }
@@ -667,7 +667,7 @@
                     "percent": {
                         "required": true,
                         "title": "Процентная ставка %",
-                        "type": "integer"
+                        "type": "currency"
                     },
                     "goal_bool": {
                         "required": true,
@@ -703,7 +703,7 @@
                                             "required": true,
                                             "title": "ИНН",
                                             "type": "string",
-                                            "mask": "9999999999?99"
+                                            "mask": "9999999999[99]"
                                         }
                                     }
                                 }
@@ -722,7 +722,7 @@
                                             "required": true,
                                             "title": "ИНН",
                                             "type": "string",
-                                            "mask": "9999999999?99"
+                                            "mask": "9999999999[99]"
                                         }
                                     }
                                 }

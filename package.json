@@ -19,6 +19,7 @@
     "express-session": "^1.15.1",
     "file-system": "^2.2.2",
     "formidable": "^1.1.1",
+    "inputmask": "^3.3.11",
     "mongo-join": "^1.0.0",
     "mongodb-extended-json": "^1.9.0",
     "mongoose": "^4.9.1",

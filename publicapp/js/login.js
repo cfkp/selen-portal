@@ -117,6 +117,8 @@ var SelenLogin = function () {
         $('#agree').change(function () {
             $('#resetpass_submit').prop('disabled', !this.checked);
         });
+         
+        $('#tel').inputmask("+7-999-999-99-99");  //static mask 
     };
 
     //== Public Functions

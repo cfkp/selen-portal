@@ -8,9 +8,9 @@
 
  var enjoyhint_script_data = [
      {
-         description: 'Для оформления заявки необходимо заполнить данные',
+         description: 'Для оформления заявки необходимо создать заявку',
          event: 'next',
-         selector: '#request_detail_menu',
+         selector: '#menu_person_request',
          // shape:'circle',
          nextButton: {
              className: "myNext",
@@ -58,7 +58,8 @@
          if ((error&&error.name && error.name === 'SelenError' || error instanceof SelenError) &&
              !(error.errobj.error == 'not_authorized' && window.location.pathname == '/login')) {
              SelenUtil.messagedlg(error.errobj);
-         };
+             
+         } else {SelenUtil.messagedlg(undefined,error.stack);};
      });
 
   

@@ -76,7 +76,7 @@
               throw err;
           }
           if (!data || !data.rows || data.rows.length == 0) {
-              messagedlg(undefined, "Не найдено вариантов. Попробуйте изменить условия поиска", "error", function () {
+              SelenUtil.messagedlg(undefined, "Не найдено вариантов. Попробуйте изменить условия поиска", "error", function () {
                   $("#show_search").click()
               })
           } else {
@@ -105,7 +105,7 @@
 
   function get_htmldata(url, inpdata, container) {
 
-      selen_call(url, inpdata, function (val) {
+      SelenApi.selen_call(url, inpdata, function (val) {
           insertTemplate(container, val)
       });
 

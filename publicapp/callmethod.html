@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="../bootstrap/css/bootstrap.css"/>
 <link rel="stylesheet" href="../bootstrap/css/bootstrap-theme.css"/>
 
-<link rel="stylesheet" href="../css/bootstrap.min.css"/>
+    <!--link rel="stylesheet" href="../css/bootstrap.min.css" /-->
 
 
 
@@ -21,14 +21,17 @@
 
 <!--script src="https://code.jquery.com/jquery-1.12.4.js"></script-->
 <script src="../jquery/jquery.js"></script>
+    <script src="../jquery/jquery.inputmask.bundle.js"></script>
 
 <script src="../jquery/ui/jquery-ui.js"></script>
 <script src="../jquery-maskmoney/jquery.maskMoney.min.js"></script>
 
 <script src="../bootstrap/js/bootstrap.js"></script>
-<script src="../jasny-bootstrap/js/jasny-bootstrap.js"></script>
+    <!--script src="../jasny-bootstrap/js/jasny-bootstrap.js"></script-->
 <!--script src="../bootstrap/js/bootstrap-formhelpers-phone.js"></script-->
 
+    <script src="../enjoyhint/enjoyhint.min.js"></script>
+    <script src="../enjoyhint/kinetic.min.js"></script>
 
 
 <!--script type="text/javascript" src="../lib/jsonform-master/deps/underscore.js"></script>
@@ -39,9 +42,13 @@
 <link rel="stylesheet" href="../jasny-bootstrap/css/jasny-bootstrap.min.css">
 <link rel="stylesheet" href="../bootstrap-select/css/bootstrap-select.min.css">
 <link rel="stylesheet" href='../jsonmasterBRUT/brutusin-json-forms.css'/>
+    <link rel="stylesheet" href="../enjoyhint/jquery.enjoyhint.css">
+
 <script src="../jsonmasterBRUT/markdown.min.js"></script>
 <script src="../bootstrap-select/js/bootstrap-select.min.js"></script>
 <script src="../bootstrap-select/js/i18n/defaults-en_US.min.js"></script>
+
+    <script src="../jsonmasterBRUT/data-validation.js"></script>
 
 <script src="../jsonmasterBRUT/brutusin-json-forms.js"></script>
 <script src="../jsonmasterBRUT/brutusin-json-forms-bootstrap.js"></script>
@@ -79,6 +86,7 @@
 <body> 
 <!--------------------Error modal--------------------------------------------------->
 <div class="modal fade" id="messagedlg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -88,17 +96,20 @@
         <p id="msg"></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Закрыть</button>
         <!--button type="button" class="btn btn-primary">Сохранить изменения</button-->
       </div>
-    </div><!-- /.modal-content -->
-</div><!-- /.modal-dialog -->
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
  <!--------------method execute--------------------------------------------->
 <div class="modal fade" id="method_execute" tabindex="-1" role="dialog" data-backdrop="static"  aria-labelledby="method_title">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <!--button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="false">&times;</span></button-->
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="method_title">Modal title</h4>
       </div>
       <div class="modal-body">
@@ -107,7 +118,7 @@
       <div class="modal-footer">
 	<div id= "executealert" class="alert alert-danger" ></div>
         <button type="button" class="btn btn-primary" id='execute' >Сохранить</button>
-        <button type="button" class="btn btn-default" id='cancel' data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" id='cancel' data-dismiss="modal">Отмена</button>
       </div>
     </div>
   </div>
@@ -115,7 +126,7 @@
                            
 <!--------------reference grid select view--------------------------------------------->
 <div class="modal fade" id="refview" tabindex="-1" role="dialog" aria-labelledby="refview_title">
-  <div class="modal-dialog" role="document" style="width: fit-content;">
+        <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -124,7 +135,8 @@
       <div class="modal-body"></div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" >Выбрать</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                </div>
       </div>
     </div>
   </div>

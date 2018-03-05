@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
     <link rel="stylesheet" href="../bootstrap/css/bootstrap-theme.css" />
 
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <!--link rel="stylesheet" href="../css/bootstrap.min.css" /-->
 
 
 
@@ -21,13 +21,16 @@
 
     <!--script src="https://code.jquery.com/jquery-1.12.4.js"></script-->
     <script src="../jquery/jquery.js"></script>
-
+   <script src="../jquery/jquery.inputmask.bundle.js"></script>
+ 
     <script src="../jquery/ui/jquery-ui.js"></script>
     <script src="../jquery-maskmoney/jquery.maskMoney.min.js"></script>
 
     <script src="../bootstrap/js/bootstrap.js"></script>
-    <script src="../jasny-bootstrap/js/jasny-bootstrap.js"></script>
+    <!--script src="../jasny-bootstrap/js/jasny-bootstrap.js"></script-->
     <!--script src="../bootstrap/js/bootstrap-formhelpers-phone.js"></script-->
+<script src="../enjoyhint/enjoyhint.min.js"></script>
+    <script src="../enjoyhint/kinetic.min.js"></script>
 
 
 
@@ -64,7 +67,6 @@
     <script src="../js/methods.js"></script>
     <script src="../js/views.js"></script>
 
-    <script src="../js/menu.js"></script>
 
     <script src="../js/upload.js"></script>
 
@@ -82,8 +84,11 @@
 </head>
 
 <body>
+    <img id="loading" class='loader' />
+
     <!--------------------Error modal--------------------------------------------------->
     <div class="modal fade" id="messagedlg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -96,6 +101,7 @@
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Закрыть</button>
                 <!--button type="button" class="btn btn-primary">Сохранить изменения</button-->
             </div>
+        </div>
         </div>
         <!-- /.modal-content -->
     </div>
@@ -112,6 +118,7 @@
                     <form id='data_container' class="method_form"> </form>
                 </div>
                 <div class="modal-footer">
+                    <div id="executealert" class="alert alert-danger"></div>
                     <button type="button" class="btn btn-primary" id='execute'>Сохранить</button>
                     <button type="button" class="btn btn-primary" id='cancel' data-dismiss="modal">Отмена</button>
                 </div>
@@ -121,7 +128,7 @@
 
     <!--------------reference grid select view--------------------------------------------->
     <div class="modal fade" id="refview" tabindex="-1" role="dialog" aria-labelledby="refview_title">
-        <div class="modal-dialog" role="document" style="width: fit-content;">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -130,7 +137,7 @@
                 <div class="modal-body"></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary">Выбрать</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена</button>
                 </div>
             </div>
         </div>
@@ -173,13 +180,24 @@
                 <!--input type="number"   name ='fin_amount' class="form-control" required-->
                 <input type="text" name='fin_amount' class="form-control amount" id="c2" />
                 <script type="text/javascript">
-                    $(".amount").maskMoney({
+/*                    $(".amount").maskMoney({
                         symbol: '',
                         allowZero: false,
                         precision: 0,
                         allowNegative: true,
                         defaultZero: false
-                    });
+                    });*/
+                $(".amount").inputmask("numeric", {
+                    radixPoint: ".",
+                    groupSeparator: ",",
+                    digits: 0,
+                    autoGroup: true,
+                    prefix: '', //No Space, this will truncate the first character
+                    rightAlign: false,
+                    oncleared: function () {
+                        $(this).val('0');
+                    }
+                });
 
                 </script>
 
