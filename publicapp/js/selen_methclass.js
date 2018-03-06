@@ -124,7 +124,7 @@ class SelenMethod {
     AfterExecute(ajaxobj, response) {
         this.lastresponse = response;
         if (this.lastresponse.msg) {
-            messagedlg(this.lastresponse.msg);
+            SelenUtil.messagedlg(this.lastresponse.msg);
         };
         $('#method_execute').modal('hide');
 
@@ -203,9 +203,9 @@ class SelenMethod {
 
     CheckClick() {
         if (this.bf.validate()) {
-            messagedlg(null, "Ошибок нет", "message");
+            SelenUtil.messagedlg(null, "Ошибок нет", "message");
         } else {
-            messagedlg(null, "Найдены ошибки", "error");
+            SelenUtil.messagedlg(null, "Найдены ошибки", "error");
         };
 
     }

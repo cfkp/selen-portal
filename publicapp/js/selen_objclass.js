@@ -106,7 +106,7 @@ class SelenObject {
         };
         var newdata = this.bf.getData();
         if (newdata == null) {
-            messagedlg(null, "Ошибка сохранения данных - пустые данные", "message");
+            SelenUtil.messagedlg(null, "Ошибка сохранения данных - пустые данные", "message");
         } else if (newdata && this.data && JSON.stringify(newdata) === JSON.stringify(this.data)) {
             console.log('no change data');
             if (sayOk) {
@@ -128,7 +128,7 @@ class SelenObject {
         //     HaltError('jkhkjhkhkh');
 
         if (this.bf.validate()) {
-            messagedlg(null, "Ошибок нет", "message");
+            SelenUtil.messagedlg(null, "Ошибок нет", "message");
         }
         /*else {
 	messagedlg(null, "Найдены ошибки", "error");
