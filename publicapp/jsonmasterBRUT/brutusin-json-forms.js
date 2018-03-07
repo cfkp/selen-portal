@@ -745,7 +745,7 @@ if (typeof brutusin === "undefined") {
 
                         if (propSchema.type == "object" || propSchema.type == "oneOf" || propSchema.type == "array") {
                             appendChild(tbody, tr_name, propSchema);
-
+                             td1.setAttribute('colspan',2);
                             appendChild(tr_name, td1, propSchema);
                             td2.setAttribute('colspan',2);
                         } else {

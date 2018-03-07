@@ -211,7 +211,7 @@
                             "maximum": 2099,
                             "calcfunc": {
                                 "name": "sequence",
-                                "initval": " if (!value||value==0)  { if (sysdate().getMonth()>3 ){return sysdate().getFullYear()-2;} else {return sysdate().getFullYear()-3;}} else return value;"
+                                "initval": " if (!value||value==0)  { if (sysdate().getMonth()>3 ){return sysdate().getFullYear()-3;} else {return sysdate().getFullYear()-4;}} else return value;"
                             }
                         },
                         "proceeds_comp": {

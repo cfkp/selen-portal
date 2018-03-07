@@ -434,13 +434,7 @@
                         "title": "Список покупателей/ предварительные договора / комфортные письма / коммерческие предложения с указанием объемов и цены",
                         "type": "string",
                         "format": "text"
-                    },
-                    "market_plan": {
-                        "required": true,
-                        "title": "Планируемый график реализации",
-                        "type": "string",
-                        "format": "text"
-                    }
+                    } 
                 }
             },
             "project_indicators": {
@@ -483,8 +477,8 @@
             },
             "prognosis": {
                 "title": "Прогнозные финансовые показатели ",
-                "minItems": 6,
-                "maxItems": 6,
+                "minItems": 5,
+                "maxItems": 5,
                 "format": "grid",
                 "gridX": "year",
                 "calcsum": "true",
