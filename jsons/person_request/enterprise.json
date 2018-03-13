@@ -144,30 +144,49 @@
                 "type": "array",
                 "minItems": 1,
                 "items": {
-                    "title": "Компания",
+                    "title": "Группа",
                     "type": "object",
                     "properties": {
-                        "inn": {
-                            "required": true,
-                            "title": "ИНН",
-                            "validator": "inn",
-                            "mask": "9999999999[99]",
-                            "type": "string"
-                        },
+
                         "name": {
                             "required": true,
-                            "title": "Название компании",
+                            "title": "Наименование группы компаний",
                             "type": "string"
                         },
-                        "ogrn": {
-                            "required": true,
-                            "title": "ОГРН",
-                            "type": "string"
-                        },
-                        "participant": {
-                            "title": "Участники/Акционеры",
-                            "$ref": "#/definitions/participants",
-                            "$id": null
+                        "companies": {
+                            "title": "Компании",
+                            "description": "",
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "title": "Компания",
+                                "type": "object",
+                                "properties": {
+                                    "inn": {
+                                        "required": true,
+                                        "title": "ИНН",
+                                        "validator": "inn",
+                                        "mask": "9999999999[99]",
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "required": true,
+                                        "title": "Название компании",
+                                        "type": "string"
+                                    },
+                                    "ogrn": {
+                                        "required": true,
+                                        "title": "ОГРН",
+                                        "type": "string"
+                                    },
+                                    "participant": {
+                                        "title": "Участники/Акционеры",
+                                        "$ref": "#/definitions/participants",
+                                        "$id": null
+                                    }
+                                }
+                            }
+
                         }
                     }
                 }

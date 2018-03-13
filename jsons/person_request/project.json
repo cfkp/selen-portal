@@ -459,12 +459,12 @@
                     },
                     "indic_nrv": {
                         "required": true,
-                        "title": "NRV",
+                        "title": "NPV, тыс. руб.",
                         "type": "currency"
                     },
                     "indic_irr": {
                         "required": true,
-                        "title": "IRR",
+                        "title": "IRR, %",
                         "type": "currency"
                     },
                     "indic_other": {
@@ -610,13 +610,7 @@
                         "required": true,
                         "title": "Количество планируемых к поддержанию, созданию и модернизации высокопроизводительных рабочих мест",
                         "type": "integer"
-                    },
-                    "other_staff_text": {
-                        "required": true,
-                        "title": "Количество планируемых к поддержанию, созданию и модернизации высокопроизводительных рабочих мест(ссылка на бизнес-план)",
-                        "type": "string",
-                        "format": "text"
-                    }
+                    } 
                 }
             },
             "credit_info": {

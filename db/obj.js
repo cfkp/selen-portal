@@ -175,7 +175,7 @@ function getchildobj(metaclass, collection, nextfunc) {
 exports.getchildobj = getchildobj;
 
 
-function init_method(meta_class, meta_method, obj_list, nextfunc) {
+function init_method(req, meta_class, meta_method, obj_list, nextfunc) {
     /* console.log('init_method meta_class '+meta_class);
      console.log('init_method meta_method '+meta_method);
      console.log('init_method obj_list '+obj_list);
@@ -207,10 +207,9 @@ function init_method(meta_class, meta_method, obj_list, nextfunc) {
                     'msg': 'Не выбраны документы'
                 })
             } else {
-                console.log('default session  ' + JSON.stringify(sess.CurrentUser(), 4, 4));
                 try {
                     set_defaults(results.schema, {
-                        user: sess.CurrentUser()
+                        user: req.user
                     });
                 } catch (e) {};
                 console.log('after set def ' + JSON.stringify(results, 4, 4));

@@ -1,16 +1,15 @@
 //var User = require('models/user').User;
 var db = require('../db/db');
 
-var current_user,
-    request;
-
+ 
 module.exports.setCurrentUser = function (req, res, next) {
-    //console.log('set CurrentUser' );
+  //   console.log('set CurrentUser'+req.url );
     req.user = res.locals.user = null;
-    current_user = null;
-    if (!req.session.user) return next();
+     if (!req.session.user) return next();
+    if (req.session.userdata){   
+        req.user =  res.locals.user=req.session.userdata; return next()};
     var dbloc = db.get();
-
+console.log('CurrentUser not exists' );
     dbloc.collection('users').aggregate([
 
         {
@@ -35,10 +34,10 @@ module.exports.setCurrentUser = function (req, res, next) {
         }
 	]).toArray(function (err, rows) {
         if (err) return next(err);
-
-        req.user = res.locals.user = rows[0];
-        request = req;
-        current_user = rows[0];
+        
+        req.session.userdata = rows[0];
+        req.user =  res.locals.user = rows[0];
+        req.session.save();
         next();
     });
 
@@ -71,13 +70,12 @@ module.exports.setCurrentUserbyID = function (userid, next) {
         }
 	]).toArray(function (err, rows) {
         if (err) return next(err);
-        current_user = rows[0];
-        next(null);
+        next(null, rows[0]);
     });
 
 };
 
-
+/*
 module.exports.CurrentUser = function () {
     //console.log('CurrentUser'+current_user);
 
@@ -91,4 +89,4 @@ module.exports.CurrentUserId = function () {
     } else {
         return undefined;
     }
-};
+};*/

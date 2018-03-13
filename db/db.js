@@ -35,7 +35,7 @@ exports.close = function (done) {
     }
 }
 
-exports.audit = function (meta_class, meta_method, obj_id, data) {
+exports.audit = function (userid, meta_class, meta_method, obj_id, data) {
     var id = new ObjectID().toString();
     var sysdate = new Date().toISOString();
 
@@ -43,7 +43,7 @@ exports.audit = function (meta_class, meta_method, obj_id, data) {
         "_id": id,
         "created": sysdate,
         "this_meta_class": "audit",
-        "user_createid": sess.CurrentUserId(),
+        "user_createid": userid,
         "meta_class": meta_class,
         "meta_method": meta_method,
         "object_id": obj_id,
@@ -74,7 +74,7 @@ exports.save_obj_hist = function (userid, meta_class, obj) {
             "_id": id,
             "created": sysdate,
             this_meta_class: "object_history",
-            "user_createid": sess.CurrentUserId(),
+            "user_createid": userid,
             "meta_class": meta_class,
             "object_id": obj._id,
             "object": obj
@@ -88,8 +88,8 @@ exports.save_obj_hist = function (userid, meta_class, obj) {
 };
 
 
-exports.save_obj = function (meta_class, collection, data, callback) {
-    console.log('save_obj curuser ' + sess.CurrentUserId());
+exports.save_obj = function (userid, meta_class, collection, data, callback) {
+    console.log('save_obj curuser ' + userid);
 
     var id = new ObjectID().toString();
     var sysdate = new Date().toISOString();
@@ -100,7 +100,7 @@ exports.save_obj = function (meta_class, collection, data, callback) {
             "__v": 0,
             "created": sysdate,
             this_meta_class: meta_class,
-            "user_createid": sess.CurrentUserId(),
+            "user_createid": userid,
             "meta_class": meta_class,
             "state": "Новый",
             "data": data
@@ -123,8 +123,8 @@ exports.save_obj = function (meta_class, collection, data, callback) {
 
 };
 
-exports.update_obj = function (meta_class, meta_method, obj_id, set$, callback) {
-    console.log('update_obj ' + obj_id + ' set ' + JSON.stringify(set$));
+exports.update_obj = function (userid, meta_class, meta_method, obj_id, set$, callback) {
+    //console.log('update_obj ' + obj_id + ' set ' + JSON.stringify(set$));
     if (set$) {
         //	set$["user_updateid"]=sess.CurrentUserId();
         dbconnection.collection(meta_class).findOneAndUpdate({
@@ -142,9 +142,9 @@ exports.update_obj = function (meta_class, meta_method, obj_id, set$, callback) 
         }, {
             returnOriginal: false
         }, function (err, docs) {
-            console.log('update doc ' + JSON.stringify(docs, 4, 4))
+            //        console.log('update doc ' + JSON.stringify(docs, 4, 4))
             if (!err && docs && docs.value && docs.ok == 1)
-                exports.audit(meta_class, meta_method, obj_id, {
+                exports.audit(userid, meta_class, meta_method, obj_id, {
                     set: set$
                 });
             else {
@@ -165,5 +165,40 @@ exports.update_obj = function (meta_class, meta_method, obj_id, set$, callback) 
         'err': 'NO_DATA_SAVE',
         'msg': 'Нет данных для изменения'
     });
+
+};
+
+
+exports.sequence_get_next = function (seqname, callback) {
+    console.log('sequence_get_next ' + seqname);
+    //	set$["user_updateid"]=sess.CurrentUserId();
+    dbconnection.collection('sequence').findAndModify({
+        "_id": seqname
+    }, [], {
+
+        $inc: {
+            sequence: 1
+        }
+
+    }, {
+        new: true,
+        upsert: true
+
+    }, function (err, docs) {
+        console.log('sequence_get_next doc ' + JSON.stringify(docs, 4, 4))
+        if (!err && docs && docs.value && docs.ok == 1) {} else {
+            err = {
+                'err': 'ERROR_UPDATE',
+                'msg': 'ошибка получения следующего значения ',
+                error_detail: {
+                    err: err,
+                    doc: docs
+                }
+            }
+        };
+        callback(err, docs.value.sequence);
+
+    });
+
 
 };

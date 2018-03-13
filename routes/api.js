@@ -207,7 +207,7 @@ router.post('/callmethod/:meta_class/:meta_method/init', function (req, res, nex
     var meta_action = req.params.meta_action;
 
     async.waterfall(
-		[objlib.init_method.bind(null, meta_class, meta_method, req.body.objectlist),
+		[objlib.init_method.bind(null,req, meta_class, meta_method, req.body.objectlist),
 		function (meth, callback) {
                 //			console.log('after init '+JSON.stringify (meth));
                 if (meth.value &&
@@ -274,7 +274,7 @@ router.post('/callmethod/person_request/process_request/execute', checkAuth, fun
     if (req.body.objectlist) {
         obj_id = req.body.objectlist[0];
     };
-    db.audit(meta_class, meta_method, obj_id, {
+    db.audit(userID,meta_class, meta_method, obj_id, {
         set: set$
     });
 
@@ -334,7 +334,7 @@ router.post('/callmethod/person_request/set_expert/execute', checkAuth, function
                         'msg': 'Не найден документ'
                     });
                 }
-                db.update_obj(meta_class, meta_method, obj_id, set$, callback)
+                db.update_obj(userID,meta_class, meta_method, obj_id, set$, callback)
  			},
 			function (res, callback) {
                 //	console.log(meta_method +' mail data '+JSON.stringify(res,4,4));
@@ -430,13 +430,13 @@ router.post('/callmethod/person_request/change_state/execute', checkAuth, functi
                     "comment": data.comment
                 };
 
-                db.update_obj(meta_class, meta_method, obj_id, set$, callback)
+                db.update_obj(userID,meta_class, meta_method, obj_id, set$, callback)
  			},
 			function (res, callback) {
                 //	console.log(meta_method +'mail data '+JSON.stringify(res,4,4));
                 //	mailer('finance@cfcp.ru','Уведомление',null,'request_notify',res);
                 if (user_mess) {
-                    db.save_obj("request_messages", {
+                    db.save_obj(userID,"request_messages", {
                         "meta_parent_field": "pers_request_id",
                         "meta_parent_value": obj_id
                     }, {
@@ -550,7 +550,7 @@ router.post('/callmethod/person_request/change_state2expert/execute', checkAuth,
                     "state": new_state
                 };
 
-                db.update_obj(meta_class, meta_method, obj_id, set$, callback)
+                db.update_obj(userID,meta_class, meta_method, obj_id, set$, callback)
  			},
 			function (res, callback) {
                 console.log(meta_method + 'mail data ' + JSON.stringify(res, 4, 4));
@@ -666,7 +666,7 @@ router.post('/callmethod/person_request/create_request/execute', function (req, 
                     })
                 };
                 institute = programm.data.program.institute;
-                pers_req.create_NewUser_pers_request(data, callback);
+                pers_req.create_NewUser_pers_request(userID,data, callback);
 
  		},
 		function (res, callback) {
@@ -748,7 +748,7 @@ router.post('/callmethod/:meta_class/:meta_method/execute', checkAuth, function 
     };
     if (meta_method == 'edit' && obj_id) {
         if (data !== null) {
-            db.audit(meta_class, meta_method, obj_id, data);
+            db.audit(userID,meta_class, meta_method, obj_id, data);
 
             dbloc.collection(meta_class).updateOne({
                 "_id": obj_id
@@ -770,7 +770,7 @@ router.post('/callmethod/:meta_class/:meta_method/execute', checkAuth, function 
     } else if (meta_method == 'delete' && obj_id) {
         if (data.confirm !== null && data.confirm == true) {
 
-            db.audit(meta_class, meta_method, obj_id, data);
+            db.audit(userID,meta_class, meta_method, obj_id, data);
 
             dbloc.collection(meta_class).remove //updateOne
             ({
@@ -816,7 +816,7 @@ router.post('/callmethod/:meta_class/:meta_method/execute', checkAuth, function 
 
             row[req.body.collection.meta_parent_field] = req.body.collection.meta_parent_value;
         }
-        db.audit(meta_class, meta_method, obj_id, row);
+        db.audit(userID,meta_class, meta_method, obj_id, row);
         dbloc.collection(meta_class).save(row, function (err, docs) {
 
             if (err || docs.result === undefined) {

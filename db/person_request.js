@@ -148,7 +148,7 @@ var update_newuser_request = function (userID) {
 };
 
 
-var create_NewUser_pers_request = function (pers_data, next) {
+var create_NewUser_pers_request = function (userid,pers_data, next) {
 
     var pers_req = {
         "email": pers_data.email,
@@ -166,33 +166,21 @@ var create_NewUser_pers_request = function (pers_data, next) {
     async.waterfall([
 			function (callback) {
                 console.log('create_NewUser_pers_request check_user');
-                if (!sess.CurrentUserId()) {
+                if (!userid) {
                     console.log('create_NewUser_pers_request check_user no find or create user');
 
                     User.authorize(3, pers_data.email, pers_data.fio, null, pers_data.phone, callback);
                 } else {
-                    callback(null, sess.CurrentUser())
+                    callback(null, userid)
                 };
 
 			},
 			function (user, callback) {
-                user$ = user;
-                console.log('set_current_user' + user$);
-
-                if (!sess.CurrentUserId()) {
-                    console.log('set_current_user1');
-                    sess.setCurrentUserbyID(user._id, callback);
-                } else {
-                    console.log('set_current_user2');
-                    callback(null)
-                }
-			},
-			function (callback) {
-                console.log('create_request' + user$);
+                 console.log('create_request' + user);
                 console.log('create_request' + callback);
-                db.save_obj("person_request", undefined, pers_req, function (err, row) {
+                db.save_obj(user._id,"person_request", undefined, pers_req, function (err, row) {
                     callback(err, {
-                        "user": user$,
+                        "user": user,
                         "pers_req": row
                     })
                 });
@@ -211,7 +199,7 @@ var create_NewUser_pers_request = function (pers_data, next) {
 exports.create_NewUser_pers_request = create_NewUser_pers_request;
 
 
-function sendnotifymessage(pers_req_id, mess_row) {
+function sendnotifymessage(userid,pers_req_id, mess_row) {
 
     async.waterfall([
 			function (callback) {
@@ -223,12 +211,12 @@ function sendnotifymessage(pers_req_id, mess_row) {
 
             //	console.log('sednotifymessage' +' mail res '+JSON.stringify(res,4,4));
             //	console.log('sednotifymessage' +' mail row '+JSON.stringify(mess_row,4,4));
-            if (res && res.user_createid !== sess.CurrentUserId() && res.user_expert) {
+            if (res && res.user_createid !== userid && res.user_expert) {
                 objlib.sendmail2user( /*res.user_createid*/ res.user_expert, 'Уведомление о сообщении', null, 'message_notify', {
                     person_request: res,
                     person_message: mess_row
                 });
-            } else if (res && res.user_expert && res.user_createid == sess.CurrentUserId()) {
+            } else if (res && res.user_expert && res.user_createid == userid) {
                 objlib.sendmail2user(res.user_expert, 'Уведомление о сообщении', null, 'message_notify', {
                     person_request: res,
                     person_message: mess_row

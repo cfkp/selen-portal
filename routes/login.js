@@ -138,8 +138,8 @@ router.get('/registration', function (req, res, next) {
             } else {
                 req.session.user = obj_id;
                 sess.setCurrentUserbyID(obj_id,
-                    function (err) {
-                        var user = sess.CurrentUser();
+                    function (err,user) {
+                         
                         mailer(user.email, 'Окончание регистрации', null, 'end_register', {
                             user: user
                         });
