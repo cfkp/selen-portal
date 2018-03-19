@@ -1,15 +1,22 @@
 //var User = require('models/user').User;
 var db = require('../db/db');
+var randomString = require('random-string');
 
- 
+
 module.exports.setCurrentUser = function (req, res, next) {
-  //   console.log('set CurrentUser'+req.url );
+    //   console.log('set CurrentUser'+req.url );
     req.user = res.locals.user = null;
-     if (!req.session.user) return next();
-    if (req.session.userdata){   
-        req.user =  res.locals.user=req.session.userdata; return next()};
+    if (!req.session.user) return next();
+    if (req.session.userdata) {
+    console.log('CurrentUser  session exists '+req.session.userdata._id );
+    console.log('session key '+req.session.key );
+
+        req.user = res.locals.user = req.session.userdata;
+        req.session.key
+        return next()
+    };
     var dbloc = db.get();
-console.log('CurrentUser not exists' );
+    console.log('CurrentUser not exists');
     dbloc.collection('users').aggregate([
 
         {
@@ -34,9 +41,13 @@ console.log('CurrentUser not exists' );
         }
 	]).toArray(function (err, rows) {
         if (err) return next(err);
-        
+
         req.session.userdata = rows[0];
-        req.user =  res.locals.user = rows[0];
+        req.session.key=randomString({
+                        length: 6
+                    });
+        req.user = res.locals.user = rows[0];
+        
         req.session.save();
         next();
     });

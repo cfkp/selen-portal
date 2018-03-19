@@ -1,4 +1,4 @@
-﻿{ 
+﻿{
     "_id": "59784ac448491c032d7f2a5b",
     "meta_name": "project_ent",
     "meta_table_name": "project_ent",
@@ -215,6 +215,17 @@
                     }
                 }
             },
+                        "group": {
+                "title": "Компания входит в группу",
+                "type": "object",
+                "required": true,
+                "properties": {
+                    "name": {
+                        "required": true,
+                        "title": "Наименование группы компании",
+                        "type": "string"
+                    }
+                }},
             "group_company": {
                 "title": "Группа компаний",
                 "description": "Группа компаний (добавьте компании, входящие в группу помимо компании Инициатора и Проектной компании)",
@@ -224,7 +235,6 @@
                     "title": "Группа",
                     "type": "object",
                     "properties": {
-
                         "name": {
                             "required": true,
                             "title": "Наименование группы компаний",
@@ -263,7 +273,6 @@
                                     }
                                 }
                             }
-
                         }
                     }
                 }
@@ -408,7 +417,8 @@
                         },
                         "phone": {
                             "type": "string",
-                            "title": "Телефон"
+                            "title": "Телефон",
+                            "mask": "+7-999-999-99-99"
                         },
                         "contact": {
                             "required": true,
@@ -444,7 +454,8 @@
                         },
                         "phone": {
                             "type": "string",
-                            "title": "Телефон"
+                            "title": "Телефон",
+                            "mask": "+7-999-999-99-99"
                         }
                     }
                 }
@@ -730,7 +741,7 @@
                         }
                     }
                 ]
-            },
+            }, 
             "enterprise_owners": {
                 "title": "Структура владения",
                 "type": "array",
@@ -817,6 +828,11 @@
                                                 "required": true,
                                                 "title": "E-Mail",
                                                 "type": "email"
+                                            },
+                                            "phone": {
+                                                "type": "string",
+                                                "title": "Телефон",
+                                                "mask": "+7-999-999-99-99"
                                             },
                                             "rezident": {
                                                 "title": "Гражданство",

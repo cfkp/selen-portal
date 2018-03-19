@@ -293,17 +293,18 @@ if (typeof brutusin === "undefined") {
 
                         input.value = value;
                     };
-                    if (s.readOnly)
-                        input.disabled = true;
 
                 }
             }
             if (s.mask) {
-              // $(input).inputmask(s.mask);
-                $(input).inputmask({ mask: s.mask, greedy: false });
-                 
+                // $(input).inputmask(s.mask);
+                $(input).inputmask({
+                    mask: s.mask,
+                    greedy: false
+                });
+
             };
-            if (s.type === 'currency') {
+            if (s.type === 'currency' && !s.format) {
 
                 $(input).inputmask("numeric", {
                     radixPoint: ".",
@@ -319,6 +320,26 @@ if (typeof brutusin === "undefined") {
                 });
 
             };
+            if (s.format === 'percent') {
+
+                $(input).inputmask("numeric", {
+                    radixPoint: ".",
+                    groupSeparator: "",
+                    digits: 2,
+                    autoGroup: true,
+                    suffix: '%', //No Space, this will truncate the first character
+                    rightAlign: false,
+                    oncleared: function () {
+                        $(this).val('0');
+                        this.onchange();
+                    }
+                });
+
+            };
+            if (s.readOnly){
+                input.disabled = true;
+            };
+
             input.schema = schemaId;
             input.setAttribute("autocorrect", "off");
 
@@ -443,7 +464,24 @@ if (typeof brutusin === "undefined") {
                 var d = data;
                 if (!sch.calcfunc) {
                     return;
-                } else if (sch.calcfunc.name == 'percent') {
+                };
+                var this$Id = id;
+                var this$ = renderInfoMap[this$Id];
+                var parent$Id = getParentSchemaId(this$Id);
+                var parent$ = this$.parentObject;
+                var Parentarr$ = getParent(parent$Id);
+                var parent$map = renderInfoMap[parent$Id];
+
+
+                if (sch.calcfunc.target) {
+                    var target_id = sch.calcfunc.target.replace("parent$", parent$Id);
+                    var target_elem = renderInfoMap[target_id];
+                    if (target_elem && target_elem.propertyProvider.onchange) {
+                        target_elem.propertyProvider.onchange()
+                    }
+                    return;
+                };
+                if (sch.calcfunc.name == 'percent') {
                     var map_obj = renderInfoMap[id];
                     var parentId = getParentSchemaId(id);
                     var Parentarr = getParent(parentId);
@@ -458,6 +496,33 @@ if (typeof brutusin === "undefined") {
                             res = Math.round(map_obj.parentObject.prognosis_EBITDA / map_obj.parentObject.prognosis_dohod * 100 * 100) / 100;
                             bb.propertyProvider.setValue(res);
                         }
+                    } catch (err) {
+                        console.log('ошибка расчета ' + sch.calcfunc + ' ' + err)
+                    }
+
+
+                    /*                            var value=
+                                                nextval.map_obj.getValue().setValue(value+i);
+                      */
+
+                } else if (sch.calcfunc.valuefunc) {
+                    var map_obj = renderInfoMap[id];
+                    var parentId = getParentSchemaId(id);
+                    var Parentarr = getParent(parentId);
+                    var mainarrmap = renderInfoMap[parentId];
+
+                    var prop = map_obj.propertyProvider.getValue();
+                    var res;
+                    try {
+
+                        var f = new Function('parent$', 'value', sch.calcfunc.valuefunc);
+                        var val = f(parent$, value);
+
+
+
+
+                        this$.propertyProvider.setValue(val);
+
                     } catch (err) {
                         console.log('ошибка расчета ' + sch.calcfunc + ' ' + err)
                     }
@@ -534,7 +599,7 @@ if (typeof brutusin === "undefined") {
                     data = value;
                 }
             };
-
+            propertyProvider.onchange = input.onchange;
             input.onchange();
             return parentObject;
         };
@@ -745,9 +810,9 @@ if (typeof brutusin === "undefined") {
 
                         if (propSchema.type == "object" || propSchema.type == "oneOf" || propSchema.type == "array") {
                             appendChild(tbody, tr_name, propSchema);
-                             td1.setAttribute('colspan',2);
+                            td1.setAttribute('colspan', 2);
                             appendChild(tr_name, td1, propSchema);
-                            td2.setAttribute('colspan',2);
+                            td2.setAttribute('colspan', 2);
                         } else {
                             appendChild(tr_value, td1, propSchema);
                         }
@@ -769,6 +834,7 @@ if (typeof brutusin === "undefined") {
                     } else {
                         appendChild(container, td2, s);
                     }
+
 
                     var pp = createStaticPropertyProvider(prop);
                     var propInitialValue = null;

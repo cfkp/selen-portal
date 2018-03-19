@@ -5,6 +5,7 @@ var _ = require('lodash');
 var fs = require("fs");
 var db = require('../db/db');
 var checkAuth = require('../middleware/checkAuth');
+var sec = require('../middleware/secutil');
 var ObjectID = require('mongodb').ObjectID;
 var jspath = require('JSONPath');
 var log = require('libs/log')(module);
@@ -230,6 +231,8 @@ var get_gridcols_from_class = function (meta_class) {
     return view;
 
 };
+
+ 
 
 router.post('/ref_value_list', function (req, res, next) {
     log.info({
@@ -738,6 +741,7 @@ router.post('/:meta_class/:meta_view', function (req, res, next) {
                 var result = {};
                 result.header = model.data;
                 result.rows = rows;
+                sec.calc_view_hash(req.session.key,rows);
                 callback(null, result);
             });
 
