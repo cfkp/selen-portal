@@ -518,6 +518,7 @@
                             "required": true,
                             "readOnly": true,
                             "title": "Рентабельность по EBITDA, %",
+                            "calcsum": false,
                             "type": "currency"
                         },
                         "prognosis_clear": {

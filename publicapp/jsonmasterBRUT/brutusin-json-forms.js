@@ -1162,7 +1162,7 @@ if (typeof brutusin === "undefined") {
 
                 }
 
-                if (s.calcsum) {
+                if (s.calcsum&&!(propSchema.calcsum==false)/*propSchema.calcsum==undefined||propSchema.calcsum==true*/) {
                     var td2 = document.createElement("td");
                     td2.className = "prop-value-sum gridX";
                     appendChild(tr, td2, gridxShm);
