@@ -339,10 +339,13 @@ if (typeof brutusin === "undefined") {
             if (s.readOnly){
                 input.disabled = true;
             };
+            if (s.hidden){
+                $(input).hide();
+                
+            };
 
             input.schema = schemaId;
             input.setAttribute("autocorrect", "off");
-
             input.getValidationError = function () {
                 try {
                     var value = getValue(s, input);

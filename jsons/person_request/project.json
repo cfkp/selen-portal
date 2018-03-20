@@ -855,6 +855,55 @@
                     }
                 }
             },
+            "app1_row_noname": {
+                "type": "object",
+                "title": "Показатели Обоснование бюджета проекта без наименования",
+                "properties": {
+                    "name": {
+                        "type": "text",
+                        "hidden":true,
+                        "readOnly":true,
+                        "title": "Наименование",
+                        "description": "Наименование"
+                    },
+                    "terms": {
+                        "type": "text",
+                        "title": "Сроки реализации",
+                        "description": "Сроки реализации"
+                    },
+                    "contracts": {
+                        "type": "text",
+                        "title": "Заключенные договоры, платежные поручения/другие комментарии",
+                        "description": "Заключенные договоры, платежные поручения/другие комментарии"
+                    },
+                    "sum_total": {
+                        "type": "currency",
+                        "title": "Сумма всего, тыс. руб.",
+                        "description": "Сумма всего, тыс. руб."
+                    },
+                    "sum_own": {
+                        "type": "currency",
+                        "title": "Собственные средства, тыс. руб.",
+                        "description": "Собственные средства, тыс. руб."
+                    },
+                    "sum_creditor": {
+                        "type": "currency",
+                        "title": "Средства кредитора, тыс. руб.",
+                        "description": "Средства кредитора, тыс. руб."
+                    },
+                    "sum_rest_own": {
+                        "type": "currency",
+                        "description": "Остаток к финансированию, за счет собственных средств, тыс. руб.",
+                        "title": "Остаток к финансированию, за счет собственных средств, тыс. руб."
+                    },
+                    "sum_rest_creditor": {
+                        "type": "currency",
+                        "description": "Остаток к финансированию, за счет кредитора, тыс. руб.",
+                        "title": "Остаток к финансированию, за счет кредитора, тыс. руб."
+                    }
+                }
+            },
+
             "app1": {
                 "title": "Обоснование бюджета проекта",
                 "type": "object",
@@ -869,7 +918,7 @@
                         "properties": {
                             "land": {
                                 "title": "Земельный участок",
-                                "$ref": "#/definitions/app1_row",
+                                "$ref": "#/definitions/app1_row_noname",
                                 "$id": null
                             }
                         }
@@ -880,17 +929,17 @@
                         "properties": {
                             "project_doc": {
                                 "title": "2.1.Заключение договоров на разработку проектной документации",
-                                "$ref": "#/definitions/app1_row",
+                                "$ref": "#/definitions/app1_row_noname",
                                 "$id": null
                             },
                             "project_exp": {
                                 "title": "2.2.Экспертиза проекта",
-                                "$ref": "#/definitions/app1_row",
+                                "$ref": "#/definitions/app1_row_noname",
                                 "$id": null
                             },
                             "project_permitt": {
                                 "title": "2.3.Разрешение на строительство",
-                                "$ref": "#/definitions/app1_row",
+                                "$ref": "#/definitions/app1_row_noname",
                                 "$id": null
                             }
                         }
@@ -901,12 +950,12 @@
                         "properties": {
                             "сonclusion_dog": {
                                 "title": "3.1.Заключение договоров",
-                                "$ref": "#/definitions/app1_row",
+                                "$ref": "#/definitions/app1_row_noname",
                                 "$id": null
                             },
                             "сonclusion_inf": {
                                 "title": "3.2.Возведение инфраструктуры",
-                                "$ref": "#/definitions/app1_row",
+                                "$ref": "#/definitions/app1_row_noname",
                                 "$id": null
                             }
                         }
@@ -917,12 +966,12 @@
                         "properties": {
                             "сonclusion_gen": {
                                 "title": "4.1.Заключение договора генерального подряда",
-                                "$ref": "#/definitions/app1_row",
+                                "$ref": "#/definitions/app1_row_noname",
                                 "$id": null
                             },
                             "сonclusion_build": {
                                 "title": "4.2.Проведение строительно-монтажных работ по основным объектам (в разрезе каждого объекта)",
-                                "$ref": "#/definitions/app1_row",
+                                "$ref": "#/definitions/app1_row_noname",
                                 "$id": null
                             }
                         }
@@ -933,12 +982,12 @@
                         "properties": {
                             "equipment": {
                                 "title": "5.1.Приобретение оборудования/технологии (с указанием размещения оборудования)",
-                                "$ref": "#/definitions/app1_row",
+                                "$ref": "#/definitions/app1_row_noname",
                                 "$id": null
                             },
                             "installation": {
                                 "title": "5.2.Пусконаладочные работы и шеф-монтаж",
-                                "$ref": "#/definitions/app1_row",
+                                "$ref": "#/definitions/app1_row_noname",
                                 "$id": null
                             }
                         }
@@ -949,12 +998,12 @@
                         "properties": {
                             "equipment": {
                                 "title": "6.1.Приобретение оборудования/технологии (с указанием размещения оборудования)",
-                                "$ref": "#/definitions/app1_row",
+                                "$ref": "#/definitions/app1_row_noname",
                                 "$id": null
                             },
                             "installation": {
                                 "title": "6.2.Пусконаладочные работы и шеф-монтаж",
-                                "$ref": "#/definitions/app1_row",
+                                "$ref": "#/definitions/app1_row_noname",
                                 "$id": null
                             }
                         }
