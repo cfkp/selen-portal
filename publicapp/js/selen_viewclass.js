@@ -1,6 +1,6 @@
 'use strict';
 
- /*
+/*
 var get_grid_id = function (grid_container) {
     var id_cont = {};
     id_cont['grid_id'] = grid_container.attr('id') + '_' + 'vwGrid';
@@ -124,15 +124,15 @@ class SelenView {
         };
 
         if (!this.EJSTemplate) {
-            this.EJSTemplate=new SelenTemplate(this.header.template);
+            this.EJSTemplate = new SelenTemplate(this.header.template);
         };
-        
-        var html =this.EJSTemplate.render( {
+
+        var html = this.EJSTemplate.render({
             header: this.header,
             rows: this.rows
         });
         gr_cont.html(html);
-this.get_selected_rows(); 
+        this.get_selected_rows();
 
     }
 
@@ -153,7 +153,7 @@ this.get_selected_rows();
         var container = table; //this.container.find(this.gridid.grid_id_);
 
 
- 
+
         /*if (this.header.detail) {
 	   	var div_detail = $('<div></div>'); 
 		div_detail.attr('id','detail_tabs')	 
@@ -229,24 +229,33 @@ this.get_selected_rows();
         }
 
     }
+    clear_detail() {
+        if (this.detail) {
+            this.detail.Destroy();
+            this.detail = null;
+        };
+    }
     refresh() {
         var s = this.get_selected_rows();
         this.Load();
         var grid_element = this.container.find(this.gridid.grid_id_);
 
         if (this.view_mode == 'grid') {
-
+            grid_element.jqGrid('resetSelection');
+            this.clear_detail();
             grid_element.jqGrid('clearGridData');
             grid_element.jqGrid('setGridParam', {
                 data: this.rows
             });
             grid_element.trigger('reloadGrid');
+            this.setSelection();
+
         } else {
-            var html =this.EJSTemplate.render( {
-            header: this.header,
-            rows: this.rows
-        });
-        grid_element.html(html);
+            var html = this.EJSTemplate.render({
+                header: this.header,
+                rows: this.rows
+            });
+            grid_element.html(html);
         this.get_selected_rows();    
         };
 
@@ -279,7 +288,9 @@ this.get_selected_rows();
             }
         };
         this.selected_rows = s;
-        if (this.methods) {this.methods.enableByObjlist(s.length)}
+        if (this.methods) {
+            this.methods.enableByObjlist(s.length)
+        }
         return this.selected_rows;
     }
 
@@ -301,10 +312,7 @@ this.get_selected_rows();
     }
     onSelectRow(elem, rowid, selected) {
         if ((this.header.detail) && (rowid != null)) {
-            if (this.detail) {
-                this.detail.Destroy();
-                this.detail = null;
-            };
+            this.clear_detail();
             var s = this.get_selected_rows();
             if (selected && s.length == 1) {
                 this.detail = new SelenMenu(this, this.header.detail.menu, this.detail_container);
@@ -333,16 +341,16 @@ this.get_selected_rows();
         }
     }
 
-    
-      get_grid_id  () {
-    var id_cont = {};
-    id_cont['grid_id'] = this.container.attr('id') + '_' + 'vwGrid';
-    id_cont['gridpager_id'] = this.container.attr('id') + '_' + 'vwPager';
-    id_cont['grid_id_'] = '#' + id_cont['grid_id'];
-    id_cont['gridpager_id_'] = '#' + id_cont['gridpager_id'];
-    return id_cont;
 
-};
+    get_grid_id() {
+        var id_cont = {};
+        id_cont['grid_id'] = this.container.attr('id') + '_' + 'vwGrid';
+        id_cont['gridpager_id'] = this.container.attr('id') + '_' + 'vwPager';
+        id_cont['grid_id_'] = '#' + id_cont['grid_id'];
+        id_cont['gridpager_id_'] = '#' + id_cont['gridpager_id'];
+        return id_cont;
+
+    };
 
 
 };
