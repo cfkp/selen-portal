@@ -45,42 +45,66 @@
 
       ];
 
+ function getURLparam(varName) {
+     // Grab and unescape the query string - appending an '&' keeps the RegExp simple
+     // for the sake of this example.
+     var queryStr = unescape(window.location.search) + '&';
+
+     // Dynamic replacement RegExp
+     var regex = new RegExp('.*?[&\\?]' + varName + '=(.*?)&.*');
+
+     // Apply RegExp to the query string
+     val = queryStr.replace(regex, "$1");
+
+     // If the string is the same, we didn't find a match - return false
+     return val == queryStr ? '' : val;
+ }
 
  $(document).ready(function () {
-      window.addEventListener('error', function (e) {
-         /*console.log("Url  ="+document.location);
-         console.log("PathName  ="+ window.location.pathname);// Returns path only
-         console.log("url  ="+window.location.href);// Returns full URL
-         */
+     window.addEventListener('error', function (e) {
+
          var error = e.error;
          $('#loading').hide();
-          
-         if ((error&&error.name && error.name === 'SelenError' || error instanceof SelenError) &&
-             !(error.errobj.error == 'not_authorized' && window.location.pathname == '/login')) {
+
+         if ((error && error.name && error.name === 'SelenError' || error instanceof SelenError) &&
+             !(error.errobj.error == 'not_authorized')) {
              SelenUtil.messagedlg(error.errobj);
-             
-         } else {SelenUtil.messagedlg(undefined,error.stack);};
+
+         } else if (error && error.name && error.name === 'SelenError' && error.errobj.error == 'not_authorized') {
+             window.location = '/login';
+         } else {
+             SelenUtil.messagedlg(undefined, error.stack);
+         };
      });
 
-  
+
 
      BrutusinForms = brutusin["json-forms"];
      BrutusinForms.bootstrap.addFormatDecorator("file", "file", "glyphicon-search",
          function (element) {
-              var main_div = $(element).parent();
+             var main_div = $(element).parent();
              main_div.find('.file_control').click();
- 
+
          });
      BrutusinForms.bootstrap.addFormatDecorator("color", "color");
      BrutusinForms.bootstrap.addFormatDecorator("date", "date");
-      if (window.opener) {
+     if (window.opener) {
          selen_meth = new SelenMethod(undefined, window.opener.method_call.meta_class, window.opener.method_call.meta_meth, null, window.opener.method_call.def_data);
 
      }
-     if (window.location.pathname !== '/login' && window.location.pathname !== '/cfkp_calculate.html' && !window.opener ) {
+     /*history.pushState(null, null,window.location.origin+window.location.pathname+'?inn=87878787');*/
+     if (window.location.pathname !== '/login' && window.location.pathname !== '/cfkp_calculate.html' && window.location.pathname !== '/main.html' && !window.opener) {
          main_menu = new SelenMenu(undefined, 'main_menu');
      }
-      enjoyhint_instance = new EnjoyHint({});
+     if (window.location.pathname == '/main.html') {
+         var action = getURLparam('action');
+         var meta_class = getURLparam('meta_class');
+         var meta_name = getURLparam('meta_name');
+         var filter = getURLparam('filter');
+         selen_view = new SelenView($('body'), meta_class, meta_name, filter);
+     }
+
+     enjoyhint_instance = new EnjoyHint({});
      enjoyhint_instance.setScript(enjoyhint_script_data);
 
 

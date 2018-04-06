@@ -65,7 +65,7 @@ class SelenMethod {
 
     Init() {
 
-        SelenApi.api_load_async('callmethod/' + this.meta_class + '/' + this.meta_name + '/init', {
+        SelenApi.api_load_async('/api/callmethod/' + this.meta_class + '/' + this.meta_name + '/init', {
             objectlist: this.objectlist
         }, SelenUtil.cb(this, this.AfterInit))
         /*	this.lastresponse= api_load_sync('callmethod/'+this.meta_class+'/'+this.meta_name+'/init', JSON.stringify({objectlist:this.objectlist}));
@@ -86,7 +86,7 @@ class SelenMethod {
         this.Show();
         //}
 
-    };
+    } 
 
     Errorhandler(element, err) {
         $('#loading').hide();
@@ -107,7 +107,7 @@ class SelenMethod {
         if (this.bf.validate()) {
             this.data = this.bf.getData();
             this.modal_container.find('#execute').prop('disabled', true);
-            SelenApi.api_load_async('callmethod/' + this.meta_class + '/' + this.meta_name + '/execute', {
+            SelenApi.api_load_async('/api/callmethod/' + this.meta_class + '/' + this.meta_name + '/execute', {
                 objectlist: this.objectlist,
                 collection: this.collection,
                 data: this.data

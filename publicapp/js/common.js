@@ -72,7 +72,7 @@
         $('#loading').show();
 
         $.ajax({
-            url: "../api/" + url,
+            url: ".." + url,
             type: "POST",
             data: requestdata,
             contentType: "application/json",

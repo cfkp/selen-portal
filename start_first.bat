@@ -1,3 +1,3 @@
-cd first-project
 set NODE_PATH=.
-node bin/www
+rem node bin/www
+npm start

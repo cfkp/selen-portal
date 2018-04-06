@@ -21,11 +21,14 @@ router.get('/', function (req, res) {
     log.debug({
         req: req
     }, "login form");
-
+if (!req.session.user) {
     res.render('login', {
         mode: req.query.mode,
         params: req.query
-    });
+    });}
+else {    return res.redirect("/");
+
+}    
 });
 /*
 router.get('/:mode :programm', function (req, res) {

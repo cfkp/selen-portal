@@ -78,7 +78,8 @@ var SelenLogin = function () {
                     if (dataresponse) {
                         SelenUtil.messagedlg(JSON.stringify(dataresponse), "Данные сохранены", "message",
                             function () {
-                                window.location.href = "/";
+                                //window.location.href = "/";
+                            window.history.back();
                             }
                         );
                     };

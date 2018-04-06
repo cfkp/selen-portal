@@ -11,7 +11,7 @@ var jspath = require('JSONPath');
 var log = require('libs/log')(module);
 var config = require('config');
 
-var userID;
+
 
 router.all('/', checkAuth, function (request, response, next) {
     log.debug({
@@ -26,7 +26,7 @@ function replaceAll(str, find, strreplace) {
 };
 
 
-function get_filter(filter, value) {
+function get_filter(filter, value, req) {
     var result;
     var newf;
 
@@ -43,7 +43,7 @@ function get_filter(filter, value) {
         newf = replaceAll(newf, '#', '.');
         if (filter[f] != undefined && filter[f] instanceof Object) {
 
-            result[newf] = get_filter(filter[f], value)
+            result[newf] = get_filter(filter[f], value, req)
         } else if (typeof filter[f] == 'string') {
 
             var s;
@@ -57,7 +57,7 @@ function get_filter(filter, value) {
         try {
             if (result[newf] === "session_user") {
                 //			console.log('set session_user '+result[newf]);
-                result[newf] = userID;
+                result[newf] = req.session.user;
                 //			console.log(' session_user '+result[newf]);
             };
 
@@ -232,13 +232,13 @@ var get_gridcols_from_class = function (meta_class) {
 
 };
 
- 
 
-router.post('/ref_value_list', function (req, res, next) {
+
+router.post('/ref_value_list', checkAuth, function (req, res, next) {
     log.info({
         req: req
     }, 'start');
-
+    var userID;
     userID = req.session.user;
     var meta_class = req.body.meta_class;
     var meta_view = req.body.meta_view;
@@ -260,7 +260,7 @@ router.post('/ref_value_list', function (req, res, next) {
 
     var selcols = get_col_list(colmodel);
 
-    req_filter = get_filter(req_filter, req.body.value);
+    req_filter = get_filter(req_filter, req.body.value, req);
     //	console.log('req_filter '+JSON.stringify(req_filter));
 
     async.waterfall([
@@ -280,10 +280,11 @@ router.post('/ref_value_list', function (req, res, next) {
 				},
 
 		], function (err, results) {
-
-        if (err)
-            return next(err);
-        res.json(results);
+        if (!err) {
+            res.json(results);
+        } else {
+            res.status(500).send(err);
+        };
     });
 
 
@@ -292,10 +293,11 @@ router.post('/ref_value_list', function (req, res, next) {
 
 //  /request_messages/vw_collection_messages
 
-router.post('/request_messages/vw_collection_messages', function (req, res, next) {
+router.post('/request_messages/vw_collection_messages', checkAuth, function (req, res, next) {
     log.debug({
         req: req
     }, 'start');
+    var userID;
     userID = req.session.user;
     console.log('/request_messages/vw_collection_messages');
     var meta_class = 'request_messages';
@@ -382,7 +384,7 @@ router.post('/request_messages/vw_collection_messages', function (req, res, next
             //				console.log(JSON.stringify(filter))
             //console.log('filt2')
 
-            filter = get_filter(filter, null);
+            filter = get_filter(filter, null, req);
             //				console.log(JSON.stringify(filter))
 
 
@@ -395,8 +397,8 @@ router.post('/request_messages/vw_collection_messages', function (req, res, next
                 }
             })
 
-            console.log('view aggreg');
-            console.log(JSON.stringify(aggreg, 4, 4));
+            //      console.log('view aggreg');
+            //        console.log(JSON.stringify(aggreg, 4, 4));
             /*selcols={ _id: 1,
               created: 1,
               'data.message': 1,
@@ -418,17 +420,20 @@ router.post('/request_messages/vw_collection_messages', function (req, res, next
 
 			}
 		], function (err, results) {
-        if (err)
-            return next(err);
-        res.json(results);
+        if (!err) {
+            res.json(results);
+        } else {
+            res.status(500).send(err);
+        };
     });
 
 });
 
-router.post('/audit/vw_collection_audit', function (req, res, next) {
+router.post('/audit/vw_collection_audit', checkAuth, function (req, res, next) {
     log.debug({
         req: req
     }, 'start');
+    var userID;
     userID = req.session.user;
     console.log('/audit/vw_collection_audit');
     var meta_class = 'audit';
@@ -506,7 +511,7 @@ router.post('/audit/vw_collection_audit', function (req, res, next) {
             //				console.log(JSON.stringify(filter))
             //console.log('filt2')
 
-            filter = get_filter(filter, null);
+            filter = get_filter(filter, null, req);
             //				console.log(JSON.stringify(filter))
 
 
@@ -525,17 +530,20 @@ router.post('/audit/vw_collection_audit', function (req, res, next) {
 
 			}
 		], function (err, results) {
-        if (err)
-            return next(err);
-        res.json(results);
+        if (!err) {
+            res.json(results);
+        } else {
+            res.status(500).send(err);
+        };
     });
 
 });
 
-router.post('/audit/vw_collection_audit_change_state', function (req, res, next) {
+router.post('/audit/vw_collection_audit_change_state', checkAuth, function (req, res, next) {
     log.debug({
         req: req
     }, 'start');
+    var userID;
     userID = req.session.user;
     console.log('/audit/vw_collection_audit_change_state');
     var meta_class = 'audit';
@@ -613,7 +621,7 @@ router.post('/audit/vw_collection_audit_change_state', function (req, res, next)
             //				console.log(JSON.stringify(filter))
             //console.log('filt2')
 
-            filter = get_filter(filter, null);
+            filter = get_filter(filter, null, req);
             //				console.log(JSON.stringify(filter))
 
 
@@ -632,9 +640,163 @@ router.post('/audit/vw_collection_audit_change_state', function (req, res, next)
 
 			}
 		], function (err, results) {
-        if (err)
-            return next(err);
-        res.json(results);
+        if (!err) {
+            res.json(results);
+        } else {
+            res.status(500).send(err);
+        };
+    });
+
+});
+
+
+router.post('/tass_info/getinfobyinn', checkAuth, function (req, res, next) {
+    log.debug({
+        req: req
+    }, 'start');
+    var userID;
+    userID = req.session.user;
+    console.log('/tass_info/getinfobyinn');
+    var meta_class = 'tass_ent_info';
+    var meta_view = 'undefined';
+    var user_filter;
+    var collection;
+    var pers_req = require('../db/person_request');
+
+    if (req.body) {
+        user_filter = req.body.filter;
+        collection = req.body.collection
+    };
+
+
+    /////////////////////////
+    var dbloc = db.get();
+    var collectname = "meta_view";
+    var fil = {
+        "meta_name": meta_view
+    };
+
+    if (typeof meta_class === 'undefined' || !meta_class || meta_class === null || meta_class === 'undefined') {
+        res.json({
+            'error': 'class_undefined',
+            'msg': 'Неопределен класс'
+        });
+        return;
+    }
+    if (typeof meta_view === 'undefined' || !meta_view || meta_view === null || meta_view === 'undefined') {
+        collectname = "meta_class";
+        fil = {
+            "meta_name": meta_class
+        };
+    };
+
+    async.waterfall([
+
+            function (callback) {
+            console.log('load_tass_infobyinn');
+            ///http://selen-it.ru:8080/ztassq2/query/tass/full?inn=780508221257
+            pers_req.load_tass_infobyinn('780508221257', callback);
+            },
+            function (data, callback) {
+            console.log('after load_tass_infobyinn ' + JSON.stringify(data, 4, 4));
+             ///http://selen-it.ru:8080/ztassq2/query/tass/full?inn=780508221257
+              db.save_obj (userID, meta_class,{}, data,callback);
+            },
+            function (data, callback) {
+            console.log('after load_tass_infobyinn ' + JSON.stringify(data, 4, 4));
+            // select header
+            dbloc.collection(collectname).findOne(fil, callback);
+			},
+			function (model, callback) {
+            var filter = {};
+            filter['and'] = [];
+            var user_role;
+            if (req.user.role) {
+                user_role = req.user.role._id;
+            } else {
+                user_role = config.get('def_role_id');
+            };
+
+            filter['and'].push({
+                "deleted": {
+                    $exists: false
+                }
+            });
+            /*filter['and'].push({$or :[{"user_createid":userID } ,
+				{"data.recepient_group_id": user_role } ]});   */
+            var vfilter;
+            var selcols = {};
+            if (collectname == "meta_view" && model !== null) {
+
+                selcols = get_col_list(model.data.colmodel);
+
+                if (model.data.filter) {
+                    vfilter = model.data.filter
+                };
+            };
+
+            if (collectname == 'meta_class') {
+                model['data'] = get_gridcols_from_class(model)
+            };
+            if (vfilter) {
+                filter['and'].push(vfilter);
+            }
+            if (user_filter) {
+                filter['and'].push(user_filter);
+            };
+            if (collection && collection.meta_parent_field) {
+                var colfilt = {};
+                colfilt[collection.meta_parent_field] = collection.meta_parent_value;
+                filter['and'].push(colfilt);
+
+            }
+            //            console.log('filt1')
+            //            				console.log(JSON.stringify(filter))
+            //            console.log('filt2')
+
+            filter = get_filter(filter, null, req);
+            //            console.log(JSON.stringify(filter))
+
+
+            var aggreg = get_aggregate_params(filter, model.data.colmodel);
+            /*
+                        aggreg.push({
+                            '$addFields': {
+                                mymessage: {
+                                    $eq: ["$user_createid._id", userID]
+                                }
+                            }
+                        })
+            */
+
+            //            console.log('view aggreg');
+            //            console.log(JSON.stringify(aggreg, 4, 4));
+            /*selcols={ _id: 1,
+              created: 1,
+              'data.message': 1,
+              'data.recepient_group_id.title': 1,
+              'data.recepient_group_idk': 'kljlkjlk' ,
+              'user_createid.email': 1
+               
+            };*/
+
+            dbloc.collection(meta_class).aggregate(
+                aggreg).toArray(function (err, rows) {
+                var result = {};
+                result.header = model.data;
+                result.rows = rows;
+                callback(null, result);
+            });
+
+
+
+			}
+		], function (err, results) {
+        if (!err) {
+            res.json(results);
+        } else {
+            res.status(500).send(err);
+        };
     });
 
 });
@@ -642,10 +804,11 @@ router.post('/audit/vw_collection_audit_change_state', function (req, res, next)
 
 
 
-router.post('/:meta_class/:meta_view', function (req, res, next) {
+router.post('/:meta_class/:meta_view', checkAuth, function (req, res, next) {
     log.debug({
         req: req
     }, 'start');
+    var userID;
     userID = req.session.user;
     var meta_class = req.params.meta_class;
     var meta_view = req.params.meta_view;
@@ -728,7 +891,7 @@ router.post('/:meta_class/:meta_view', function (req, res, next) {
 
             }
 
-            filter = get_filter(filter, null);
+            filter = get_filter(filter, null, req);
 
 
             var aggreg = get_aggregate_params(filter, model.data.colmodel);
@@ -741,7 +904,7 @@ router.post('/:meta_class/:meta_view', function (req, res, next) {
                 var result = {};
                 result.header = model.data;
                 result.rows = rows;
-                sec.calc_view_hash(req.session.key,rows);
+                sec.calc_view_hash(req.session.key, rows);
                 callback(null, result);
             });
 
@@ -749,9 +912,11 @@ router.post('/:meta_class/:meta_view', function (req, res, next) {
 
 			}
 		], function (err, results) {
-        if (err)
-            return next(err);
-        res.json(results);
+        if (!err) {
+            res.json(results);
+        } else {
+            res.status(500).send(err);
+        };
     });
 
 });

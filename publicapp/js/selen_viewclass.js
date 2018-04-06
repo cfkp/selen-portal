@@ -1,42 +1,36 @@
 'use strict';
-
-/*
-var get_grid_id = function (grid_container) {
-    var id_cont = {};
-    id_cont['grid_id'] = grid_container.attr('id') + '_' + 'vwGrid';
-    id_cont['gridpager_id'] = grid_container.attr('id') + '_' + 'vwPager';
-    id_cont['grid_id_'] = '#' + id_cont['grid_id'];
-    id_cont['gridpager_id_'] = '#' + id_cont['gridpager_id'];
-    return id_cont;
-
-};
-*/
+ 
 
 class SelenView {
 
-    constructor(parentobj, _meta_class, _meta_view) {
+    constructor(parentobj, _meta_class, _meta_view, _filter) {
         var obj_container;
         if (parentobj) {
             this.parent = parentobj;
             this.parent_container = this.parent.container;
         } else {
-            this.parent_container = $('#refview .modal-body')
+            parentobj = $('#refview .modal-body')
         }
+        if (parentobj instanceof jQuery) {
+            this.parent = parentobj;
+            this.parent_container = parentobj;
 
+        }
         obj_container = $('<div></div>');
         obj_container.attr('class', 'sln_view_container');
         obj_container.attr('id', 'sln_cnt' + _meta_view);
         this.parent_container.append(obj_container);
 
         this.container = obj_container;
-
         this.container.attr('meta_class', _meta_class);
+
         this.container.attr('meta_view', _meta_view);
 
         this.meta_class = _meta_class;
         this.meta_view = _meta_view;
         this.gridid = this.get_grid_id();
-
+        var cont_elem = obj_container.get(0);
+        cont_elem.SelenObj = this;
         var menu_method_container = $('<div class="sln_menu_method_container"></div>');
         this.container.append(menu_method_container);
         this.menu_method_container = menu_method_container;
@@ -53,20 +47,21 @@ class SelenView {
         this.rows = {};
         this.methods = null;
         this.detail = null;
+        if (typeof _filter == 'string') {
+            this.user_filter = JSON.parse(_filter)
+        } else {
+            this.user_filter = _filter;
+        }
+
         if (parentobj && parentobj.collection) {
             this.collection = Object.assign({}, parentobj.collection);
         }
 
         this.Load();
-        this.Show();
+        //this.Show();
     }
     Destroy() {
-        //this.SaveClick();
-
-        //	var meth_cont =this.container.find("#methods_container"); 
-        //	meth_cont.empty();
-        //	var bfcont=this.container.find("#data_container");
-        //	bfcont.empty();
+        
         if (this.view_mode == 'grid') {
             $.jgrid.gridUnload(this.gridid.grid_id);
         }
@@ -91,11 +86,20 @@ class SelenView {
             requestdata['collection'] = this.collection
         }
 
+        SelenApi.api_load_async('/view/' + this.meta_class + '/' + this.meta_view, JSON.stringify(requestdata), SelenUtil.cb(this, this.AfterLoad))
 
-        this.lastresponse = SelenApi.view_load_sync(this.meta_class + '/' + this.meta_view, JSON.stringify(requestdata));
-        this.header = this.lastresponse.responseJSON.header;
-        this.rows = this.lastresponse.responseJSON.rows;
-    }
+        }
+
+    AfterLoad(ajaxobj, response) {
+
+        this.lastresponse = response;
+        this.header = this.lastresponse.header;
+        this.rows = this.lastresponse.rows;
+        if (this.mode_refresh) {this.refreshAfterLoad()} else{
+        this.Show();}
+    };
+
+
 
     Show() {
         if (this.header.methods_menu) {
@@ -237,7 +241,11 @@ class SelenView {
     }
     refresh() {
         var s = this.get_selected_rows();
+        this.mode_refresh=true;
         this.Load();
+    }
+
+    refreshAfterLoad() {
         var grid_element = this.container.find(this.gridid.grid_id_);
 
         if (this.view_mode == 'grid') {
@@ -256,12 +264,11 @@ class SelenView {
                 rows: this.rows
             });
             grid_element.html(html);
-        this.get_selected_rows();    
+            this.get_selected_rows();
         };
 
 
     }
-
 
 
     setSelection() {
@@ -324,19 +331,9 @@ class SelenView {
                 this.detail.collection.meta_parent_value = rowid;
 
                 this.detail.meta_readonly = this.header.detail.readonly;
-                /*if (this.methods&&this.methods.container) {
-                var reports = this.methods.container.find("#rep_menu")
-                if (reports) {
-                	reports.find( "li a" ).each(function( index ) {
-                		$( this ).attr("href",$( this ).attr("hreftempl").replace('<%=meta_parent_value%>',rowid))
-                	});	                           };
-                }*/
+ 
                 this.detail.Show();
-                //	detail_container.show();
-                //	detail_container.find("[root_menu='#detail_tabs']").show();	
-                //	detail_container.find('.active a').click();
-
-            }
+              }
 
         }
     }

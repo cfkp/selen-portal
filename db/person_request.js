@@ -49,6 +49,66 @@ var create_request = function (userID, fio, phone, fin_amount, fin_period, progr
     });
 };
 
+var load_tass_infobyinn = function (inn, next) {
+
+    var sysdate = new Date().toISOString();
+
+    var options = config.get('tass_server');
+
+    var request = require('request');
+    var url = "http://" + options.host + ':' + options.port + '/ztassq2/query/tass/full?' + 'inn=' + inn;
+
+    //  Basic Authentication credentials   
+    /*var username = "vinod"; 
+    var password = "12345";
+    var authenticationHeader = "Basic " + new Buffer(username + ":" + password).toString("base64");
+    */
+    log.info({
+        inn: inn,
+        url: url
+    }, 'load_tass_infobyinn');
+
+    request({
+            url: url,
+             headers: { /*"Authorization" : authenticationHeader */ }
+        },
+        function (error, response, body) {
+            var err;
+        var  jsonbody;
+            if (error || !response) {
+                log.error({
+                    inn: inn,
+                    statusCode: 404,
+                    error: error
+                }, 'load_tass_infobyinn');
+                err = {
+                    'error': 'no_load_tass_infobyinn',
+                    'msg': 'Ошибка загрузки информации по ИНН из ТассБизнесс: 404'
+                };
+            } else if (error || response.statusCode != 200) {
+                log.error({
+                    inn: inn,
+                    statusCode: response.statusCode,
+                    res: response,
+                    error: error
+                }, 'load_tass_infobyinn');
+                err = {
+                    'error': 'no_load_tass_infobyinn',
+                    'msg': 'Ошибка загрузки информации по ИНН из ТассБизнесс:  ' + response.statusCode
+                };
+            } else {
+                log.info({
+                    inn: inn,
+                    statusCode: response.statusCode,
+                    error: error
+                }, 'load_tass_infobyinn');
+            }if (!err){jsonbody=JSON.parse(body);}
+         
+            next(err, jsonbody);
+        });
+
+
+};
 
 var load_request_info = function (request_id, next) {
 
@@ -68,7 +128,7 @@ var load_request_info = function (request_id, next) {
     }, 'load_request_info');
 
     request({
-            url: "http://" + options.host + ':' + options.port + options.path + request_id,
+            url: "http://" + options.host + ':' + options.port + options.path + 'id=' + request_id,
             headers: { /*"Authorization" : authenticationHeader */ }
         },
         function (error, response, body) {
@@ -100,7 +160,8 @@ var load_request_info = function (request_id, next) {
                     statusCode: response.statusCode,
                     error: error
                 }, 'load_request_info');
-            }
+            } 
+         
             next(err, body);
         });
 
@@ -148,7 +209,7 @@ var update_newuser_request = function (userID) {
 };
 
 
-var create_NewUser_pers_request = function (userid,pers_data, next) {
+var create_NewUser_pers_request = function (userid, pers_data, next) {
 
     var pers_req = {
         "email": pers_data.email,
@@ -176,9 +237,9 @@ var create_NewUser_pers_request = function (userid,pers_data, next) {
 
 			},
 			function (user, callback) {
-                 console.log('create_request' + user);
+                console.log('create_request' + user);
                 console.log('create_request' + callback);
-                db.save_obj(user._id,"person_request", undefined, pers_req, function (err, row) {
+                db.save_obj(user._id, "person_request", undefined, pers_req, function (err, row) {
                     callback(err, {
                         "user": user,
                         "pers_req": row
@@ -199,7 +260,7 @@ var create_NewUser_pers_request = function (userid,pers_data, next) {
 exports.create_NewUser_pers_request = create_NewUser_pers_request;
 
 
-function sendnotifymessage(userid,pers_req_id, mess_row) {
+function sendnotifymessage(userid, pers_req_id, mess_row) {
 
     async.waterfall([
 			function (callback) {
@@ -240,3 +301,4 @@ exports.sendnotifymessage = sendnotifymessage;
 exports.create_request = create_request;
 exports.update_newuser_request = update_newuser_request;
 exports.load_request_info = load_request_info;
+exports.load_tass_infobyinn = load_tass_infobyinn;

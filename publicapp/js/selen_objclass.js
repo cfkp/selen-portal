@@ -31,7 +31,7 @@ class SelenObject {
         this.data = {};
         this.bf = null;
         this.Load();
-        this.Show();
+
     }
     Destroy() {
         this.SaveClick();
@@ -48,9 +48,26 @@ class SelenObject {
     }
 
     Load() {
-        this.lastresponse = SelenApi.api_load_sync('/loadclass/' + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, null);
-        this.schema = this.lastresponse.responseJSON.schema;
-        this.value = this.lastresponse.responseJSON.value;
+        SelenApi.api_load_async('/api/loadclass/' + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, {
+            objectlist: this.objectlist
+        }, SelenUtil.cb(this, this.AfterInit))
+
+        /*  this.lastresponse = SelenApi.api_load_sync('/loadclass/' + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, null);
+          this.schema = this.lastresponse.responseJSON.schema;
+          this.value = this.lastresponse.responseJSON.value;*/
+    }
+    AfterInit(ajaxobj, response) {
+        this.lastresponse = response;
+        this.schema = this.lastresponse.schema;
+
+        this.value = this.lastresponse.value;
+        /*if (!this.parent) {
+        this.createwindow();
+        } else {
+        */
+        this.Show();
+        //}
+
     }
 
     Show() {
@@ -77,12 +94,13 @@ class SelenObject {
             var meth_cont = this.container.find("#methods_container");
             meth_cont.append(savebtn, check_btn);
             $(div_meth).affix({
-                               
+
                 offset: {
-                    top: 500 /*,
-                    bottom: function () {
-                      return (this.bottom = $('.footer').outerHeight(true))
-                    }*/
+                    top: 500
+                    /*,
+                                       bottom: function () {
+                                         return (this.bottom = $('.footer').outerHeight(true))
+                                       }*/
                 }
             })
         }
