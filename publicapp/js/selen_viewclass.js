@@ -1,4 +1,4 @@
-'use strict';
+ 
  
 
 class SelenView {
@@ -9,7 +9,7 @@ class SelenView {
             this.parent = parentobj;
             this.parent_container = this.parent.container;
         } else {
-            parentobj = $('#refview .modal-body')
+            parentobj = $('#refview .modal-body');
         }
         if (parentobj instanceof jQuery) {
             this.parent = parentobj;
@@ -48,7 +48,7 @@ class SelenView {
         this.methods = null;
         this.detail = null;
         if (typeof _filter == 'string') {
-            this.user_filter = JSON.parse(_filter)
+            this.user_filter = JSON.parse(_filter);
         } else {
             this.user_filter = _filter;
         }
@@ -83,10 +83,10 @@ class SelenView {
             };
         };
         if (this.collection) {
-            requestdata['collection'] = this.collection
+            requestdata.collection  = this.collection;
         }
 
-        SelenApi.api_load_async('/view/' + this.meta_class + '/' + this.meta_view, JSON.stringify(requestdata), SelenUtil.cb(this, this.AfterLoad))
+        SelenApi.api_load_async('/view/' + this.meta_class + '/' + this.meta_view, JSON.stringify(requestdata), SelenUtil.cb(this, this.AfterLoad));
 
         }
 
@@ -95,7 +95,7 @@ class SelenView {
         this.lastresponse = response;
         this.header = this.lastresponse.header;
         this.rows = this.lastresponse.rows;
-        if (this.mode_refresh) {this.refreshAfterLoad()} else{
+        if (this.mode_refresh) {this.refreshAfterLoad();} else{
         this.Show();}
     };
 
@@ -107,9 +107,9 @@ class SelenView {
         };
 
         if ((this.header.view_mode) && (this.header.view_mode == "page")) {
-            this.showpage()
+            this.showpage();
         } else {
-            this.showgrid()
+            this.showgrid();
         }
 
 
@@ -124,7 +124,7 @@ class SelenView {
         this.content_container.append(gr_cont);
 
         if (!this.header.template) {
-            this.header.template = 'default.ejs'
+            this.header.template = 'default.ejs';
         };
 
         if (!this.EJSTemplate) {
@@ -151,7 +151,7 @@ class SelenView {
 
         table.attr('id', this.gridid.grid_id);
         var pager = $('<div></div>');
-        pager.attr('id', this.gridid.gridpager_id)
+        pager.attr('id', this.gridid.gridpager_id);
         var gr_cont = this.content_container.append(table);
         gr_cont.append(pager);
         var container = table; //this.container.find(this.gridid.grid_id_);
@@ -195,7 +195,7 @@ class SelenView {
             pager: this.gridid.gridpager_id_,
             loadonce: true,
             rowNum: 30,
-            viewrecords: true,
+            
             scroll: 1, // set the scroll property to 1 to enable paging with scrollbar - virtual loading of records
             emptyrecords: '0 записей найдено', // the message will be displayed at the bottom 
 
@@ -273,7 +273,7 @@ class SelenView {
 
     setSelection() {
         if (this.selected_rows && this.selected_rows.length > 0) {
-            var grid_element = this.container.find(this.gridid.grid_id_)
+            var grid_element = this.container.find(this.gridid.grid_id_);
             grid_element.jqGrid('setSelection', this.selected_rows);
         };
 
@@ -296,7 +296,7 @@ class SelenView {
         };
         this.selected_rows = s;
         if (this.methods) {
-            this.methods.enableByObjlist(s.length)
+            this.methods.enableByObjlist(s.length);
         }
         return this.selected_rows;
     }
@@ -341,10 +341,10 @@ class SelenView {
 
     get_grid_id() {
         var id_cont = {};
-        id_cont['grid_id'] = this.container.attr('id') + '_' + 'vwGrid';
-        id_cont['gridpager_id'] = this.container.attr('id') + '_' + 'vwPager';
-        id_cont['grid_id_'] = '#' + id_cont['grid_id'];
-        id_cont['gridpager_id_'] = '#' + id_cont['gridpager_id'];
+        id_cont.grid_id = this.container.attr('id') + '_' + 'vwGrid';
+        id_cont.gridpager_id  = this.container.attr('id') + '_' + 'vwPager';
+        id_cont.grid_id_  = '#' + id_cont.grid_id ;
+        id_cont.gridpager_id_  = '#' + id_cont.gridpager_id ;
         return id_cont;
 
     };

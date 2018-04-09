@@ -5,7 +5,7 @@
             var args = [this];
             for (var i in arguments) args.push(arguments[i]);
             return fnc.apply(object, args);
-        }
+        };
     }
 
     function getfile_sync(file, callback) {
@@ -20,7 +20,22 @@
         return result;
     };
 
+    function getURLparam(varName) {
+         // Grab and unescape the query string - appending an '&' keeps the RegExp simple
+         // for the sake of this example.
+         var queryStr = /*unescape(*/window.location.search/*)*/ + '&';
 
+         // Dynamic replacement RegExp
+         var regex = new RegExp('.*?[&\\?]' + varName + '=(.*?)&.*');
+
+         // Apply RegExp to the query string
+         val = unescape(queryStr.replace(regex, "$1"));
+
+         // If the string is the same, we didn't find a match - return false
+         return val == queryStr ? '' : val;
+     }
+
+ 
 
 
     function api_load_sync(url, requestdata) {
@@ -64,10 +79,10 @@
 
     function api_load_async(url, requestdata, responsefunc, errorhandler) {
         if (!errorhandler) {
-            errorhandler = defSelenErrorhandler
+            errorhandler = defSelenErrorhandler;
         };
         if (requestdata && typeof requestdata == 'object') {
-            requestdata = JSON.stringify(requestdata)
+            requestdata = JSON.stringify(requestdata);
         };
         $('#loading').show();
 
@@ -93,10 +108,10 @@
 
     function selen_call(url, requestdata, responsefunc, errorhandler) {
         if (!errorhandler) {
-            errorhandler = messagedlg
+            errorhandler = messagedlg;
         };
         if (requestdata && typeof requestdata == 'object') {
-            requestdata = JSON.stringify(requestdata)
+            requestdata = JSON.stringify(requestdata);
         };
         $.ajax({
             url: "../" + url,
@@ -128,19 +143,19 @@
             jsonmessage = {
                 msg: usermessage,
                 type: dlgtype
-            }
+            };
         } else if (jsonmessage instanceof Object) {} else {
-            jsonmessage = JSON.parse(jsonmessage)
+            jsonmessage = JSON.parse(jsonmessage);
         };
 
         var msg = jsonmessage.msg;
-        var dlgtype = jsonmessage.type;
+        dlgtype = jsonmessage.type;
         var dlgtitle = "Сообщение";
         if (!dlgtype || dlgtype == "error") {
-            dlgtitle = "Ошибка"
+            dlgtitle = "Ошибка";
         }
         if (!msg) {
-            msg = "Неизвестная ошибка"
+            msg = "Неизвестная ошибка";
         };
 
         $('#messagedlg #msgtitle').html(dlgtitle);
@@ -161,24 +176,24 @@
                 this.errobj = {
                     'err': 'unknow',
                     'msg': 'Ошибка ' + res.statusText
-                }
+                };
             } else if (res&&typeof res=='string') {
 
                 this.errobj = {
                     'err': 'user',
                     'msg': res
-                }
+                };
             } else {
                 this.errobj = {
                     'err': 'unknow',
                     'msg': 'Ошибка ' + res
-                }
+                };
 
             };
 
             //	this.stack = cause.stack;
         }
-    }
+    };
 
     class SelenTemplate {
         constructor(name) {
@@ -198,11 +213,11 @@
             } else return undefined;
         }
 
-    }
+    };
 
     var HaltError = function (res, msg) {
         throw new SelenError(res, msg);
-    }
+    };
 
     function SelenApi() {};
 
@@ -221,4 +236,5 @@
     window.HaltError = HaltError;
     window.SelenUtil = SelenUtil;
     window.SelenTemplate = SelenTemplate;
+    window.getURLparam=getURLparam;
 }());

@@ -11,7 +11,7 @@ var SelenLogin = function () {
         $(".registrate").hide();
     };
 
-    var cancelClick= function () {
+    var cancelClick = function () {
         $(".reset_pass").hide();
         $(".login").show();
         $(".registrate").hide();
@@ -31,27 +31,27 @@ var SelenLogin = function () {
             $(obj).parent().removeClass("has-success");
             $(obj).parent().addClass("has-error");
         }
-    }
+    };
 
-    var handleFormSwitch = function() {
-        $('#show_reset_pass').click(function(e) {
-            e.preventDefault(); 
-            
+    var handleFormSwitch = function () {
+        $('#show_reset_pass').click(function (e) {
+            e.preventDefault();
+
             displayForgetPasswordForm();
         });
 
-        $('#show_registation').click(function(e) {
+        $('#show_registation').click(function (e) {
             e.preventDefault();
             displaySignUpForm();
         });
-        $('#login_cancel').click(function(e) {
+        $('#login_cancel').click(function (e) {
             e.preventDefault();
             cancelClick();
         });
 
-     }
-    
-    
+    };
+
+
     var dologin = function (form) {
         //alert('o');
         // var form = $(this);
@@ -60,7 +60,7 @@ var SelenLogin = function () {
         $('.error', form).html('');
         $(":submit", form).button("loading");
 
-   $('#loading').show();
+        $('#loading').show();
 
         $.ajax({
             url: "/login",
@@ -79,7 +79,21 @@ var SelenLogin = function () {
                         SelenUtil.messagedlg(JSON.stringify(dataresponse), "Данные сохранены", "message",
                             function () {
                                 //window.location.href = "/";
-                            window.history.back();
+                            let returnUrl=getURLparam('returnUrl');    
+                            if (returnUrl) {
+                                window.location.href = returnUrl;
+                            }
+                            else {    window.location.href = "/";
+                            }
+    
+                            
+                            //window.location.href = "/";
+/*                                if (sessionStorage.getItem("previousUrl") != null) {
+                                    var oldURL = sessionStorage.getItem("previousUrl");
+                                    window.history.back();
+                                } else {
+                                    window.location.href = "/";
+                                }*/
                             }
                         );
                     };
@@ -93,11 +107,11 @@ var SelenLogin = function () {
 
     };
 
-    
-    
-    
-     var init=function () {
-         handleFormSwitch();
+
+
+
+    var init = function () {
+        handleFormSwitch();
         $(document.forms['login-form']).on('submit', function () {
             dologin($(document.forms['login-form']));
             return false;
@@ -118,18 +132,18 @@ var SelenLogin = function () {
         $('#agree').change(function () {
             $('#resetpass_submit').prop('disabled', !this.checked);
         });
-         
-        $('#tel').inputmask("+7-999-999-99-99");  //static mask 
+
+        $('#tel').inputmask("+7-999-999-99-99"); //static mask 
     };
 
     //== Public Functions
     return {
         // public functions
-        init:  init
+        init: init
     };
 
-}()
+}();
 //== Class Initialization
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
     SelenLogin.init();
-}); 
+});

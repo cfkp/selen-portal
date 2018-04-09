@@ -2,45 +2,6 @@ var view;
 
  
  
-var get_view_data = function (grid_container, user_filter, datarender, selectrows) {
-    //  function api_load(url,requestdata,responsefunc) {
-    var requestdata; //filter потом будет
-
-    var meta_class = grid_container.attr('meta_class');
-    var meta_view = grid_container.attr('meta_view');
-
-    var url = meta_class + '/' + meta_view;
-
-    if (user_filter) {
-        requestdata = {
-            'filter': user_filter
-        };
-    };
-
-    $.ajax({
-        url: "/view/" + url,
-        type: "POST",
-        data: requestdata,
-        contentType: "application/json",
-        dataType: "json",
-
-        statusCode: {
-            200: function (dataresponse) {
-                if (datarender) {
-                    datarender(grid_container, dataresponse, selectrows);
-                }
-                //	alert('view result ok');
-            },
-            403: function (jqXHR) {
-                loadError(jqXHR);
-            },
-            500: function (jqXHR) {
-                loadError(jqXHR);
-            }
-        }
-    });
-
-};
 
 function jsonPathToValue(jsonData, path) {
     if (!(jsonData instanceof Object) || typeof (path) === "undefined") {
@@ -66,12 +27,12 @@ function jsonPathToValue(jsonData, path) {
 
 function convert_colmodel2auto(rows, colmodel) {
     if (!colmodel) {
-        return undefined
+        return undefined;
     };
     var autodata = [];
     var auto_row = {};
 
-    for (d in rows) {
+    for (var d in rows) {
         auto_row = {
             'value': null,
             'label': '',
@@ -79,16 +40,16 @@ function convert_colmodel2auto(rows, colmodel) {
             '_id': null
         };
         var row = rows[d];
-        for (cols in colmodel) {
+        for (var cols in colmodel) {
             if (colmodel[cols] && colmodel[cols].key) {
-                auto_row['value'] = jsonPathToValue(row, colmodel[cols].name);
+                auto_row.value = jsonPathToValue(row, colmodel[cols].name);
 
             }
             if (colmodel[cols].name == '_id') {
-                auto_row['_id'] = jsonPathToValue(row, colmodel[cols].name)
+                auto_row._id = jsonPathToValue(row, colmodel[cols].name);
             }
             if (!colmodel[cols].hidden) {
-                auto_row['label'] = auto_row['label'] + jsonPathToValue(row, colmodel[cols].name) + ' ';
+                auto_row.label = auto_row.label + jsonPathToValue(row, colmodel[cols].name) + ' ';
             };
 
 
@@ -104,8 +65,9 @@ function get_autodata(params, request, response) {
     var colmodel = params.colmodel;
     $.post('view/ref_value_list', params,
         function (data) {
+        var autodata={};
             if (data) {
-                 var autodata = convert_colmodel2auto(data.rows, colmodel);
+                  autodata = convert_colmodel2auto(data.rows, colmodel);
             };
             response(autodata);
         });
@@ -118,13 +80,13 @@ function fill_ref(src_meta_ref, input_element, value_ref_element) {
     meta_ref.filter = {};
 
     if (meta_ref.colmodel) {
-        for (x in meta_ref.colmodel) {
+        for (var x in meta_ref.colmodel) {
             if (meta_ref.colmodel[x].key) {
                 meta_ref.filter[meta_ref.colmodel[x].name] = "[value]";
             }
         };
     } else {
-        meta_ref.filter["_id"] = "[value]";
+        meta_ref.filter._id = "[value]";
     };
     get_autodata(meta_ref, request, function (data) {
         if (data && data[0]) {
@@ -145,10 +107,10 @@ function get_selected_rows(viewcontainer) {
         var gridid = get_grid_id(viewcontainer);
         var selrows;
         selrows = $(gridid.grid_id_).jqGrid('getGridParam', 'selrow');
-        if (selrows && typeof selrows == 'array') {
+        if (selrows &&  selrows instanceof Array) {
             s = selrows;
         } else {
-            s.push(selrows)
+            s.push(selrows);
         };
     };
     return s;

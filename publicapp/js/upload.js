@@ -49,7 +49,7 @@ function uploadfile(obj) {
                 console.log('upload successful!\n' + data);
                 var url;
                 if (JSON.parse(data).serverfilename) {
-                    url = 'load/down/' + JSON.parse(data).serverfilename
+                    url = 'load/down/' + JSON.parse(data).serverfilename;
                 }
                 $(inp).attr("value", JSON.stringify({
                     "name": file.name,

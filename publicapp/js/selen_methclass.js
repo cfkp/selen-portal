@@ -1,4 +1,4 @@
-'use strict';
+ 
 
 
 function callmeth_in_window(meta_class, meta_meth, def_data) {
@@ -41,7 +41,7 @@ class SelenMethod {
         this.def_data = def_data;
         this.objectlist = {};
         if (_objectlist) {
-            this.objectlist = _objectlist
+            this.objectlist = _objectlist;
         };
         this.schema = {};
         if (parentobj && parentobj.collection) {
@@ -67,7 +67,7 @@ class SelenMethod {
 
         SelenApi.api_load_async('/api/callmethod/' + this.meta_class + '/' + this.meta_name + '/init', {
             objectlist: this.objectlist
-        }, SelenUtil.cb(this, this.AfterInit))
+        }, SelenUtil.cb(this, this.AfterInit));
         /*	this.lastresponse= api_load_sync('callmethod/'+this.meta_class+'/'+this.meta_name+'/init', JSON.stringify({objectlist:this.objectlist}));
         	this.schema=this.lastresponse.responseJSON.schema;
         	 
@@ -192,7 +192,7 @@ class SelenMethod {
         if (window.opener) {
             this.modal_container.find('#cancel').unbind('click');
             this.modal_container.find('#cancel').bind('click', function () {
-                window.close()
+                window.close();
             });
         };
         this.modal_container.modal();

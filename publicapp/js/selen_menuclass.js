@@ -1,4 +1,4 @@
-'use strict';
+ 
 
 
 class SelenMenu {
@@ -15,7 +15,7 @@ class SelenMenu {
 
         } else {
             this.parent_container = $('#top_menu');
-            this.container = $('#main_workspace')
+            this.container = $('#main_workspace');
         }
 
         this.meta_class = "meta_menu";
@@ -88,7 +88,7 @@ class SelenMenu {
             items.bind('click', SelenUtil.cb(this, this.MenuClick));
 
         }
-         this.enableByObjlist(0)
+         this.enableByObjlist(0);
     }
     set_def_active(menu) {
         var sel;
@@ -96,7 +96,7 @@ class SelenMenu {
         var el = $(sel);
         var par = el.parents("ul");
         if ((par[0]) && (par[0].style) && (par[0].style.display) && (par[0].style.display == 'none')) {
-            return
+            return;
         };
         el.click();
     };
@@ -105,7 +105,7 @@ class SelenMenu {
         var obj = $(clickedElem);
         var root_ul = obj.parents("ul");
         var parent_li=obj.parent("li");
-        if (parent_li.hasClass('disabled')) {return true};
+        if (parent_li.hasClass('disabled')) {return true;};
         //root_ul.find("li").removeClass("active");
         //obj.parent().addClass("active");
         if (obj.attr("sub_id") && !obj.attr("meta_action_type")) {
@@ -124,9 +124,9 @@ class SelenMenu {
                 if (obj.attr("hreftempl").indexOf('<%=objectlist%>') >= 0) {
                     var objlist = this.parent.get_selected_rows();
                     if (objlist.length > 0) {
-                        obj.attr("href", obj.attr("hreftempl").replace('<%=objectlist%>', objlist.join()))
+                        obj.attr("href", obj.attr("hreftempl").replace('<%=objectlist%>', objlist.join()));
                     } else {
-                        throw new SelenError(null, 'Не выбраны документы')
+                        throw new SelenError(null, 'Не выбраны документы');
                     }
                 } else {
                     obj.attr("href", obj.attr("hreftempl"));
@@ -152,7 +152,7 @@ class SelenMenu {
                     this.child_meth = null;
                 }
 
-                this.child_meth = new SelenMethod(this, obj.attr("meta_class"), obj.attr("meta_method"), this.parent.get_selected_rows())
+                this.child_meth = new SelenMethod(this, obj.attr("meta_class"), obj.attr("meta_method"), this.parent.get_selected_rows());
                 //call_method(obj.attr("meta_class"), obj.attr("meta_method"),this.container);
             } else if (obj.attr("meta_action_type") == "view") {
                 if (this.child_obj && this.child_obj[this.container.attr('id')]) {

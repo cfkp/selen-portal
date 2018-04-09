@@ -1,4 +1,4 @@
-'use strict';
+ 
 
 
 
@@ -50,7 +50,7 @@ class SelenObject {
     Load() {
         SelenApi.api_load_async('/api/loadclass/' + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, {
             objectlist: this.objectlist
-        }, SelenUtil.cb(this, this.AfterInit))
+        }, SelenUtil.cb(this, this.AfterInit));
 
         /*  this.lastresponse = SelenApi.api_load_sync('/loadclass/' + this.meta_class + '/' + this.meta_name + '/' + this.meta_value, null);
           this.schema = this.lastresponse.responseJSON.schema;
@@ -102,7 +102,7 @@ class SelenObject {
                                          return (this.bottom = $('.footer').outerHeight(true))
                                        }*/
                 }
-            })
+            });
         }
         var bfcont = this.container.find("#data_container");
         this.bf = BrutusinForms.create(this.schema.data);

@@ -26,7 +26,7 @@
 },
 
      {
-         description: 'Для оформления заявки необходимо заполнить данные',
+         description: 'Заполнить данные',
 
          selector: '#sln_cntrequest_detail_menu',
          // shape:'circle',
@@ -45,33 +45,31 @@
 
       ];
 
- function getURLparam(varName) {
-     // Grab and unescape the query string - appending an '&' keeps the RegExp simple
-     // for the sake of this example.
-     var queryStr = unescape(window.location.search) + '&';
-
-     // Dynamic replacement RegExp
-     var regex = new RegExp('.*?[&\\?]' + varName + '=(.*?)&.*');
-
-     // Apply RegExp to the query string
-     val = queryStr.replace(regex, "$1");
-
-     // If the string is the same, we didn't find a match - return false
-     return val == queryStr ? '' : val;
- }
 
  $(document).ready(function () {
+
+
      window.addEventListener('error', function (e) {
 
          var error = e.error;
          $('#loading').hide();
 
          if ((error && error.name && error.name === 'SelenError' || error instanceof SelenError) &&
-             !(error.errobj.error == 'not_authorized')) {
+             (error.errobj.error !== 'not_authorized')) {
              SelenUtil.messagedlg(error.errobj);
 
          } else if (error && error.name && error.name === 'SelenError' && error.errobj.error == 'not_authorized') {
-             window.location = '/login';
+             let returnUrl = window.location.pathname;
+
+             if (window.location.search.length > 0) {
+                 returnUrl += window.location.search;
+             }
+
+             returnUrl = encodeURIComponent(returnUrl);
+
+             window.location.href = '/login?returnUrl=' + returnUrl;
+
+             ///   window.location = '/login';
          } else {
              SelenUtil.messagedlg(undefined, error.stack);
          };
@@ -88,6 +86,8 @@
          });
      BrutusinForms.bootstrap.addFormatDecorator("color", "color");
      BrutusinForms.bootstrap.addFormatDecorator("date", "date");
+
+     
      if (window.opener) {
          selen_meth = new SelenMethod(undefined, window.opener.method_call.meta_class, window.opener.method_call.meta_meth, null, window.opener.method_call.def_data);
 
@@ -97,11 +97,21 @@
          main_menu = new SelenMenu(undefined, 'main_menu');
      }
      if (window.location.pathname == '/main.html') {
+
          var action = getURLparam('action');
          var meta_class = getURLparam('meta_class');
          var meta_name = getURLparam('meta_name');
          var filter = getURLparam('filter');
-         selen_view = new SelenView($('body'), meta_class, meta_name, filter);
+         var def_data = getURLparam('def_data');
+         if (action == 'view') {
+             selen_view = new SelenView($('body'), meta_class, meta_name, filter);
+         } else if (action == 'method') {
+             selen_meth = new SelenMethod(undefined, meta_class, met_name, null, window.opener.method_call.def_data);
+
+         } else {
+             main_menu = new SelenMenu(undefined, 'main_menu');
+         };
+
      }
 
      enjoyhint_instance = new EnjoyHint({});
