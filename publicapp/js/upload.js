@@ -1,13 +1,5 @@
 var maxSizeMB = 2;
-$(document).ready(function () {
-
-    $('.upload-btn').on('click', function () {
-        $('#upload-input').click();
-    });
-
-});
-
-
+ 
 function uploadfile(obj) {
 
     var files = $(obj).get(0).files;

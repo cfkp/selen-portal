@@ -87,16 +87,17 @@
      BrutusinForms.bootstrap.addFormatDecorator("color", "color");
      BrutusinForms.bootstrap.addFormatDecorator("date", "date");
 
-     
+
      if (window.opener) {
          selen_meth = new SelenMethod(undefined, window.opener.method_call.meta_class, window.opener.method_call.meta_meth, null, window.opener.method_call.def_data);
 
      }
      /*history.pushState(null, null,window.location.origin+window.location.pathname+'?inn=87878787');*/
-     if (window.location.pathname !== '/login' && window.location.pathname !== '/cfkp_calculate.html' && window.location.pathname !== '/main.html' && !window.opener) {
+     if (window.location.pathname !== '/login' && 
+         window.location.pathname !== '/'&&window.location.pathname !== '/cfkp_calculate.html' && window.location.pathname !== '/main.html' && !window.opener) {
          main_menu = new SelenMenu(undefined, 'main_menu');
      }
-     if (window.location.pathname == '/main.html') {
+     if (window.location.pathname == '/') {
 
          var action = getURLparam('action');
          var meta_class = getURLparam('meta_class');
@@ -104,14 +105,17 @@
          var filter = getURLparam('filter');
          var def_data = getURLparam('def_data');
          if (action == 'view') {
-             selen_view = new SelenView($('body'), meta_class, meta_name, filter);
+             selen_view = new SelenView($('#main_workspace'), meta_class, meta_name, filter);
          } else if (action == 'method') {
-             selen_meth = new SelenMethod(undefined, meta_class, met_name, null, window.opener.method_call.def_data);
+             selen_meth = new SelenMethod(undefined, meta_class, meta_name, null, def_data);
 
          } else {
              main_menu = new SelenMenu(undefined, 'main_menu');
          };
 
+     }
+     if (window.location.pathname == '/login') {
+         SelenLogin.init();
      }
 
      enjoyhint_instance = new EnjoyHint({});

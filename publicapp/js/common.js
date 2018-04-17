@@ -14,28 +14,28 @@
             async: false
         });
         if (result.status != 200) {
-            HaltError("Ошибка загрузки шаблона "+file); 
+            HaltError("Ошибка загрузки шаблона " + file);
         }
 
         return result;
     };
 
     function getURLparam(varName) {
-         // Grab and unescape the query string - appending an '&' keeps the RegExp simple
-         // for the sake of this example.
-         var queryStr = /*unescape(*/window.location.search/*)*/ + '&';
+        // Grab and unescape the query string - appending an '&' keeps the RegExp simple
+        // for the sake of this example.
+        var queryStr = /*unescape(*/ window.location.search /*)*/ + '&';
 
-         // Dynamic replacement RegExp
-         var regex = new RegExp('.*?[&\\?]' + varName + '=(.*?)&.*');
+        // Dynamic replacement RegExp
+        var regex = new RegExp('.*?[&\\?]' + varName + '=(.*?)&.*');
 
-         // Apply RegExp to the query string
-         val = unescape(queryStr.replace(regex, "$1"));
+        // Apply RegExp to the query string
+        val = unescape(queryStr.replace(regex, "$1"));
 
-         // If the string is the same, we didn't find a match - return false
-         return val == queryStr ? '' : val;
-     }
+        // If the string is the same, we didn't find a match - return false
+        return val == queryStr ? '' : val;
+    }
 
- 
+
 
 
     function api_load_sync(url, requestdata) {
@@ -48,7 +48,7 @@
             async: false
         });
         if (result.status != 200) {
-            throw new SelenError(result) ; 
+            throw new SelenError(result);
         }
 
         return result;
@@ -65,7 +65,7 @@
             async: false
         });
         if (result.status != 200) {
-            throw new SelenError(result) ;
+            throw new SelenError(result);
         }
 
         return result;
@@ -90,15 +90,43 @@
             url: ".." + url,
             type: "POST",
             data: requestdata,
+            //   timeout: 600000,
             contentType: "application/json",
             dataType: "json",
+             tryCount : 0,
+    retryLimit : 3,
             statusCode: {
                 200: responsefunc,
                 403: errorhandler,
                 500: errorhandler
             },
-            complete: function () {
-                $('#loading').hide();
+            error: function (xhr, textStatus, errorThrown) {
+                var retryAfter = xhr.getResponseHeader('Retry-After');
+
+                if (textStatus == 'timeout'||xhr.status == 503) {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        //try again
+                        var thisAjax=this;
+                        setTimeout(function(){$.ajax(thisAjax);
+                        return;},retryAfter);
+//                        $.ajax(this);
+//                        return;
+                    }/*else{errorhandler(errorThrown);}
+                    return;
+                }
+                if (xhr.status == 500) {
+                    errorhandler(errorThrown);
+                } */else {
+                   errorhandler(errorThrown);
+                }}
+            },
+            
+            complete: function (xhr, textStatus) {
+                if ((textStatus == 'timeout'||xhr.status == 503)&&(this.tryCount <= this.retryLimit) ){}
+        else {                $('#loading').hide();
+}
+//                $('#loading').hide();
             }
         });
 
@@ -165,19 +193,40 @@
 
     };
 
+    function jsonPathToValue(jsonData, path) {
+        if (!(jsonData instanceof Object) || typeof (path) === "undefined") {
+            throw "Not valid argument:jsonData:" + jsonData + ", path:" + path;
+        }
+        path = path.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
+        path = path.replace(/^\./, ''); // strip a leading dot
+        var pathArray = path.split('.');
+        for (var i = 0, n = pathArray.length; i < n; ++i) {
+            var key = pathArray[i];
+            if (key in jsonData) {
+                if (jsonData[key] !== null) {
+                    jsonData = jsonData[key];
+                } else {
+                    return null;
+                }
+            } else {
+                return key;
+            }
+        }
+        return jsonData;
+    };
 
     class SelenError {
         constructor(res) {
             this.name = 'SelenError';
             if (res && res.responseJSON) {
                 this.errobj = res.responseJSON;
-            } else if (res && !res.responseJSON&& res.statusText) {
+            } else if (res && !res.responseJSON && res.statusText) {
 
                 this.errobj = {
                     'err': 'unknow',
                     'msg': 'Ошибка ' + res.statusText
                 };
-            } else if (res&&typeof res=='string') {
+            } else if (res && typeof res == 'string') {
 
                 this.errobj = {
                     'err': 'user',
@@ -231,10 +280,12 @@
     SelenUtil.messagedlg = messagedlg;
     SelenUtil.cb = cb;
 
+
     window.SelenApi = SelenApi;
     window.SelenError = SelenError;
     window.HaltError = HaltError;
     window.SelenUtil = SelenUtil;
     window.SelenTemplate = SelenTemplate;
-    window.getURLparam=getURLparam;
+    window.getURLparam = getURLparam;
+    window.jsonPathToValue = jsonPathToValue;
 }());

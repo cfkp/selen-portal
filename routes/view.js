@@ -104,49 +104,52 @@ var get_aggregate_params = function (filter, colmodel) {
 
     var selcols = {};
     var joins = [];
-    for (var i = 0; i < colmodel.length; i++) {
-        if (colmodel[i].value) {
-            selcols[colmodel[i].name] = colmodel[i].value;
-        } else {
-            selcols[colmodel[i].name] = 1;
-        }
-        if (colmodel[i].meta_ref) {
-            var f = res.find(item => {
-                return item.$lookup && item.$lookup.localField == colmodel[i].meta_ref.localfield
-            });
-            //console.log('f '+f);
-            if (!f) {
-                var look = {
-                    $lookup: {
-                        from: colmodel[i].meta_ref.meta_class,
-                        localField: colmodel[i].meta_ref.localfield,
-                        foreignField: "_id",
-                        as: colmodel[i].meta_ref.localfield
-                    }
-                }
-                res.push(look);
-                var addf = {},
-                    loc = {};
-
-                loc[colmodel[i].meta_ref.localfield] = {
-                    $arrayElemAt: ["$" + colmodel[i].meta_ref.localfield, 0]
-                };
-                console.log(addf);
-                addf['$addFields'] = loc;
-                //console.log(addf);		
-                res.push(addf);
+    if (colmodel) {
+        for (var i = 0; i < colmodel.length; i++) {
+            if (colmodel[i].value) {
+                selcols[colmodel[i].name] = colmodel[i].value;
+            } else {
+                selcols[colmodel[i].name] = 1;
             }
-            /*	{$addFields:  
-            		{"user_createid" : 
-            			{$arrayElemAt: [ "$"+colmodel[i].meta_ref.localfield, 0 ]}
-            		} }*/
+            if (colmodel[i].meta_ref) {
+                var f = res.find(item => {
+                    return item.$lookup && item.$lookup.localField == colmodel[i].meta_ref.localfield
+                });
+                //console.log('f '+f);
+                if (!f) {
+                    var look = {
+                        $lookup: {
+                            from: colmodel[i].meta_ref.meta_class,
+                            localField: colmodel[i].meta_ref.localfield,
+                            foreignField: "_id",
+                            as: colmodel[i].meta_ref.localfield
+                        }
+                    }
+                    res.push(look);
+                    var addf = {},
+                        loc = {};
+
+                    loc[colmodel[i].meta_ref.localfield] = {
+                        $arrayElemAt: ["$" + colmodel[i].meta_ref.localfield, 0]
+                    };
+                    console.log(addf);
+                    addf['$addFields'] = loc;
+                    //console.log(addf);		
+                    res.push(addf);
+                }
+                /*	{$addFields:  
+                		{"user_createid" : 
+                			{$arrayElemAt: [ "$"+colmodel[i].meta_ref.localfield, 0 ]}
+                		} }*/
+
+            };
 
         };
 
+        res.push({
+            '$project': selcols
+        });
     };
-    res.push({
-        '$project': selcols
-    });
     res.push({
         $sort: {
             created: 1
@@ -220,14 +223,33 @@ var get_gridcols_from_class = function (meta_class) {
     var plain = [];
     var view = {};
     var colmodel = [{
-        "label": "id",
-        "name": "_id",
-        "key": true,
-        "hidden": true
-            }];
-
+            "label": "id",
+            "name": "_id",
+            "key": true,
+            "hidden": true
+            },
+        {
+            "label": "created",
+            "name": "created"
+        },
+        {
+            "label": "state",
+            "name": "state"
+        },
+        {
+            "label": "updated",
+            "name": "updated"
+        }];
+    if (!meta_class.properties) {
+        colmodel.push({
+            "label": "data",
+            "name": "data"
+        });
+    }
     get_defcolmodel(meta_class.data, meta_class.data, 'data', colmodel /*,10*/ );
     view['colmodel'] = colmodel;
+
+
     return view;
 
 };
@@ -657,15 +679,16 @@ router.post('/tass_info/getinfobyinn', checkAuth, function (req, res, next) {
     var userID;
     userID = req.session.user;
     console.log('/tass_info/getinfobyinn');
-    var meta_class = 'tass_ent_info';
+    var meta_class = 'tass_info';
     var meta_view = 'undefined';
     var user_filter;
     var collection;
     var pers_req = require('../db/person_request');
-
+    var inn;
+    var obj_id;
     if (req.body) {
         user_filter = req.body.filter;
-        collection = req.body.collection
+        inn = user_filter["data.inn"];
     };
 
 
@@ -691,23 +714,12 @@ router.post('/tass_info/getinfobyinn', checkAuth, function (req, res, next) {
     };
 
     async.waterfall([
-
-            function (callback) {
-            console.log('load_tass_infobyinn');
-            ///http://selen-it.ru:8080/ztassq2/query/tass/full?inn=780508221257
-            pers_req.load_tass_infobyinn('780508221257', callback);
-            },
-            function (data, callback) {
-            console.log('after load_tass_infobyinn ' + JSON.stringify(data, 4, 4));
-             ///http://selen-it.ru:8080/ztassq2/query/tass/full?inn=780508221257
-              db.save_obj (userID, meta_class,{}, data,callback);
-            },
-            function (data, callback) {
-            console.log('after load_tass_infobyinn ' + JSON.stringify(data, 4, 4));
+        function (callback) {
+            //    console.log('after load_tass_infobyinn1 ' + JSON.stringify(data1, 4, 4));
             // select header
             dbloc.collection(collectname).findOne(fil, callback);
 			},
-			function (model, callback) {
+		function (model, callback) {
             var filter = {};
             filter['and'] = [];
             var user_role;
@@ -728,7 +740,6 @@ router.post('/tass_info/getinfobyinn', checkAuth, function (req, res, next) {
             var selcols = {};
             if (collectname == "meta_view" && model !== null) {
 
-                selcols = get_col_list(model.data.colmodel);
 
                 if (model.data.filter) {
                     vfilter = model.data.filter
@@ -771,32 +782,118 @@ router.post('/tass_info/getinfobyinn', checkAuth, function (req, res, next) {
 
             //            console.log('view aggreg');
             //            console.log(JSON.stringify(aggreg, 4, 4));
-            /*selcols={ _id: 1,
-              created: 1,
-              'data.message': 1,
-              'data.recepient_group_id.title': 1,
-              'data.recepient_group_idk': 'kljlkjlk' ,
-              'user_createid.email': 1
-               
-            };*/
+
 
             dbloc.collection(meta_class).aggregate(
                 aggreg).toArray(function (err, rows) {
                 var result = {};
                 result.header = model.data;
-                result.rows = rows;
-                callback(null, result);
+                result.header.template = 'getinfobyinn.ejs';
+                result.header.view_mode = "page",
+                    result.rows = rows;
+                callback(err, result);
             });
 
 
 
-			}
+			},
+        function (res, callback) {
+            if (res.rows && res.rows.length !== 0) {
+                obj_id = res.rows[0]._id;
+                callback(null, res);
+            } else {
+                var data2 = {
+                    "result": 666,
+                    "message": "Данные загружаются",
+                    "inn": inn
+                };
+                db.save_obj(userID, meta_class, {}, data2, function (err, doc) {
+
+                    res.rows.push(doc);
+                    obj_id = doc._id;
+                    callback(err, res);
+                });
+            }
+        }
+
 		], function (err, results) {
+        //        if (results.rows )
+        //            {
+        //                
+        //            }
         if (!err) {
-            res.json(results);
+            try {
+                console.log(JSON.stringify(results, 4, 4));
+                console.log("Дата создания в виде строки " + results.rows[0].created);
+                var date_created = new Date(results.rows[0].created);
+                var date_updated = new Date(results.rows[0].updated);
+                console.log("Дата создания в виде даты toISOString " + date_created.toISOString());
+                console.log("Дата создания в виде даты toISOString " + date_updated.toISOString());
+                var delay_created = (new Date() - date_created) / 60000;
+                var delay_updated = (new Date() - date_updated) / 60000;
+                console.log("интервал между созданием мин " + delay_created);
+                console.log("интервал между изменением мин " + delay_updated);
+            } catch (e) {
+                console.log("Ошибка расчета интервалов " + e);
+                delay_created = 10000;
+                delay_updated = 10000;
+            };
+
+
+            if (  results.rows[0].data.result!="200") {
+                res.set({
+                    'Retry-After': 60000
+                });
+                res.status(503).json(results);
+            } else {
+                res.json(results);
+            };
+            if (results.rows[0].state  !== 'Загрузка' && delay_updated > 10 ||
+                (results.rows[0].state == 'Загрузка' && delay_updated > 5)) {
+                console.log("Только создан  не обновился в течении 5 мин");
+
+
+                async.waterfall([
+                    function (callback) {
+                        console.log('before load_tass_infobyinn   obj_id=' + obj_id);
+                        db.update_obj(userID, meta_class, undefined, obj_id, {
+                            "state": "Загрузка"
+                        }, callback);
+                    },
+
+                    function (doc, callback) {
+                        console.log(' Запускаем загрузку из таса');
+                           pers_req.load_tass_infobyinn(inn, callback);
+                       /*setTimeout(
+                            function () {
+                                let data = require("jsons/getinfobyinn_example.json");
+                                console.log('load_tass_infobyinn ');
+                                callback(null, data);
+                            }, 1000 * 60 * 3);*/
+
+                    },
+                    function (data2, callback) {
+                        console.log('after load_tass_infobyinn update obj_id=' + obj_id);
+                        db.update_obj(userID, meta_class, undefined, obj_id, {
+                            data: data2,
+                            state: "Загружено"
+                        }, callback)
+                    }
+
+		], function (err, results) {
+
+                    if (!err) {
+                        console.log('Конец обновление информации');
+                    } else {
+                        console.log('Ошибка обновления информации ' + err);
+                    };
+                });
+            }
         } else {
             res.status(500).send(err);
         };
+
+
     });
 
 });
@@ -865,8 +962,9 @@ router.post('/:meta_class/:meta_view', checkAuth, function (req, res, next) {
             var vfilter;
             var selcols = {};
             if (collectname == "meta_view" && model !== null) {
-
+                //????????????
                 selcols = get_col_list(model.data.colmodel);
+                //????????????
 
                 if (model.data.filter) {
                     vfilter = model.data.filter

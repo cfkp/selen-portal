@@ -89,14 +89,15 @@ exports.save_obj_hist = function (userid, meta_class, obj) {
 
 
 exports.save_obj = function (userid, meta_class, collection, data, callback) {
-    console.log('save_obj curuser ' + userid);
+    //console.log('save_obj curuser ' + userid);
+    //console.log('save_obj1  ' + JSON.stringify(data, 4, 4));
 
     var id = new ObjectID().toString();
     var sysdate = new Date().toISOString();
 
     if (data) {
         var row = {
-            "_id": id,
+            "_id": id, 
             "__v": 0,
             "created": sysdate,
             this_meta_class: meta_class,
@@ -111,6 +112,7 @@ exports.save_obj = function (userid, meta_class, collection, data, callback) {
 
 
         dbconnection.collection(meta_class).save(row, function (err, docs) {
+   // console.log('save_obj2  ' + JSON.stringify(row, 4, 4));
 
             callback(err, row)
 

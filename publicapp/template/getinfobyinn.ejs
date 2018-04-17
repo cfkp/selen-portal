@@ -1,0 +1,134 @@
+<%
+var get_field_desc =function(field_name){  
+
+var fields =[{name:'message',title:'Сообщение',hidden:true},
+    {name:'result',title:'',hidden:true},
+    {name:'msp',title:'Компания присутсвует в Едином реестре малого и среднего предпринимательства'},
+{name:'inn',title:'ИНН'},
+{name:'name',title:'Наименование'},
+{name:'registerDate',title:'Дата регистрации'},
+{name:'okved',title:'ОКВЭД'},
+{name:'address',title:'Адреса'},
+{name:'founder',title:'Учредители'},
+{name:'founderName',title:'Имя учредителя'},
+{name:'founderPercent',title:'Процент владения'},
+{name:'related',title:'Связанные компании'},
+{name:'relatedName',title:'Имя связанной компании(тип связи)'},
+{name:'relatedPercent',title:'Процент владения'},
+{name:'stuff',title:'Численность'},
+{name:'balance',title:'Баланс'},
+{name:'year',title:'Год'},
+{name:'proceeds_comp',title:'Выручка(по сегментам/компаниям) (тыс. руб.)'},
+{name:'proceeds_oper',title:'Операционная прибыль (тыс. руб.)'},
+{name:'proceeds_clear',title:'Чистая прибыль(тыс. руб.)'},
+{name:'proceeds_capital',title:'Собственный капитал'},
+{name:'proceeds_balance',title:'Валюта баланса'},
+{name:'taxArrears',title:'Задолженность по уплате налогов'},
+{name:'unfairSuppliers',title:'Наличие в списке недобросовестных поставщиков'},
+{name:'sumVal',title:'Истец в судебных исках, сумма'},
+{name:'claimSum',title:'Ответчик в судебных исках, сумма'},
+{name:'bankruptcy',title:'Информация о банкротствах'},
+{name:'publisher',title:'кем опубликовано'},
+{name:'date',title:'Дата публикации'},
+{name:'message',title:'Примечание'},
+{name:'purchases',title:'Информация о контрактах'}  ,          
+{name:'ext_contract_id',title:'номер контракта'},
+{name:'purchase_info',title:'Объект закупки'},
+{name:'contract_sum',title:'сумма контракта'}
+     
+];
+
+    for (var x in fields){
+        if (fields[x].name==field_name){
+            return fields[x];
+        };
+    };
+
+    return {name:field_name,title:field_name};
+
+};
+
+
+%>
+
+<% function expand_other(name ,value){%>
+       <div class='other' id=<%=name%>>
+       <div><%=name%></div>       
+       <div><%=JSON.stringify(value,4,4)%></div>       
+    </div>
+ <%}%>
+
+
+<% function expand_simple(name ,value){%>
+       <div class="d-td" id=<%=name%>>
+       
+       <div><%=value%></div>       
+    </div>
+ <%}%>
+
+
+<% function expand_obj(obj){
+    %>
+<div class="d-td no-p">
+<div class="d-table" >
+ <%
+ for(var prop in obj) {
+     var f_prop=get_field_desc(prop);
+    
+     if (f_prop&&f_prop.hidden){continue;}
+  %>
+<div  class="d-tr" id=prop><%=f_prop.title%>
+<%    
+    
+    if (obj[prop] != undefined && obj[prop] instanceof Object) {
+        %> <%
+            expand_obj(obj[prop]);
+        %><%     
+         }
+        else if ( typeof obj[prop] == 'string' ||typeof obj[prop] == 'number' || typeof obj[prop] == 'boolean'){
+        expand_simple(prop,obj[prop]);
+        }
+        else {
+            expand_other(prop,obj[prop]);
+        }
+%>
+</div>
+<%}%>
+</div> </div>   
+<%}%>
+
+<style type="text/css">
+ 
+.row{
+  box-sizing: border-box;
+}
+.d-table{
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+}
+.d-tr{
+  display: table-row;
+    border: 1px solid #ccc;
+}
+.d-td{
+  display: table-cell;
+  text-align: center;
+ /* border: none;*/
+  border: 1px solid #ccc;
+  vertical-align: middle;
+}
+.d-td:not(.no-p){
+  padding: 4px;
+}
+</style>
+
+
+<% for(var irow=0; irow < rows.length; irow++) { %>
+    <div class= "row" id="row[<%=irow%>]" >
+        <%expand_obj(rows[irow].data);%>
+    </div>
+<% } %>
+
+            
+            

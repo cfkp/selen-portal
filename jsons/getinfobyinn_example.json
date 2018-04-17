@@ -1,0 +1,80 @@
+{
+    "result": 200,
+    "message": "Full OK",
+    "msp": true,
+    "inn": "7726578115",
+    "name": "ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ \"АЛЬТА ГРУПП ФЭКТОРИ\"",
+    "registerDate": "2007-10-10T00:00:00.000Z",
+    "okved": "22.29 Производство прочих пластмассовых изделий",
+    "address": ["115487, ГОРОД МОСКВА, УЛИЦА НАГАТИНСКАЯ, ДОМ 16, ПОМЕЩЕНИЕ X КОМ.24"],
+    "founder": [{
+        "founderName": "ООО \"ИВАНОВСКИЕ КОММУНАЛЬНЫЕ СИСТЕМЫ\"",
+        "founderPercent": "76.0"
+    }, {
+        "founderName": "ПРИБЫЛЬ КРИСТИНА АЛЕКСАНДРОВНА",
+        "founderPercent": "24.0"
+    }],
+    "related": [{
+        "relatedName": "ООО \"АЛЬТА ГРУПП\"(Общий учредитель)",
+        "relatedPercent": "0.0"
+    }, {
+        "relatedName": "ООО \"АЛЬТА ГРУПП ПРОДАКШН\"(Общий учредитель)",
+        "relatedPercent": "0.0"
+    }, {
+        "relatedName": "ООО \"АЛЬТА ГРУПП\"(Общий учредитель)",
+        "relatedPercent": "0.0"
+    }, {
+        "relatedName": "ООО \"ЛУЧШИЙ АНДЕРСОН\"(Общий учредитель)",
+        "relatedPercent": "0.0"
+    }, {
+        "relatedName": "ООО \"АЛЬТА ГРУПП РИТЕЙЛ\"(Общий учредитель)",
+        "relatedPercent": "0.0"
+    }, {
+        "relatedName": "ООО \"ЦЕНТР ОБЕСПЕЧЕНИЯ ЭКОЛОГИЧЕСКОЙ БЕЗОПАСНОСТИ\"(Общий учредитель)",
+        "relatedPercent": "0.0"
+    }, {
+        "relatedName": "ООО \"ЮЖНО-САХАЛИНСКИЙ ПЕРЕРАБАТЫВАЮЩИЙ КОМПЛЕКС\"(Общий учредитель)",
+        "relatedPercent": "0.0"
+    }, {
+        "relatedName": "ООО \"ЭКО ВУД\"(Общий руководитель)",
+        "relatedPercent": "0.0"
+    }, {
+        "relatedName": "ООО \"ОМЕКУП\"(Общий руководитель)",
+        "relatedPercent": "0.0"
+    }, {
+        "relatedName": "ПУКЕМО МИХАИЛ МИХАЙЛОВИЧ(Общий руководитель)",
+        "relatedPercent": "0.0"
+    }, {
+        "relatedName": "ООО \"АЛЬТА ПРОДАКШН\"(Общий руководитель)",
+        "relatedPercent": "0.0"
+    }],
+    "balance": [{
+        "year": "2015",
+        "proceeds_comp": "80978",
+        "proceeds_oper": "6346",
+        "proceeds_clear ": "6199",
+        "proceeds_capital": "0",
+        "proceeds_balance": "82723"
+    }, {
+        "year": "2016",
+        "proceeds_comp": "67368",
+        "proceeds_oper": "718",
+        "proceeds_clear ": "505",
+        "proceeds_capital": "0",
+        "proceeds_balance": "68832"
+    }, {
+        "year": "2017",
+        "proceeds_comp": "0",
+        "proceeds_oper": "0",
+        "proceeds_clear ": "0",
+        "proceeds_capital": "0",
+        "proceeds_balance": "0"
+    }],
+    "stuff": "Нет информации",
+    "taxArrears": "Нет",
+    "unfairSuppliers": "Нет",
+    "sumVal": "0",
+    "claimSum": "0,00",
+    "bankruptcy": [],
+    "purchases": []
+}

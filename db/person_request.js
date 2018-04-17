@@ -102,7 +102,11 @@ var load_tass_infobyinn = function (inn, next) {
                     statusCode: response.statusCode,
                     error: error
                 }, 'load_tass_infobyinn');
-            }if (!err){jsonbody=JSON.parse(body);}
+            }
+        if (!err){
+            console.log('End load info');
+            console.log(body);
+            jsonbody=JSON.parse(body);}
          
             next(err, jsonbody);
         });

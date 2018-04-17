@@ -111,6 +111,7 @@ var SelenLogin = function () {
 
 
     var init = function () {
+        if  (!document.forms['login-form']) {return ;};
         handleFormSwitch();
         $(document.forms['login-form']).on('submit', function () {
             dologin($(document.forms['login-form']));
@@ -143,7 +144,4 @@ var SelenLogin = function () {
     };
 
 }();
-//== Class Initialization
-jQuery(document).ready(function () {
-    SelenLogin.init();
-});
+ 

@@ -1,30 +1,5 @@
-var view;
-
+var ModalView;
  
- 
-
-function jsonPathToValue(jsonData, path) {
-    if (!(jsonData instanceof Object) || typeof (path) === "undefined") {
-        throw "Not valid argument:jsonData:" + jsonData + ", path:" + path;
-    }
-    path = path.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
-    path = path.replace(/^\./, ''); // strip a leading dot
-    var pathArray = path.split('.');
-    for (var i = 0, n = pathArray.length; i < n; ++i) {
-        var key = pathArray[i];
-        if (key in jsonData) {
-            if (jsonData[key] !== null) {
-                jsonData = jsonData[key];
-            } else {
-                return null;
-            }
-        } else {
-            return key;
-        }
-    }
-    return jsonData;
-};
-
 function convert_colmodel2auto(rows, colmodel) {
     if (!colmodel) {
         return undefined;
@@ -98,24 +73,7 @@ function fill_ref(src_meta_ref, input_element, value_ref_element) {
 
 };
 
-function get_selected_rows(viewcontainer) {
-    var s = [];
-    var page = viewcontainer.find(".pageview");
-    if (page.length) {
-        s.push(page.attr("meta_id"));
-    } else {
-        var gridid = get_grid_id(viewcontainer);
-        var selrows;
-        selrows = $(gridid.grid_id_).jqGrid('getGridParam', 'selrow');
-        if (selrows &&  selrows instanceof Array) {
-            s = selrows;
-        } else {
-            s.push(selrows);
-        };
-    };
-    return s;
-};
-
+ 
 var refviewmodal = function (meta_class, meta_view, selectFunc) {
 
     var rez = {};
@@ -124,14 +82,14 @@ var refviewmodal = function (meta_class, meta_view, selectFunc) {
     var b = $('#method_execute');
     var isfrom_modal = $('#method_execute').is(':visible');
     //show_view (grid_container,meta_class, meta_view);
-    view = new SelenView(undefined, meta_class, meta_view);
+    ModalView = new SelenView(undefined, meta_class, meta_view);
     if (isfrom_modal === true) {
         from_method = true;
         $('#method_execute').modal('hide');
     };
     modal_view.unbind('hidden.bs.modal');
     modal_view.on('hidden.bs.modal', function (event) {
-        view.Destroy();
+        ModalView.Destroy();
         if (from_method) {
             setTimeout(function () {
                 $('#method_execute').modal('show');
@@ -145,7 +103,7 @@ var refviewmodal = function (meta_class, meta_view, selectFunc) {
 
     modal_view.find('.btn-primary').bind('click', function () {
         //	execute_method(null, bf_modal.getData());
-        var s = view.get_selected_rows();
+        var s = ModalView.get_selected_rows();
         if (!s || s == null) {
             alert('Выберите значение');
 
@@ -164,11 +122,7 @@ var refviewmodal = function (meta_class, meta_view, selectFunc) {
             selectFunc(null, ui);
         }
     });
-
-     setTimeout(function () {
+      setTimeout(function () {
         modal_view.modal();
     }, 500);
-
-  
-
-};
+ };

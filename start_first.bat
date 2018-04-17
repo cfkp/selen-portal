@@ -1,3 +1,3 @@
 set NODE_PATH=.
-rem node bin/www
-npm start >1
+node bin/www>1
+rem npm start >1
